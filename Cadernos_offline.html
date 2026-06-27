@@ -177,18 +177,18 @@
   .theme-sel{display:none}
   .hidden{display:none!important}
   @media(max-width:820px){
-    .topbar{flex-wrap:wrap;gap:8px;padding:10px 14px}
+    html,body{height:auto;overflow:visible}
+    .topbar{flex-wrap:wrap;gap:8px;padding:10px 14px;position:sticky;top:0;z-index:20}
     .brand p{display:none}
     .search{order:5;flex-basis:100%;max-width:none}
-    .stage{display:block}
+    .stage{display:block;overflow:visible}
     .sidebar{display:none!important}
-    .content{display:block;width:100%}
+    .content{display:block;width:100%;height:auto;overflow:visible;padding:18px 15px 90px}
     .theme-wrap{max-width:none}
     .theme-sel{display:block;max-width:none;flex:1 1 160px}
     .subject-sel{max-width:none;flex:1 1 140px}
     .modes{flex:1 1 100%;justify-content:space-between}
     .modes button{padding:8px 10px;flex:1}
-    .content{padding:18px 15px 80px}
     .theme-head h2{font-size:22px}
     .card{height:300px}
   }
