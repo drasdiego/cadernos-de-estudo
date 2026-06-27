@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadernos de Estudo</title>
-<meta name="app-version" content="20260627-8">
+<meta name="app-version" content="20260627-9">
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -230,7 +230,6 @@ const SQL_THEMES = [
   ],
   cards:[["O que é um banco de dados?","Coleção organizada de dados armazenados eletronicamente, que permite gerenciar, buscar e manipular informações de forma eficiente."],
          ["Linha vs. coluna numa tabela","Linha = um registro (ocorrência completa). Coluna = um campo/atributo (uma característica do dado)."]] },
-
 { id:"sql", num:"02", cat:"Fundamentos", title:"O que é SQL", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p><strong>SQL</strong> (Structured Query Language) é a Linguagem Estruturada de Consulta. É o idioma para conversar com o banco: criar tabelas, inserir, alterar e consultar dados.</p>"},
@@ -242,7 +241,6 @@ const SQL_THEMES = [
   cards:[["Quem criou o SQL e quando?","A IBM, no início dos anos 70."],
          ["O que significa SQL ser \"declarativo\"?","Você descreve o resultado desejado, não o passo a passo. O motor do banco decide como executar."],
          ["O que é um \"dialeto\" do SQL?","Uma versão adaptada por um fabricante (MySQL, PostgreSQL, Oracle, SQL Server). Mesmo núcleo, sintaxe ligeiramente diferente."]] },
-
 { id:"padr", num:"03", cat:"Fundamentos", title:"Padronização", date:DATE1,
   blocks:[
    {t:"plain",h:"<p>Para o SQL funcionar de forma parecida em qualquer sistema, foi padronizado por dois órgãos:</p>"},
@@ -254,7 +252,6 @@ const SQL_THEMES = [
   ],
   cards:[["Quais órgãos padronizaram o SQL e quando?","ANSI em 1986 e ISO em 1987."],
          ["O que é um SGBD?","Sistema de Gerenciamento de Banco de Dados: o software que administra o banco e executa o SQL (MySQL, PostgreSQL, Oracle, SQL Server)."]] },
-
 { id:"sub", num:"04", cat:"Sublinguagens", title:"As 5 sublinguagens do SQL", date:DATE1,
   blocks:[
    {t:"plain",h:"<p>O SQL é formado por <strong>cinco conjuntos de comandos</strong>, cada um com uma finalidade. Essa divisão organiza toda a matéria.</p>"},
@@ -266,7 +263,6 @@ const SQL_THEMES = [
   cards:[["Quais são as 5 sublinguagens do SQL?","DDL (definição), DML (manipulação), DQL (consulta), DCL (controle), DTL (transação)."],
          ["Para que serve a DDL?","Definir a estrutura do banco: criar, alterar e excluir tabelas."],
          ["Para que serve a DML?","Manipular os dados: inserir, alterar e deletar registros."]] },
-
 { id:"ddl", num:"05", cat:"Sublinguagens", title:"DDL — Definição de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>A <strong>DDL</strong> cuida da <strong>estrutura</strong> do banco (o esqueleto: tabelas e colunas), não dos dados em si.</p>"},
@@ -284,7 +280,6 @@ const SQL_THEMES = [
   cards:[["Quais são os 3 comandos da DDL?","CREATE (cria), ALTER (altera), DROP (exclui)."],
          ["Como adicionar uma coluna a uma tabela existente?","ALTER TABLE nome ADD coluna TIPO; ex.: ALTER TABLE CLIENTE ADD email VARCHAR(20);"],
          ["Qual a diferença entre DROP TABLE e ALTER...DROP?","DROP TABLE apaga a tabela inteira; ALTER TABLE ... DROP coluna apaga só uma coluna."]] },
-
 { id:"dml", num:"06", cat:"Sublinguagens", title:"DML — Manipulação de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>A <strong>DML</strong> trabalha com o <strong>conteúdo</strong> das tabelas: inserir, alterar e apagar <strong>registros</strong>. A estrutura já existe.</p>"},
@@ -302,7 +297,6 @@ const SQL_THEMES = [
   cards:[["Quais são os 3 comandos da DML?","INSERT (insere), UPDATE (altera), DELETE (deleta)."],
          ["Qual o risco de UPDATE/DELETE sem WHERE?","Afeta TODAS as linhas da tabela. DELETE FROM CLIENTE; apaga todos os registros."],
          ["Hábito de segurança antes de UPDATE/DELETE?","Rodar um SELECT com o mesmo WHERE para conferir quais linhas serão afetadas."]] },
-
 { id:"dql", num:"07", cat:"Sublinguagens", title:"DQL — Consulta de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>A <strong>DQL</strong> é dedicada a <strong>consultar</strong> dados. O comando central é o <strong>SELECT</strong>, o mais usado no dia a dia de dados.</p>"},
@@ -315,7 +309,6 @@ const SQL_THEMES = [
   ],
   cards:[["Qual comando central da DQL?","SELECT — usado para consultar (retornar) dados."],
          ["Em que ordem o banco lê um SELECT simples?","Primeiro FROM, depois WHERE, por último SELECT."]] },
-
 { id:"dcl", num:"08", cat:"Sublinguagens", title:"DCL — Controle de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>A <strong>DCL</strong> controla <strong>quem pode fazer o quê</strong> no banco. É a parte de <strong>permissões e segurança</strong>.</p>"},
@@ -326,7 +319,6 @@ const SQL_THEMES = [
   ],
   cards:[["O que faz GRANT e REVOKE?","GRANT concede acesso/permissão; REVOKE retira o acesso."],
          ["Para que serve a DCL?","Controlar permissões e segurança de acesso: quem pode fazer o quê no banco."]] },
-
 { id:"dtl", num:"09", cat:"Sublinguagens", title:"DTL — Transação de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>A <strong>DTL</strong> gerencia <strong>transações</strong>: um conjunto de operações tratado como <strong>unidade única</strong> — ou tudo é confirmado, ou nada é aplicado.</p>"},
@@ -337,7 +329,6 @@ const SQL_THEMES = [
   ],
   cards:[["O que é uma transação?","Conjunto de operações tratado como unidade única: ou tudo confirma, ou nada é aplicado."],
          ["COMMIT vs. ROLLBACK?","COMMIT confirma/concretiza a transação; ROLLBACK desfaz e volta ao estado inicial."]] },
-
 { id:"attr", num:"10", cat:"Estrutura e Chaves", title:"Atributos de colunas", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p><strong>Atributos</strong> são regras/propriedades aplicadas a uma coluna ao criá-la. Controlam o que ela aceita ou como se comporta.</p>"},
@@ -348,7 +339,6 @@ const SQL_THEMES = [
   ],
   cards:[["Diferença entre NULL e vazio?","NULL é ausência de valor (desconhecido). Diferente de 0 (número) e '' (texto vazio)."],
          ["O que faz AUTO_INCREMENT?","Gera valores em sequência automaticamente — cada novo registro recebe o próximo número."]] },
-
 { id:"chaves", num:"11", cat:"Estrutura e Chaves", title:"Chaves: PK, FK, UNIQUE e Surrogada", date:DATE1,
   blocks:[
    {t:"concept",l:"O que são chaves",h:"<p><strong>Chaves</strong> são atributos (ou conjuntos de atributos) que identificam de forma única um registro numa tabela. São essenciais para a <strong>integridade dos dados</strong>: previnem duplicatas e permitem criar <strong>relacionamentos</strong> entre tabelas. Sem chaves, seria impossível gerenciar dados de forma eficaz.</p>"},
@@ -368,7 +358,6 @@ const SQL_THEMES = [
          ["PRIMARY KEY vs. UNIQUE?","PRIMARY KEY: identificador principal, só uma por tabela, sempre NOT NULL. UNIQUE: garante unicidade, pode haver várias por tabela."],
          ["O que é chave surrogada?","Chave artificial (geralmente numérica) criada só para ser primária, substituindo uma chave natural complexa."],
          ["Chave natural vs. surrogada?","Natural = dado real do mundo (ex.: CPF). Surrogada = número sem significado de negócio (ex.: id auto-incremento)."]] },
-
 { id:"rel", num:"12", cat:"Modelagem", title:"Relacionamentos entre tabelas", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>Relacionamento é a <strong>ligação</strong> entre tabelas por chaves: a <strong>PK</strong> de uma aparece em outra como <strong>FK</strong>. A cardinalidade diz <strong>quantas</strong> linhas de um lado se ligam ao outro.</p>"},
@@ -380,7 +369,6 @@ const SQL_THEMES = [
   cards:[["O que são PK e FK num relacionamento?","PK (chave primária) identifica a linha; FK (chave estrangeira) é a coluna que aponta para a PK de outra tabela, conectando-as."],
          ["1:1, 1:N e N:M — exemplos?","1:1 Pessoa↔CPF; 1:N Cliente→Compras; N:M Compras↔Produtos."],
          ["Como se implementa N:M na prática?","Com uma tabela intermediária (associativa), que transforma o N:M em dois relacionamentos 1:N."]] },
-
 { id:"modelos", num:"13", cat:"Modelagem", title:"Modelos de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p><strong>Modelos de dados</strong> são formas de organizar os dados. A escolha depende do objetivo: operação do dia a dia ou análise.</p>"},
@@ -394,7 +382,6 @@ const SQL_THEMES = [
   cards:[["Modelo relacional serve melhor para quê?","Operações transacionais (inserir/atualizar/consultar) com integridade referencial. É o do dia a dia."],
          ["O que é modelo dimensional?","Modelo de data warehouse/BI que separa fatos (dados quantitativos) de dimensões (contexto: tempo, produto, local)."],
          ["O que é Star Schema?","Modelo dimensional com uma tabela de fatos central ligada a várias dimensões, formando uma estrela."]] },
-
 { id:"where", num:"14", cat:"Consultas avançadas", title:"Filtros e a cláusula WHERE", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é o WHERE",h:"<p>O <strong>WHERE</strong> (\"onde\") filtra os resultados de uma consulta: define <strong>quais linhas</strong> aparecem. O banco testa a condição <strong>linha por linha</strong> — se for <strong>verdadeira</strong>, a linha aparece; se <strong>falsa</strong>, é ignorada.</p><p><strong>Por que usar:</strong> foco (ver só o que importa) e <strong>performance</strong> (processa menos dados, busca mais rápida).</p>"},
@@ -419,7 +406,6 @@ const SQL_THEMES = [
          ["No LIKE, o que significam % e _?","% = zero ou muitos caracteres; _ = exatamente um caractere. Ex.: 'M%' começa com M."],
          ["O que faz DISTINCT?","Remove duplicatas, retornando apenas valores exclusivos da consulta."],
          ["BETWEEN inclui as pontas do intervalo?","Sim. IDADE BETWEEN 20 AND 23 inclui o 20 e o 23."]] },
-
 { id:"agg", num:"15", cat:"Consultas avançadas", title:"Funções de agregação e GROUP BY", date:DATE1,
   blocks:[
    {t:"concept",l:"O que são funções de agregação",h:"<p>Calculam um <strong>único resultado</strong> a partir de um <strong>conjunto de valores</strong> (várias linhas). Em vez de ver cada linha, você vê um resumo: total, média, maior, menor.</p>"},
@@ -436,7 +422,6 @@ const SQL_THEMES = [
          ["COUNT(*) vs COUNT(coluna)?","COUNT(*) conta todas as linhas; COUNT(coluna) conta só as que não são NULL."],
          ["Para que serve GROUP BY?","Agrupar linhas por uma coluna para aplicar a agregação a cada grupo separadamente."],
          ["O que é o AS em SQL?","Um alias: nome temporário para uma coluna ou tabela, deixando o resultado mais legível."]] },
-
 { id:"order", num:"16", cat:"Consultas avançadas", title:"ORDER BY e operações aritméticas", date:DATE1,
   blocks:[
    {t:"concept",l:"ORDER BY — ordenar",h:"<p>Define a <strong>ordem</strong> dos resultados. <strong>ASC</strong> = crescente (A-Z, 0-9), é o padrão. <strong>DESC</strong> = decrescente.</p><p>É a <strong>última cláusula</strong> do SELECT. Pode ordenar até por colunas não selecionadas e pela <strong>posição numérica</strong> da coluna.</p>"},
@@ -453,8 +438,34 @@ const SQL_THEMES = [
          ["O que faz o operador % (módulo)?","Retorna o resto da divisão entre dois números."],
          ["Qual a ordem de precedência dos cálculos?","Parênteses, expoentes, multiplicação/divisão, adição/subtração."],
          ["Como evitar erro de divisão por zero?","Filtrar com WHERE para descartar divisores iguais a 0 (ex.: WHERE FILHOS > 0)."]] },
-
-{ id:"tipos", num:"17", cat:"Tipos e funções", title:"Tipos de dados (datatypes)", date:DATE1,
+{ id:"subq", num:"17", cat:"Consultas avançadas", title:"Subqueries (subconsultas)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Uma <strong>subquery</strong> (subconsulta) é uma consulta <strong>dentro</strong> de outra. Como uma boneca russa: você faz um SELECT e, dentro dele, coloca outro SELECT.</p>"},
+   {t:"concept",l:"Dois usos principais",h:"<p><strong>Como coluna:</strong> traz um valor calculado de outra tabela para cada linha.<br><strong>Como filtro:</strong> limita os resultados com base numa lista gerada por outra consulta (<code>WHERE ... IN (subconsulta)</code>).</p>"},
+   {t:"code",h:"<span class='cm'>-- Como filtro: só quem fez alguma compra</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>ID</span> <span class='kw'>IN</span> (<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>);"},
+   {t:"code",h:"<span class='cm'>-- Como coluna: total de compras de cada pessoa</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>,\n  (<span class='kw'>SELECT</span> <span class='kw'>COUNT</span>(*) <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span> <span class='kw'>WHERE</span> <span class='fn'>ID_PESSOA</span>=<span class='fn'>P</span>.<span class='fn'>ID</span>) <span class='kw'>AS</span> <span class='fn'>total</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>;"},
+   {t:"attr",l:"Atenção — desempenho",h:"<p>Não há limite para aninhar subconsultas, mas <strong>muitas camadas deixam a consulta lenta</strong> (o banco tem muito trabalho extra). Use com parcimônia.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Subconsultas respondem perguntas em duas etapas: \"quem comprou?\" e depois \"traga os nomes desses\". <strong>Próxima ação:</strong> no Praticar, liste quem está acima da média de idade com uma subconsulta.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Subqueries<ul><li>Consulta dentro de consulta</li><li>No WHERE, FROM ou SELECT</li><li>Resolve em etapas</li></ul></li></ul>"}
+  ],
+  cards:[["O que é uma subquery?","Uma consulta dentro de outra (um SELECT dentro de outro SELECT)."],
+         ["Quais os dois usos de subquery?","Como coluna (valor calculado por linha) e como filtro (WHERE ... IN (subconsulta))."],
+         ["Qual o cuidado com subqueries?","Muitas camadas aninhadas deixam a consulta lenta (alto custo)."]] },
+{ id:"views", num:"18", cat:"Consultas avançadas", title:"Views (visões)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é uma View",h:"<p>Uma <strong>view</strong> (visão) é uma <strong>tabela virtual</strong>: não armazena dados próprios, é apenas um <strong>SELECT salvo</strong> com um nome. Você a consulta como se fosse uma tabela comum.</p>"},
+   {t:"concept",l:"Por que usar",h:"<p><strong>Reuso:</strong> escreve a consulta difícil uma vez e salva.<br><strong>Segurança:</strong> mostra só algumas colunas, escondendo dados sensíveis (ex.: salários).<br><strong>Simplificação:</strong> transforma um código gigante em algo limpo de usar.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Característica</th><th>Detalhe</th></tr><tr><td>Dinâmica</td><td>Reflete os dados atuais: se a tabela muda, a view mostra a mudança.</td></tr><tr><td>Permanente</td><td>Continua existindo mesmo após reiniciar o servidor.</td></tr><tr><td>Leve</td><td>Não ocupa espaço extra: é só a instrução salva.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Criar:</span>\n<span class='kw'>CREATE VIEW</span> <span class='fn'>vw_adultos</span> <span class='kw'>AS</span>\n  <span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> &gt;= 18;\n\n<span class='cm'>-- Consultar como se fosse tabela:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>vw_adultos</span>;"},
+   {t:"tip",l:"Comandos",h:"<p><code>CREATE VIEW nome AS [SELECT]</code> cria; <code>ALTER VIEW</code> altera a consulta; <code>DROP VIEW</code> apaga a view. <strong>DROP VIEW não apaga os dados</strong> das tabelas originais, só a visão.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Views deixam consultas complexas reutilizáveis e seguras (ótimo para esconder colunas sensíveis). <strong>Próxima ação:</strong> no Praticar, crie uma view com as pessoas de um estado.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Views<ul><li>Consulta salva como tabela virtual</li><li>Simplifica e reutiliza</li><li>Dinâmica: reflete os dados atuais</li></ul></li></ul>"}
+  ],
+  cards:[["O que é uma view?","Uma tabela virtual: um SELECT salvo com nome, que não armazena dados próprios."],
+         ["Por que usar views?","Reuso (salvar consulta difícil), segurança (esconder colunas) e simplificação."],
+         ["DROP VIEW apaga os dados?","Não. Apaga só a view; os dados das tabelas originais permanecem."],
+         ["A view reflete mudanças nos dados?","Sim, é dinâmica: mostra sempre os dados atuais das tabelas."]] },
+{ id:"tipos", num:"19", cat:"Tipos e funções", title:"Tipos de dados (datatypes)", date:DATE1,
   blocks:[
    {t:"concept",l:"O que são",h:"<p><strong>Tipos de dados</strong> (datatypes) são categorias que definem o tipo de informação que uma coluna pode armazenar. Especificam o <strong>formato, o tamanho e a natureza</strong> do dado, garantindo armazenamento consistente e eficiente.</p>"},
    {t:"h3",h:"Numéricos"},
@@ -472,8 +483,7 @@ const SQL_THEMES = [
          ["Quantos bytes ocupa um INT?","4 bytes (faixa aproximada de -2,1 bilhões a +2,1 bilhões)."],
          ["CHAR vs VARCHAR?","CHAR é fixo (sempre ocupa o tamanho definido); VARCHAR é variável (ocupa o necessário + 1 byte)."],
          ["Qual tipo guarda data e hora juntas?","DATETIME (8 bytes). DATE guarda só data; TIME só hora."]] },
-
-{ id:"fstr", num:"18", cat:"Tipos e funções", title:"Funções de string (texto)", date:DATE1,
+{ id:"fstr", num:"20", cat:"Tipos e funções", title:"Funções de string (texto)", date:DATE1,
   blocks:[
    {t:"concept",l:"O que são",h:"<p>Funções de <strong>string</strong> manipulam textos: padronizar, extrair partes, juntar e limpar dados. São rotina no trabalho com dados (normalizar nomes, separar um DDD, etc.).</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CONCAT / ||</td><td>Une (concatena) textos. SQLite/Oracle: a || b. MySQL/SQL Server: CONCAT(a,b).</td></tr><tr><td>LENGTH / LEN</td><td>Quantidade de caracteres.</td></tr><tr><td>UPPER / LOWER</td><td>Converte para maiúsculas / minúsculas.</td></tr><tr><td>SUBSTRING / SUBSTR</td><td>Extrai um pedaço (posição inicial + quantidade).</td></tr><tr><td>LEFT / RIGHT</td><td>N caracteres da esquerda / direita.</td></tr><tr><td>REPLACE</td><td>Substitui todas as ocorrências de um texto por outro.</td></tr><tr><td>LPAD / RPAD</td><td>Preenche à esquerda / direita até um tamanho.</td></tr><tr><td>LTRIM / RTRIM / TRIM</td><td>Remove espaços (ou caracteres) do início / fim / ambos.</td></tr><tr><td>SPLIT_PART</td><td>Divide por um delimitador e pega a parte na posição escolhida.</td></tr></table>"},
@@ -487,8 +497,7 @@ const SQL_THEMES = [
          ["Como concatenar textos no SQLite?","Com o operador || . Ex.: NOME || ' anos'."],
          ["Para que serve SUBSTR(texto, inicio, qtd)?","Extrai um pedaço do texto a partir de uma posição inicial, pegando uma quantidade de caracteres."],
          ["O que faz REPLACE?","Substitui todas as ocorrências de um trecho por outro texto."]] },
-
-{ id:"fnum", num:"19", cat:"Tipos e funções", title:"Funções numéricas e de data", date:DATE1,
+{ id:"fnum", num:"21", cat:"Tipos e funções", title:"Funções numéricas e de data", date:DATE1,
   blocks:[
    {t:"concept",l:"Funções numéricas",h:"<p>Realizam cálculos e ajustes em valores numéricos.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>POWER / POW</td><td>Potência. POWER(2,3) = 8.</td></tr><tr><td>ROUND</td><td>Arredonda para o mais próximo. ROUND(28.456,1) = 28.5.</td></tr><tr><td>SQRT</td><td>Raiz quadrada. SQRT(9) = 3.</td></tr><tr><td>TRUNC</td><td>Corta os decimais sem arredondar. TRUNC(111.15) = 111.</td></tr><tr><td>ABS</td><td>Valor absoluto (sem sinal). ABS(-7) = 7.</td></tr><tr><td>MOD / %</td><td>Resto da divisão. 10 % 3 = 1.</td></tr></table>"},
@@ -504,8 +513,7 @@ const SQL_THEMES = [
          ["Quanto é POWER(2,3)?","8 (2 elevado a 3)."],
          ["Para que serve EXTRACT / DATE_PART?","Extrair uma parte específica de uma data (dia, mês ou ano)."],
          ["Como extrair o ano de uma data no SQLite?","Com strftime('%Y', data)."]] },
-
-{ id:"fcond", num:"20", cat:"Tipos e funções", title:"Conversão e condicionais (CASE, COALESCE)", date:DATE1,
+{ id:"fcond", num:"22", cat:"Tipos e funções", title:"Conversão e condicionais (CASE, COALESCE)", date:DATE1,
   blocks:[
    {t:"concept",l:"Conversão de tipos",h:"<p>Transformam um dado de um tipo para outro (texto em número, número em texto, etc.).</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CAST / CONVERT</td><td>Converte tipos compatíveis. CAST('10' AS INTEGER).</td></tr><tr><td>TO_CHAR</td><td>Número ou data em texto formatado.</td></tr><tr><td>TO_DATE</td><td>Texto em data.</td></tr><tr><td>TO_NUMBER</td><td>Texto em número decimal.</td></tr></table>"},
@@ -522,8 +530,7 @@ const SQL_THEMES = [
          ["O que faz COALESCE?","Retorna o primeiro valor não-nulo de uma lista."],
          ["O que faz NULLIF(a, b)?","Retorna NULL se a e b forem iguais; senão retorna a. Bom para evitar divisão por zero."],
          ["Para que serve CAST?","Converter um dado de um tipo para outro (ex.: texto em número)."]] },
-
-{ id:"joins", num:"21", cat:"Juntando tabelas", title:"JOINs — juntando tabelas", date:DATE1,
+{ id:"joins", num:"23", cat:"Juntando tabelas", title:"JOINs — juntando tabelas", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é um JOIN",h:"<p><strong>JOIN</strong> (juntar) combina linhas de <strong>duas ou mais tabelas</strong> com base em colunas em comum (geralmente PK de uma e FK de outra). É o que permite ver, num só resultado, dados espalhados em tabelas diferentes.</p><p><strong>Atenção:</strong> em grandes volumes, JOINs têm <strong>alto custo computacional</strong> e podem deixar a consulta lenta.</p>"},
    {t:"map",l:"Os quatro tipos (diagrama de Venn)",h:SVG_JOINS()},
@@ -540,8 +547,7 @@ const SQL_THEMES = [
          ["LEFT JOIN retorna o quê?","Todas as linhas da tabela da esquerda; onde não há par na direita, vem NULL."],
          ["Como achar registros sem par?","LEFT JOIN e depois WHERE coluna_da_direita IS NULL."],
          ["O que o ON define num JOIN?","A coluna que liga as duas tabelas (ex.: ON P.ID = C.ID_PESSOA)."]] },
-
-{ id:"union", num:"22", cat:"Juntando tabelas", title:"UNION — empilhando resultados", date:DATE1,
+{ id:"union", num:"24", cat:"Juntando tabelas", title:"UNION — empilhando resultados", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é UNION",h:"<p><strong>UNION</strong> combina (empilha) as linhas de <strong>duas ou mais consultas</strong> num único resultado. Diferença para o JOIN: o JOIN junta <strong>colunas</strong> (lado a lado); o UNION junta <strong>linhas</strong> (uma embaixo da outra).</p>"},
    {t:"tip",l:"Analogia",h:"<p>Você tem uma lista de compras do mercado e outra da farmácia. O UNION é escrever todos os itens num papel só, um abaixo do outro.</p>"},
@@ -556,36 +562,6 @@ const SQL_THEMES = [
          ["UNION vs UNION ALL?","UNION remove as duplicatas; UNION ALL mantém todas (e é mais rápido)."],
          ["Quais as regras do UNION?","Mesmo número de colunas e tipos/ordem compatíveis entre as consultas."],
          ["JOIN vs UNION?","JOIN junta colunas (lado a lado); UNION junta linhas (uma embaixo da outra)."]] },
-
-{ id:"subq", num:"23", cat:"Consultas avançadas", title:"Subqueries (subconsultas)", date:DATE1,
-  blocks:[
-   {t:"concept",l:"O que é",h:"<p>Uma <strong>subquery</strong> (subconsulta) é uma consulta <strong>dentro</strong> de outra. Como uma boneca russa: você faz um SELECT e, dentro dele, coloca outro SELECT.</p>"},
-   {t:"concept",l:"Dois usos principais",h:"<p><strong>Como coluna:</strong> traz um valor calculado de outra tabela para cada linha.<br><strong>Como filtro:</strong> limita os resultados com base numa lista gerada por outra consulta (<code>WHERE ... IN (subconsulta)</code>).</p>"},
-   {t:"code",h:"<span class='cm'>-- Como filtro: só quem fez alguma compra</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>ID</span> <span class='kw'>IN</span> (<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>);"},
-   {t:"code",h:"<span class='cm'>-- Como coluna: total de compras de cada pessoa</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>,\n  (<span class='kw'>SELECT</span> <span class='kw'>COUNT</span>(*) <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span> <span class='kw'>WHERE</span> <span class='fn'>ID_PESSOA</span>=<span class='fn'>P</span>.<span class='fn'>ID</span>) <span class='kw'>AS</span> <span class='fn'>total</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>;"},
-   {t:"attr",l:"Atenção — desempenho",h:"<p>Não há limite para aninhar subconsultas, mas <strong>muitas camadas deixam a consulta lenta</strong> (o banco tem muito trabalho extra). Use com parcimônia.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Subconsultas respondem perguntas em duas etapas: \"quem comprou?\" e depois \"traga os nomes desses\". <strong>Próxima ação:</strong> no Praticar, liste quem está acima da média de idade com uma subconsulta.</p>"},
-   {t:"plain",l:"Mapa mental",h:"<ul><li>Subqueries<ul><li>Consulta dentro de consulta</li><li>No WHERE, FROM ou SELECT</li><li>Resolve em etapas</li></ul></li></ul>"}
-  ],
-  cards:[["O que é uma subquery?","Uma consulta dentro de outra (um SELECT dentro de outro SELECT)."],
-         ["Quais os dois usos de subquery?","Como coluna (valor calculado por linha) e como filtro (WHERE ... IN (subconsulta))."],
-         ["Qual o cuidado com subqueries?","Muitas camadas aninhadas deixam a consulta lenta (alto custo)."]] },
-
-{ id:"views", num:"24", cat:"Consultas avançadas", title:"Views (visões)", date:DATE1,
-  blocks:[
-   {t:"concept",l:"O que é uma View",h:"<p>Uma <strong>view</strong> (visão) é uma <strong>tabela virtual</strong>: não armazena dados próprios, é apenas um <strong>SELECT salvo</strong> com um nome. Você a consulta como se fosse uma tabela comum.</p>"},
-   {t:"concept",l:"Por que usar",h:"<p><strong>Reuso:</strong> escreve a consulta difícil uma vez e salva.<br><strong>Segurança:</strong> mostra só algumas colunas, escondendo dados sensíveis (ex.: salários).<br><strong>Simplificação:</strong> transforma um código gigante em algo limpo de usar.</p>"},
-   {t:"table",h:"<table class='cmd'><tr><th>Característica</th><th>Detalhe</th></tr><tr><td>Dinâmica</td><td>Reflete os dados atuais: se a tabela muda, a view mostra a mudança.</td></tr><tr><td>Permanente</td><td>Continua existindo mesmo após reiniciar o servidor.</td></tr><tr><td>Leve</td><td>Não ocupa espaço extra: é só a instrução salva.</td></tr></table>"},
-   {t:"code",h:"<span class='cm'>-- Criar:</span>\n<span class='kw'>CREATE VIEW</span> <span class='fn'>vw_adultos</span> <span class='kw'>AS</span>\n  <span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> &gt;= 18;\n\n<span class='cm'>-- Consultar como se fosse tabela:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>vw_adultos</span>;"},
-   {t:"tip",l:"Comandos",h:"<p><code>CREATE VIEW nome AS [SELECT]</code> cria; <code>ALTER VIEW</code> altera a consulta; <code>DROP VIEW</code> apaga a view. <strong>DROP VIEW não apaga os dados</strong> das tabelas originais, só a visão.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Views deixam consultas complexas reutilizáveis e seguras (ótimo para esconder colunas sensíveis). <strong>Próxima ação:</strong> no Praticar, crie uma view com as pessoas de um estado.</p>"},
-   {t:"plain",l:"Mapa mental",h:"<ul><li>Views<ul><li>Consulta salva como tabela virtual</li><li>Simplifica e reutiliza</li><li>Dinâmica: reflete os dados atuais</li></ul></li></ul>"}
-  ],
-  cards:[["O que é uma view?","Uma tabela virtual: um SELECT salvo com nome, que não armazena dados próprios."],
-         ["Por que usar views?","Reuso (salvar consulta difícil), segurança (esconder colunas) e simplificação."],
-         ["DROP VIEW apaga os dados?","Não. Apaga só a view; os dados das tabelas originais permanecem."],
-         ["A view reflete mudanças nos dados?","Sim, é dinâmica: mostra sempre os dados atuais das tabelas."]] }
-,
 { id:"indices", num:"25", cat:"MySQL na prática", title:"Índices (indexes)", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 05 (DDL), 11 (chaves) e 14 (WHERE).</p>"},
@@ -1018,7 +994,6 @@ const VIZ_THEMES = [
   ],
   cards:[["Por que a visualização de dados funciona?","Porque o cérebro processa imagens muito mais rápido do que textos ou tabelas numéricas."],
          ["O que é um gráfico, tecnicamente?","A representação geométrica de um conjunto de dados, para análise e interpretação rápida."]] },
-
 { id:"viz-preatentivos", num:"02", cat:"Percepção visual", title:"Atributos pré-atentivos", date:DATE1,
   blocks:[
    {t:"concept",l:"O que são",h:"<p><strong>Atributos pré-atentivos</strong> são informações que o cérebro processa <strong>instantaneamente</strong> (em milissegundos), antes mesmo da atenção consciente. São divididos em quatro grupos: forma, cor, posição e movimento.</p>"},
@@ -1031,7 +1006,6 @@ const VIZ_THEMES = [
   cards:[["O que são atributos pré-atentivos?","Informações que o cérebro processa instantaneamente, antes da atenção consciente."],
          ["Quais são os 4 grupos pré-atentivos?","Forma, cor, posição e movimento."],
          ["Para que serve o matiz (hue) da cor?","Separar categorias (cores diferentes para coisas diferentes)."]] },
-
 { id:"viz-precisao", num:"03", cat:"Percepção visual", title:"Escala de precisão e tipos de análise", date:DATE1,
   blocks:[
    {t:"concept",l:"Escala de precisão visual",h:"<p>Nem toda forma de mostrar dados é igualmente precisa. Existe uma escala do <strong>mais preciso</strong> (acurado) ao <strong>menos preciso</strong> (genérico) para o olho humano comparar.</p>"},
@@ -1048,7 +1022,6 @@ const VIZ_THEMES = [
          ["Quais os 4 tipos de análise em visualização?","Comparação, relação, distribuição e composição."],
          ["Análise de \"partes que formam o todo\" é qual tipo?","Composição."],
          ["Análise de \"como uma variável afeta outra\" é qual tipo?","Relação."]] },
-
 { id:"viz-comparacao", num:"04", cat:"Gráficos", title:"Gráficos de comparação", date:DATE1,
   blocks:[
    {t:"concept",l:"O que são",h:"<p>Gráficos de <strong>comparação</strong> colocam dados <strong>lado a lado</strong> para mostrar diferenças de tamanho ou intensidade. O cérebro identifica rápido o que é maior ou menor, sem ler tabelas longas.</p>"},
@@ -1064,7 +1037,6 @@ const VIZ_THEMES = [
   cards:[["Para que servem gráficos de comparação?","Colocar dados lado a lado para ver diferenças de tamanho/intensidade (maior/menor, atual vs. antigo)."],
          ["Poucas categorias, uma variável: qual gráfico?","Barras horizontais ou verticais."],
          ["Dados cíclicos ao longo do tempo: qual gráfico?","Gráfico de área circular (funciona como um relógio)."]] },
-
 { id:"viz-composicao", num:"05", cat:"Gráficos", title:"Gráficos de composição", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é composição",h:"<p>Composição é a análise de como um <strong>valor total se divide em partes</strong>. Mostra a \"fatia\" que cada categoria ocupa e a importância relativa de cada componente.</p>"},
@@ -1081,7 +1053,6 @@ const VIZ_THEMES = [
          ["Relativo vs. absoluto?","Relativo = porcentagem; absoluto = valor real."],
          ["Quando o gráfico de pizza é adequado?","Para poucas categorias que somam 100%."],
          ["Para que serve o gráfico de cascata (waterfall)?","Mostrar acumulação/subtração até chegar a um total (ex.: da receita ao lucro)."]] },
-
 { id:"viz-distrib", num:"06", cat:"Gráficos", title:"Distribuição e relação", date:DATE1,
   blocks:[
    {t:"concept",l:"Distribuição",h:"<p>Mostra como os dados numéricos se <strong>espalham</strong>, do menor ao maior. Revela o \"formato\" dos dados: onde a maioria se concentra, a média e os valores fora do comum.</p>"},
@@ -1095,7 +1066,6 @@ const VIZ_THEMES = [
   cards:[["Para que serve um histograma?","Mostrar a distribuição/frequência de uma variável."],
          ["O que mostra um gráfico de dispersão?","A relação entre duas variáveis."],
          ["O que é um outlier?","Um valor muito fora do padrão do restante dos dados."]] },
-
 { id:"viz-cores", num:"07", cat:"Design", title:"Cores e posicionamento", date:DATE1,
   blocks:[
    {t:"concept",l:"Atenção e sobrecarga",h:"<p>Quanto <strong>mais gráficos</strong> numa tela, <strong>menos tempo</strong> as pessoas dedicam a cada um. Gráficos maiores prendem a atenção. Muitos elementos causam <strong>sobrecarga cognitiva</strong>.</p>"},
@@ -1110,7 +1080,6 @@ const VIZ_THEMES = [
   cards:[["Quantos grandes elementos por dashboard?","No máximo cerca de 7, para evitar sobrecarga cognitiva."],
          ["Cor para categorias vs. para magnitude?","Categorias: matizes diferentes. Magnitude/números: gradiente da mesma cor."],
          ["Onde colocar a informação mais importante?","No canto superior esquerdo (início da leitura)."]] },
-
 { id:"viz-story", num:"08", cat:"Análise", title:"Storytelling e EDA", date:DATE1,
   blocks:[
    {t:"concept",l:"Storytelling com dados",h:"<p>Todo gráfico deve servir a uma mensagem. Valide sempre três pontos: a <strong>História</strong> (a narrativa dos dados), o <strong>Público</strong> (quem vai ler) e a <strong>Pergunta</strong> (o que o gráfico responde). Se não ajuda a responder a pergunta, é desnecessário.</p>"},
@@ -1123,8 +1092,7 @@ const VIZ_THEMES = [
   ],
   cards:[["Quais os 3 pilares do storytelling com dados?","História, Público e Pergunta."],
          ["O que é EDA?","Análise Exploratória de Dados: investigação inicial para resumir, achar padrões e outliers antes de modelar."],
-         ["Variável contínua vs. discreta?","Contínua = medições com casas decimais (altura); discreta = contagens inteiras (nº de filhos)."]] }
-,
+         ["Variável contínua vs. discreta?","Contínua = medições com casas decimais (altura); discreta = contagens inteiras (nº de filhos)."]] },
 { id:"viz-enganosos", num:"09", cat:"Boas práticas", title:"Gráficos que enganam", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 03 (escala de precisão) e 04 a 06 (tipos de gráfico).</p>"},
@@ -1212,7 +1180,6 @@ const EST_THEMES = [
          ["O que é a mediana?","O valor central com os dados ordenados; divide o conjunto em duas metades."],
          ["Quando preferir a mediana à média?","Quando há valores muito discrepantes (outliers)."],
          ["A moda serve para dados não numéricos?","Sim. A moda é o valor mais frequente e funciona até para categorias (ex.: cor mais vendida)."]] },
-
 { id:"est-dispersao", num:"02", cat:"Resumo dos dados", title:"Desvio padrão e variância", date:DATE1,
   blocks:[
    {t:"concept",l:"Desvio padrão",h:"<p>Mede o quanto os dados estão <strong>espalhados em relação à média</strong>. Quanto <strong>menor</strong>, mais homogêneos (e previsíveis) são os dados.</p>"},
@@ -1224,7 +1191,6 @@ const EST_THEMES = [
   cards:[["O que mede o desvio padrão?","O quanto os dados estão espalhados em relação à média."],
          ["Desvio padrão pequeno indica o quê?","Dados homogêneos e mais previsíveis."],
          ["Relação entre variância e desvio padrão?","O desvio padrão é a raiz quadrada da variância."]] },
-
 { id:"est-normal", num:"03", cat:"Distribuições", title:"Distribuição normal e box plot", date:DATE1,
   blocks:[
    {t:"concept",l:"Distribuição normal (curva de sino)",h:"<p>Também chamada de distribuição de <strong>Gauss</strong>: a maioria dos valores se agrupa no centro (em torno da média) e fica mais rara nas extremidades. Muitos fenômenos seguem esse padrão (altura, erros de medição).</p>"},
@@ -1239,7 +1205,6 @@ const EST_THEMES = [
   cards:[["Qual o formato da distribuição normal?","De sino: maioria no centro, extremos raros."],
          ["O que o box plot mostra?","Mediana, quartis (Q1, Q3), mínimo, máximo e os outliers."],
          ["Assimetria positiva: média e mediana?","Cauda à direita; a média tende a ser maior que a mediana."]] },
-
 { id:"est-amostra", num:"04", cat:"Amostragem", title:"População e amostra", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é amostragem",h:"<p>Técnicas para selecionar uma <strong>amostra</strong> (parte) de uma <strong>população</strong> (o todo) e tirar conclusões sobre o todo. Existe porque medir todos costuma ser inviável (custo, tempo, acesso).</p>"},
@@ -1252,7 +1217,6 @@ const EST_THEMES = [
   cards:[["População vs. amostra?","População = o todo; amostra = uma parte selecionada do todo."],
          ["Estratificada vs. conglomerado?","Estratificada: grupos homogêneos, sorteia dentro de cada. Conglomerado: grupos heterogêneos, sorteia grupos inteiros."],
          ["O que é uma amostra tendenciosa?","Uma amostra viciada, que não representa a população (ex.: entrevistar só torcedores na porta do estádio)."]] },
-
 { id:"est-correlacao", num:"05", cat:"Relações", title:"Correlação de Pearson", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é",h:"<p>Mede a <strong>força e a direção</strong> da relação <strong>linear</strong> entre duas variáveis quantitativas. O coeficiente <strong>r</strong> varia de <strong>-1 a +1</strong>.</p>"},
@@ -1266,7 +1230,6 @@ const EST_THEMES = [
   cards:[["A correlação de Pearson varia de quanto a quanto?","De -1 a +1."],
          ["r próximo de +1 significa?","Relação linear positiva forte (as variáveis sobem juntas)."],
          ["\"Correlação não implica...\"?","Causalidade. Subir junto não prova causa e efeito."]] },
-
 { id:"est-hipotese", num:"06", cat:"Inferência", title:"Teste de hipótese e teste t", date:DATE1,
   blocks:[
    {t:"concept",l:"Teste de hipótese",h:"<p>Método para tomar decisões sobre uma <strong>população</strong> a partir de uma <strong>amostra</strong>. Ajuda a separar uma diferença <strong>real</strong> de uma diferença por <strong>acaso</strong>.</p>"},
@@ -1280,8 +1243,7 @@ const EST_THEMES = [
   cards:[["O que é a hipótese nula (H0)?","A afirmação de que não há diferença/efeito; mantida até os dados a contrariarem."],
          ["O que é o nível de significância α?","O risco aceito de erro tipo I (falso positivo); padrão 0,05."],
          ["Erro tipo I vs. tipo II?","Tipo I = falso positivo (rejeitar H0 verdadeira). Tipo II = falso negativo (não rejeitar H0 falsa)."],
-         ["Para que serve o teste t de Student?","Comparar as médias de dois grupos, útil em amostras pequenas."]] }
-,
+         ["Para que serve o teste t de Student?","Comparar as médias de dois grupos, útil em amostras pequenas."]] },
 { id:"est-variaveis", num:"07", cat:"Fundamentos", title:"Tipos de variáveis", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (medidas de centralidade).</p>"},
@@ -1385,7 +1347,6 @@ const BI_THEMES = [
   cards:[["Para que serve o Power BI Desktop?","Criar os relatórios e as conexões com os dados, no computador."],
          ["O que é o Power BI Service?","O serviço na nuvem onde os relatórios são publicados e compartilhados."],
          ["Power BI Free vs. Pro?","Free é grátis (1 GB); Pro custa por usuário/mês, dá 10 GB e compartilhamento seguro."]] },
-
 { id:"bi-powerquery", num:"02", cat:"Tratamento", title:"Power Query: importar e tratar", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é",h:"<p>O <strong>Power Query Editor</strong> é onde os dados são <strong>limpos e moldados</strong> antes da análise (com a linguagem M). É a \"cozinha\": os dados chegam sujos e você prepara antes de cozinhar os gráficos.</p>"},
@@ -1399,7 +1360,6 @@ const BI_THEMES = [
   cards:[["Para que serve o Power Query?","Limpar e transformar os dados (linguagem M) antes da análise."],
          ["O que é unpivot (colunas em linhas)?","Normalizar dados que estão espalhados em várias colunas, juntando-os numa só."],
          ["Transformar vs. Adicionar Coluna?","Transformar muda a coluna atual; Adicionar cria uma nova preservando a original."]] },
-
 { id:"bi-modelagem", num:"03", cat:"Modelagem", title:"Fato, dimensão e relacionamentos", date:DATE1,
   blocks:[
    {t:"concept",l:"Fato e dimensão",h:"<p><strong>Tabela fato:</strong> registra os eventos/transações com valores numéricos (ex.: vendas, pedidos). <strong>Tabela dimensão:</strong> o cadastro descritivo que dá contexto (quem, onde, quando — ex.: vendedores, produtos).</p>"},
@@ -1413,7 +1373,6 @@ const BI_THEMES = [
   cards:[["Tabela fato vs. dimensão?","Fato: eventos/transações com números (vendas). Dimensão: cadastro descritivo (vendedores, produtos)."],
          ["PK e FK na modelagem?","PK é única na dimensão; FK é o mesmo código repetido na fato."],
          ["Para onde a seta do relacionamento deve apontar?","Da dimensão para a fato, para os filtros funcionarem."]] },
-
 { id:"bi-dax", num:"04", cat:"Cálculos", title:"DAX: medidas e colunas calculadas", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é DAX",h:"<p><strong>DAX</strong> (Data Analysis Expressions) é a linguagem de fórmulas do Power BI (parecida com o Excel, mas mais potente). Você referencia <strong>colunas pelo nome</strong>, não células.</p>"},
@@ -1428,7 +1387,6 @@ const BI_THEMES = [
          ["Coluna calculada vs. medida?","Coluna: calcula linha a linha e ocupa espaço (fixa). Medida: agrega, é calculada na hora e reage aos filtros."],
          ["Quando usar uma medida?","Para valores e KPIs que mudam conforme os filtros do relatório."],
          ["Como ler [Soma Vendas]/[Soma Metas]-1?","É a diferença percentual: positivo bateu a meta, negativo ficou abaixo dela."]] },
-
 { id:"bi-visuais", num:"05", cat:"Relatórios", title:"Visualizações e filtros", date:DATE1,
   blocks:[
    {t:"concept",l:"Criando um visual (3 passos)",h:"<p>No modo Relatório: 1) escolha o <strong>tipo de gráfico</strong> no painel de Visualizações; 2) arraste os <strong>campos</strong> (ex.: Unidade para Legenda, Valor para Valores); 3) ajuste a aparência com o <strong>pincel</strong> (Formatar).</p>"},
@@ -1441,7 +1399,6 @@ const BI_THEMES = [
   cards:[["Os 3 passos para criar um visual?","Escolher o tipo, arrastar os campos, formatar (pincel)."],
          ["Como criar um novo gráfico sem alterar outro?","Clicar numa área vazia antes de escolher o ícone do gráfico."],
          ["Diferença entre filtro de página e de relatório?","Página afeta só uma aba; relatório afeta todas as páginas do arquivo."]] },
-
 { id:"bi-publicacao", num:"06", cat:"Compartilhar", title:"Publicação e compartilhamento", date:DATE1,
   blocks:[
    {t:"concept",l:"Publicar",h:"<p>Do <strong>Desktop</strong> você clica em <strong>Publicar</strong> e escolhe um <strong>workspace</strong> no Service (nuvem). É como subir um vídeo para uma plataforma: o Desktop é o editor, o Service é onde todos assistem.</p>"},
@@ -1452,8 +1409,7 @@ const BI_THEMES = [
   ],
   cards:[["De onde se publica um relatório?","Do Power BI Desktop (botão Publicar) para um workspace no Service."],
          ["Que tipo de e-mail o Power BI exige?","Corporativo ou institucional; e-mails pessoais não são aceitos."],
-         ["O que é \"Publicar na Web\"?","Gera um link público acessível por qualquer pessoa — perigoso para dados sensíveis."]] }
-,
+         ["O que é \"Publicar na Web\"?","Gera um link público acessível por qualquer pessoa — perigoso para dados sensíveis."]] },
 { id:"bi-estrela", num:"07", cat:"Modelagem avançada", title:"Esquema estrela (star schema)", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (Power Query) e 03 (fato, dimensão e relacionamentos).</p>"},
@@ -1584,33 +1540,7 @@ const IA_THEMES = [
          ["Os 3 tipos de aprendizado de máquina?","Supervisionado (rotulado), não supervisionado (sem rótulos) e por reforço (recompensa/penalidade)."],
          ["IA vs. ML?","IA é o conceito amplo (imitar inteligência humana); ML é a subárea que aprende com dados."],
          ["O que é Deep Learning?","ML com redes neurais profundas; é o que está por trás de reconhecimento de imagens e dos LLMs."]] },
-
-{ id:"ia-llm", num:"02", cat:"Linguagem", title:"LLMs — modelos de linguagem", date:DATE1,
-  blocks:[
-   {t:"concept",l:"O que é um LLM",h:"<p><strong>LLM</strong> (Large Language Model) é um modelo de NLP treinado em <strong>vastos volumes de texto</strong> com aprendizado profundo, para entender e gerar linguagem humana. Usa redes neurais <strong>transformadoras</strong> para prever a próxima palavra de uma sequência.</p>"},
-   {t:"table",h:"<table class='cmd'><tr><th>Aplicações</th><th>Limitações</th></tr><tr><td>Chatbots e assistentes virtuais.</td><td>Alucinação: inventar fatos com convicção.</td></tr><tr><td>Resumo de documentos.</td><td>Viés herdado dos dados de treino.</td></tr><tr><td>Análise de sentimentos.</td><td>Precisam de verificação humana.</td></tr></table>"},
-   {t:"tip",l:"Transformers",h:"<p>É a arquitetura que permite ao modelo <strong>focar nas partes mais importantes</strong> de uma frase para entender o contexto (o \"T\" do GPT).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>LLMs são ótimos com texto, mas podem \"alucinar\" e carregar vieses. Use, mas <strong>sempre confira</strong> fatos e números.</p>"},
-   {t:"plain",l:"Mapa mental",h:"<ul><li>LLMs<ul><li>Modelos de linguagem</li><li>Preveem a próxima palavra</li><li>Treinados em muito texto</li></ul></li></ul>"}
-  ],
-  cards:[["O que faz um LLM?","Entende e gera linguagem humana, prevendo a próxima palavra com base em muito texto."],
-         ["O que é \"alucinação\" em LLMs?","Inventar fatos incorretos com aparência de verdade."],
-         ["O que são transformers?","A arquitetura de IA que foca nas partes importantes da frase para captar o contexto."]] },
-
-{ id:"ia-gen", num:"03", cat:"Geração", title:"IA Generativa", date:DATE1,
-  blocks:[
-   {t:"concept",l:"O que é",h:"<p>Algoritmos que <strong>criam novos dados</strong> (imagens, textos, música). Diferente da IA tradicional (que só <strong>analisa</strong> o que existe), a generativa <strong>cria</strong> amostras parecidas com os dados de entrada. A tradicional é o crítico de arte; a generativa é o artista.</p>"},
-   {t:"table",h:"<table class='cmd'><tr><th>Como funciona</th><th>Detalhe</th></tr><tr><td>GANs</td><td>Duas redes competem: uma cria, a outra avalia se é real ou falso — forçando precisão.</td></tr><tr><td>Transformers (GPT)</td><td>Excelentes em entender sequência e contexto (texto).</td></tr><tr><td>Treinamento &rarr; Geração</td><td>Aprende com muitos dados; depois gera novas instâncias semelhantes.</td></tr></table>"},
-   {t:"table",h:"<table class='cmd'><tr><th>Aplicações para dados</th></tr><tr><td>Dados sintéticos (expandir bases escassas ou proteger privacidade).</td></tr><tr><td>Automação de relatórios com narrativa gerada.</td></tr><tr><td>Cenários hipotéticos (\"e se o dólar subir 20%?\").</td></tr></table>"},
-   {t:"attr",l:"Ética e limites",h:"<p>Cuidado com <strong>qualidade</strong> (artefatos/erros), <strong>viés</strong> (amplia preconceitos dos dados) e <strong>privacidade</strong>. Nunca confie 100%: revisão humana é obrigatória.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>A IA generativa cria conteúdo e dados sintéticos úteis para análise, mas exige checagem crítica de qualidade, viés e privacidade.</p>"},
-   {t:"plain",l:"Mapa mental",h:"<ul><li>IA Generativa<ul><li>Cria texto, imagem, áudio</li><li>O prompt guia</li><li>Revisar: alucinação e viés</li></ul></li></ul>"}
-  ],
-  cards:[["IA generativa, diferente da tradicional, faz o quê?","Cria novos dados (imagens, textos), em vez de apenas analisar os existentes."],
-         ["O que são GANs?","Duas redes que competem (uma cria, a outra avalia), melhorando a qualidade do que é gerado."],
-         ["Principais riscos da IA generativa?","Erros (artefatos), viés dos dados e privacidade — exige revisão humana."]] }
-,
-{ id:"ia-aprendizado", num:"04", cat:"Fundamentos", title:"Tipos de aprendizado", date:DATE1,
+{ id:"ia-aprendizado", num:"02", cat:"Fundamentos", title:"Tipos de aprendizado", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (Machine Learning e IA).</p>"},
    {t:"concept",l:"O que é",h:"<p>São as três grandes formas de um modelo aprender com dados: supervisionado, não supervisionado e por reforço. Cada uma resolve um tipo diferente de problema.</p>"},
@@ -1632,6 +1562,29 @@ const IA_THEMES = [
     ["O que é aprendizado não supervisionado?","Busca grupos e padrões em dados sem rótulo."],
     ["O que é aprendizado por reforço?","Um agente aprende por tentativa, erro e recompensa."],
     ["Classificação x regressão?","Classificação prevê categoria; regressão prevê número."]] },
+{ id:"ia-llm", num:"03", cat:"Linguagem", title:"LLMs — modelos de linguagem", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é um LLM",h:"<p><strong>LLM</strong> (Large Language Model) é um modelo de NLP treinado em <strong>vastos volumes de texto</strong> com aprendizado profundo, para entender e gerar linguagem humana. Usa redes neurais <strong>transformadoras</strong> para prever a próxima palavra de uma sequência.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Aplicações</th><th>Limitações</th></tr><tr><td>Chatbots e assistentes virtuais.</td><td>Alucinação: inventar fatos com convicção.</td></tr><tr><td>Resumo de documentos.</td><td>Viés herdado dos dados de treino.</td></tr><tr><td>Análise de sentimentos.</td><td>Precisam de verificação humana.</td></tr></table>"},
+   {t:"tip",l:"Transformers",h:"<p>É a arquitetura que permite ao modelo <strong>focar nas partes mais importantes</strong> de uma frase para entender o contexto (o \"T\" do GPT).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>LLMs são ótimos com texto, mas podem \"alucinar\" e carregar vieses. Use, mas <strong>sempre confira</strong> fatos e números.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>LLMs<ul><li>Modelos de linguagem</li><li>Preveem a próxima palavra</li><li>Treinados em muito texto</li></ul></li></ul>"}
+  ],
+  cards:[["O que faz um LLM?","Entende e gera linguagem humana, prevendo a próxima palavra com base em muito texto."],
+         ["O que é \"alucinação\" em LLMs?","Inventar fatos incorretos com aparência de verdade."],
+         ["O que são transformers?","A arquitetura de IA que foca nas partes importantes da frase para captar o contexto."]] },
+{ id:"ia-gen", num:"04", cat:"Geração", title:"IA Generativa", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Algoritmos que <strong>criam novos dados</strong> (imagens, textos, música). Diferente da IA tradicional (que só <strong>analisa</strong> o que existe), a generativa <strong>cria</strong> amostras parecidas com os dados de entrada. A tradicional é o crítico de arte; a generativa é o artista.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Como funciona</th><th>Detalhe</th></tr><tr><td>GANs</td><td>Duas redes competem: uma cria, a outra avalia se é real ou falso — forçando precisão.</td></tr><tr><td>Transformers (GPT)</td><td>Excelentes em entender sequência e contexto (texto).</td></tr><tr><td>Treinamento &rarr; Geração</td><td>Aprende com muitos dados; depois gera novas instâncias semelhantes.</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Aplicações para dados</th></tr><tr><td>Dados sintéticos (expandir bases escassas ou proteger privacidade).</td></tr><tr><td>Automação de relatórios com narrativa gerada.</td></tr><tr><td>Cenários hipotéticos (\"e se o dólar subir 20%?\").</td></tr></table>"},
+   {t:"attr",l:"Ética e limites",h:"<p>Cuidado com <strong>qualidade</strong> (artefatos/erros), <strong>viés</strong> (amplia preconceitos dos dados) e <strong>privacidade</strong>. Nunca confie 100%: revisão humana é obrigatória.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>A IA generativa cria conteúdo e dados sintéticos úteis para análise, mas exige checagem crítica de qualidade, viés e privacidade.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>IA Generativa<ul><li>Cria texto, imagem, áudio</li><li>O prompt guia</li><li>Revisar: alucinação e viés</li></ul></li></ul>"}
+  ],
+  cards:[["IA generativa, diferente da tradicional, faz o quê?","Cria novos dados (imagens, textos), em vez de apenas analisar os existentes."],
+         ["O que são GANs?","Duas redes que competem (uma cria, a outra avalia), melhorando a qualidade do que é gerado."],
+         ["Principais riscos da IA generativa?","Erros (artefatos), viés dos dados e privacidade — exige revisão humana."]] },
 { id:"ia-overfitting", num:"05", cat:"Avaliação", title:"Treino, teste e overfitting", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 e 04 (tipos de aprendizado).</p>"},
@@ -1741,7 +1694,6 @@ const PY_THEMES = [
          ["O que é a biblioteca padrão do Python?","Um conjunto grande de módulos que já vêm instalados, cobrindo tarefas comuns (pilhas inclusas)."],
          ["Tipagem dinâmica e forte: explique cada parte.","Dinâmica: não se declara o tipo. Forte: a linguagem não mistura tipos incompatíveis sozinha."],
          ["O que é um ambiente virtual e por que usar?","Uma pasta isolada com as dependências de um projeto, para evitar conflitos entre versões de pacotes."]] },
-
 { id:"py-tipos", num:"02", cat:"Fundamentos", title:"Tipos embutidos e variáveis", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (saber rodar um print e importar um módulo).</p>"},
@@ -1765,7 +1717,6 @@ const PY_THEMES = [
          ["Por que 0.1 + 0.2 não é igual a 0.3?","Porque float usa representação binária, que não guarda esses decimais com exatidão."],
          ["== versus is?","== compara o valor; is compara se é o mesmo objeto. Use is None."],
          ["Como guardar dinheiro com segurança?","Com decimal.Decimal (ou arredondando), nunca com float puro."]] },
-
 { id:"py-estruturas", num:"03", cat:"Estruturas de dados", title:"list, tuple, dict e set", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 e 02 (variáveis e tipos).</p>"},
@@ -1789,7 +1740,6 @@ const PY_THEMES = [
          ["Por que uma lista não pode ser chave de dict?","Porque chaves precisam ser imutáveis e hashable; a lista muda, a tupla não."],
          ["Como remover duplicatas de uma lista?","Convertendo para set: set(lista)."],
          ["O que é aliasing (apelido) de lista?","Quando b = a faz os dois nomes apontarem para a mesma lista; mudar um muda o outro. Copie com a.copy()."]] },
-
 { id:"py-fluxo", num:"04", cat:"Lógica", title:"Controle de fluxo e compreensões", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 e 03 (tipos e coleções).</p>"},
@@ -1813,8 +1763,7 @@ const PY_THEMES = [
   cards:[["Como o Python marca blocos de código?","Por indentação (recuo de 4 espaços), em vez de chaves."],
          ["Para que serve enumerate?","Percorrer obtendo índice e valor ao mesmo tempo, sem usar range(len(...))."],
          ["List comprehension versus generator?","A compreensão cria a lista toda na memória; o generator gera item a item sob demanda, poupando memória."],
-         ["O que range(5) gera?","Os números de 0 a 4 (de 0 até n-1)."]] }
-,
+         ["O que range(5) gera?","Os números de 0 a 4 (de 0 até n-1)."]] },
 { id:"py-funcoes", num:"05", cat:"Funções", title:"Funções", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 a 04 (tipos, coleções e controle de fluxo).</p>"},
@@ -1861,54 +1810,7 @@ const PY_THEMES = [
          ["import math versus from math import sqrt?","O primeiro traz o módulo todo (math.sqrt); o segundo traz só o nome sqrt."],
          ["O que faz if __name__ == \"__main__\"?","Garante que um trecho só roda quando o arquivo é executado direto, e não quando é importado."],
          ["O que é o PyPI?","O Python Package Index, repositório oficial de pacotes de terceiros, instalados com pip."]] },
-{ id:"py-excecoes", num:"07", cat:"Robustez", title:"Erros e exceções", date:DATE1,
-  blocks:[
-   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 e 05 (fluxo e funções).</p>"},
-   {t:"concept",l:"O que é",h:"<p>Uma <strong>exceção</strong> é um erro que acontece durante a execução do programa. Se ninguém tratar, o programa para e mostra o erro.</p>"},
-   {t:"concept",l:"Por que importa",h:"<p>Programas reais lidam com o inesperado: arquivo que falta, internet que cai, usuário que digita texto onde devia ser número. Tratar a exceção evita que tudo trave.</p>"},
-   {t:"concept",l:"Quando usar",h:"<p>Quando uma operação pode falhar por algo fora do seu controle. Não use exceção para o fluxo normal do programa.</p>"},
-   {t:"concept",l:"Como funciona",h:"<p><code>try</code> tenta o código. <code>except</code> captura o erro. <code>else</code> roda se deu tudo certo. <code>finally</code> roda sempre (deu certo ou não). <code>raise</code> levanta um erro de propósito.</p>"},
-   {t:"code",h:"<span class='cm'># Exemplo concreto</span>\n<span class='kw'>try</span>:\n    idade = int(input(<span class='st'>\"Idade: \"</span>))\n<span class='kw'>except</span> ValueError:\n    print(<span class='st'>\"Digite um número válido\"</span>)\n<span class='kw'>else</span>:\n    print(<span class='st'>f\"Você tem {idade} anos\"</span>)\n<span class='kw'>finally</span>:\n    print(<span class='st'>\"fim\"</span>)"},
-   {t:"table",h:"<table class='cmd'><tr><th>Exceção comum</th><th>Quando ocorre</th></tr><tr><td>ValueError</td><td>Valor de tipo certo, mas inválido. int('abc').</td></tr><tr><td>TypeError</td><td>Operação entre tipos incompatíveis. 'a' + 1.</td></tr><tr><td>KeyError</td><td>Chave que não existe no dict.</td></tr><tr><td>IndexError</td><td>Índice fora da lista.</td></tr><tr><td>FileNotFoundError</td><td>Arquivo não encontrado.</td></tr><tr><td>ZeroDivisionError</td><td>Divisão por zero.</td></tr></table>"},
-   {t:"attr",l:"Erros comuns",h:"<p>Capturar tudo com <code>except Exception</code> (ou pior, <code>except:</code> vazio): isso esconde bugs de verdade. Usar exceção para controlar o fluxo normal em vez de um if.</p>"},
-   {t:"tip",l:"Boas práticas",h:"<p>Capture a exceção <strong>específica</strong> que você espera (ValueError, FileNotFoundError). Dê uma mensagem clara. Nunca silencie um erro sem motivo. Use <code>raise</code> com uma mensagem quando quiser sinalizar um problema.</p>"},
-   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> proteja uma divisão de ZeroDivisionError.</li><li><strong>Intermediário:</strong> peça um número e repita até o usuário digitar algo válido (try dentro de um while).</li><li><strong>Avançado:</strong> crie uma função que levanta (raise) ValueError se a idade for negativa.</li></ul>"},
-   {t:"code",h:"<span class='cm'># Soluções</span>\n<span class='kw'>try</span>:\n    print(10 / 0)\n<span class='kw'>except</span> ZeroDivisionError:\n    print(<span class='st'>\"não dá para dividir por zero\"</span>)\n\n<span class='kw'>def</span> validar(idade):\n    <span class='kw'>if</span> idade &lt; 0:\n        <span class='kw'>raise</span> ValueError(<span class='st'>\"idade não pode ser negativa\"</span>)\n    <span class='kw'>return</span> idade"},
-   {t:"recap",l:"O que preciso lembrar",h:"<p>Exceção = erro em tempo de execução. try tenta, except captura, else roda se deu certo, finally sempre roda. raise levanta o erro. Capture o tipo específico.</p>"},
-   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> o papel de try/except/else/finally; por que evitar except genérico; quando usar raise. <strong>Pergunta de recrutador:</strong> \"O que acontece no finally se houver um return no try?\" Resposta: o finally roda mesmo assim, antes de a função retornar.</p>"},
-   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Exceções<ul><li>try: tenta</li><li>except: captura (específico)</li><li>else: se deu certo</li><li>finally: sempre</li><li>raise: levanta</li></ul></li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça dois números e mostre a divisão, tratando divisão por zero e entrada inválida. <strong>Conecta com o próximo:</strong> uma das fontes mais comuns de erro é ler arquivos; isso se faz com a instrução with, o próximo tema.</p>"},
-   {t:"plain",l:"Mapa mental",h:"<ul><li>Erros e exceções<ul><li>try / except</li><li>finally: sempre roda</li><li>Tratar em vez de quebrar</li></ul></li></ul>"}
-  ],
-  cards:[["Para que serve o bloco finally?","Para rodar um código sempre, tenha dado erro ou não (ex.: fechar um arquivo)."],
-         ["Por que evitar except Exception genérico?","Porque ele captura qualquer erro, escondendo bugs reais. Capture o tipo específico esperado."],
-         ["O que faz raise?","Levanta uma exceção de propósito, para sinalizar um problema (ex.: raise ValueError('...'))."],
-         ["Qual exceção ocorre em int('abc')?","ValueError: o tipo é certo (texto), mas o valor não dá para converter."]] }
-,
-{ id:"py-arquivos", num:"08", cat:"Entrada e saída", title:"Arquivos e o comando with", date:DATE1,
-  blocks:[
-   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (tipos), 05 (funções) e 07 (exceções).</p>"},
-   {t:"concept",l:"O que é",h:"<p>Ler e escrever arquivos é pedir ao sistema operacional para abrir um arquivo, trabalhar com o conteúdo e depois fechar.</p><p>O comando <b>with</b> abre o arquivo e garante que ele será fechado sozinho ao final, mesmo se ocorrer um erro no meio.</p>"},
-   {t:"concept",l:"Por que é importante",h:"<p>Arquivo aberto e não fechado consome recursos e pode corromper dados. Em Dados, quase todo trabalho começa lendo um arquivo (CSV, TXT, JSON) e termina gravando um resultado.</p><p>O <b>with</b> remove a parte mais fácil de esquecer: o fechamento.</p>"},
-   {t:"concept",l:"Quando usar",h:"<p>Sempre que abrir um arquivo. A forma recomendada na documentação oficial é abrir com <b>with</b>, ler ou escrever dentro do bloco, e deixar o fechamento por conta dele.</p>"},
-   {t:"concept",l:"Como funciona",h:"<p>A função <b>open(caminho, modo)</b> devolve um objeto de arquivo. O <b>modo</b> diz a intenção: <code>r</code> ler, <code>w</code> escrever (apaga o que existia), <code>a</code> acrescentar ao final.</p><p>Acrescente <code>encoding='utf-8'</code> para acentos funcionarem em qualquer sistema.</p>"},
-   {t:"code",h:"<span class='cm'># Escrever um arquivo de texto</span>\nwith open('notas.txt', 'w', encoding='utf-8') as f:\n    f.write('linha 1\\n')\n    f.write('linha 2\\n')\n\n<span class='cm'># Ler de volta, linha por linha</span>\nwith open('notas.txt', 'r', encoding='utf-8') as f:\n    for linha in f:\n        print(linha.strip())"},
-   {t:"table",h:"<table class='cmd'><tr><th>Modo</th><th>O que faz</th></tr><tr><td>r</td><td>Lê. Dá erro se o arquivo não existe.</td></tr><tr><td>w</td><td>Escreve do zero. Apaga o conteúdo anterior.</td></tr><tr><td>a</td><td>Acrescenta no final. Mantém o que já existia.</td></tr></table>"},
-   {t:"attr",l:"Erros comuns",h:"<p>Abrir no modo <code>w</code> achando que vai só ler: apaga o arquivo inteiro.</p><p>Esquecer <code>encoding='utf-8'</code> e ver acentos quebrados.</p><p>Abrir sem <b>with</b> e esquecer de chamar <code>f.close()</code>.</p>"},
-   {t:"tip",l:"Boas práticas",h:"<p>Use sempre <b>with</b>. Use <code>encoding='utf-8'</code> de forma explícita. Para vários arquivos de dados reais, prefira bibliotecas próprias (como pandas, no tema 10) em vez de tratar texto na mão.</p>"},
-   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Crie um arquivo com três linhas e leia de volta mostrando cada uma.</p><p><b>2.</b> Abra um arquivo no modo <code>a</code> e acrescente uma linha sem apagar as anteriores.</p><p><b>3.</b> Leia um arquivo que pode não existir, tratando o erro com try/except para mostrar uma mensagem amigável.</p>"},
-   {t:"code",l:"Soluções",h:"<span class='cm'># 1</span>\nwith open('x.txt','w',encoding='utf-8') as f:\n    f.write('a\\nb\\nc\\n')\nwith open('x.txt','r',encoding='utf-8') as f:\n    for l in f: print(l.strip())\n\n<span class='cm'># 2</span>\nwith open('x.txt','a',encoding='utf-8') as f:\n    f.write('d\\n')\n\n<span class='cm'># 3</span>\ntry:\n    with open('nao_existe.txt','r',encoding='utf-8') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('Arquivo não encontrado.')"},
-   {t:"recap",l:"O que preciso lembrar",h:"<p>open abre, with fecha sozinho. Modo r lê, w apaga e escreve, a acrescenta. encoding='utf-8' para acentos. Erro de arquivo é FileNotFoundError.</p>"},
-   {t:"tip",l:"Em entrevistas",h:"<p>Pergunta clássica: por que usar with? Resposta: garante o fechamento do arquivo mesmo com erro, evitando vazamento de recursos.</p>"},
-   {t:"plain",l:"Mapa mental",h:"<ul><li>Arquivos<ul><li>open(caminho, modo, encoding)</li><li>with → fecha sozinho</li><li>Modos<ul><li>r ler</li><li>w escrever do zero</li><li>a acrescentar</li></ul></li><li>Erro: FileNotFoundError</li></ul></li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> grave em um arquivo o resultado de um cálculo feito por uma função do tema 05, depois leia e imprima.</p><p><b>Conexão:</b> ler arquivos é a porta de entrada para Dados. No tema 10, o pandas faz isso de forma direta com read_csv, e no SQL você fará o equivalente lendo tabelas.</p>"}
-  ],
-  cards:[
-    ["Qual a vantagem do with?","Fecha o arquivo automaticamente, mesmo se houver erro."],
-    ["O modo 'w' faz o quê com o conteúdo antigo?","Apaga tudo e escreve do zero."],
-    ["Como evitar acentos quebrados?","Use encoding='utf-8' no open."],
-    ["Qual erro ocorre ao ler um arquivo inexistente?","FileNotFoundError."]] },
-{ id:"py-oop", num:"09", cat:"Organização", title:"Orientação a objetos (classes)", date:DATE1,
+{ id:"py-oop", num:"07", cat:"Organização", title:"Orientação a objetos (classes)", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (tipos), 03 (estruturas) e 05 (funções).</p>"},
    {t:"concept",l:"O que é",h:"<p>Orientação a objetos (OOP, do inglês Object-Oriented Programming, programação orientada a objetos) é uma forma de organizar código juntando dados e as ações sobre esses dados em uma mesma estrutura, chamada <b>classe</b>.</p><p>A <b>classe</b> é a planta. O <b>objeto</b> é a casa construída a partir da planta.</p>"},
@@ -1931,6 +1833,52 @@ const PY_THEMES = [
     ["O que é um objeto?","Uma instância concreta criada a partir de uma classe."],
     ["Para que serve __init__?","Roda na criação do objeto e guarda os dados iniciais em self."],
     ["O que é self?","A referência ao próprio objeto dentro dos métodos da classe."]] },
+{ id:"py-excecoes", num:"08", cat:"Robustez", title:"Erros e exceções", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 e 05 (fluxo e funções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Uma <strong>exceção</strong> é um erro que acontece durante a execução do programa. Se ninguém tratar, o programa para e mostra o erro.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Programas reais lidam com o inesperado: arquivo que falta, internet que cai, usuário que digita texto onde devia ser número. Tratar a exceção evita que tudo trave.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando uma operação pode falhar por algo fora do seu controle. Não use exceção para o fluxo normal do programa.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p><code>try</code> tenta o código. <code>except</code> captura o erro. <code>else</code> roda se deu tudo certo. <code>finally</code> roda sempre (deu certo ou não). <code>raise</code> levanta um erro de propósito.</p>"},
+   {t:"code",h:"<span class='cm'># Exemplo concreto</span>\n<span class='kw'>try</span>:\n    idade = int(input(<span class='st'>\"Idade: \"</span>))\n<span class='kw'>except</span> ValueError:\n    print(<span class='st'>\"Digite um número válido\"</span>)\n<span class='kw'>else</span>:\n    print(<span class='st'>f\"Você tem {idade} anos\"</span>)\n<span class='kw'>finally</span>:\n    print(<span class='st'>\"fim\"</span>)"},
+   {t:"table",h:"<table class='cmd'><tr><th>Exceção comum</th><th>Quando ocorre</th></tr><tr><td>ValueError</td><td>Valor de tipo certo, mas inválido. int('abc').</td></tr><tr><td>TypeError</td><td>Operação entre tipos incompatíveis. 'a' + 1.</td></tr><tr><td>KeyError</td><td>Chave que não existe no dict.</td></tr><tr><td>IndexError</td><td>Índice fora da lista.</td></tr><tr><td>FileNotFoundError</td><td>Arquivo não encontrado.</td></tr><tr><td>ZeroDivisionError</td><td>Divisão por zero.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Capturar tudo com <code>except Exception</code> (ou pior, <code>except:</code> vazio): isso esconde bugs de verdade. Usar exceção para controlar o fluxo normal em vez de um if.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Capture a exceção <strong>específica</strong> que você espera (ValueError, FileNotFoundError). Dê uma mensagem clara. Nunca silencie um erro sem motivo. Use <code>raise</code> com uma mensagem quando quiser sinalizar um problema.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> proteja uma divisão de ZeroDivisionError.</li><li><strong>Intermediário:</strong> peça um número e repita até o usuário digitar algo válido (try dentro de um while).</li><li><strong>Avançado:</strong> crie uma função que levanta (raise) ValueError se a idade for negativa.</li></ul>"},
+   {t:"code",h:"<span class='cm'># Soluções</span>\n<span class='kw'>try</span>:\n    print(10 / 0)\n<span class='kw'>except</span> ZeroDivisionError:\n    print(<span class='st'>\"não dá para dividir por zero\"</span>)\n\n<span class='kw'>def</span> validar(idade):\n    <span class='kw'>if</span> idade &lt; 0:\n        <span class='kw'>raise</span> ValueError(<span class='st'>\"idade não pode ser negativa\"</span>)\n    <span class='kw'>return</span> idade"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Exceção = erro em tempo de execução. try tenta, except captura, else roda se deu certo, finally sempre roda. raise levanta o erro. Capture o tipo específico.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> o papel de try/except/else/finally; por que evitar except genérico; quando usar raise. <strong>Pergunta de recrutador:</strong> \"O que acontece no finally se houver um return no try?\" Resposta: o finally roda mesmo assim, antes de a função retornar.</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Exceções<ul><li>try: tenta</li><li>except: captura (específico)</li><li>else: se deu certo</li><li>finally: sempre</li><li>raise: levanta</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça dois números e mostre a divisão, tratando divisão por zero e entrada inválida. <strong>Conecta com o próximo:</strong> uma das fontes mais comuns de erro é ler arquivos; isso se faz com a instrução with, o próximo tema.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Erros e exceções<ul><li>try / except</li><li>finally: sempre roda</li><li>Tratar em vez de quebrar</li></ul></li></ul>"}
+  ],
+  cards:[["Para que serve o bloco finally?","Para rodar um código sempre, tenha dado erro ou não (ex.: fechar um arquivo)."],
+         ["Por que evitar except Exception genérico?","Porque ele captura qualquer erro, escondendo bugs reais. Capture o tipo específico esperado."],
+         ["O que faz raise?","Levanta uma exceção de propósito, para sinalizar um problema (ex.: raise ValueError('...'))."],
+         ["Qual exceção ocorre em int('abc')?","ValueError: o tipo é certo (texto), mas o valor não dá para converter."]] },
+{ id:"py-arquivos", num:"09", cat:"Entrada e saída", title:"Arquivos e o comando with", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (tipos), 05 (funções) e 07 (exceções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Ler e escrever arquivos é pedir ao sistema operacional para abrir um arquivo, trabalhar com o conteúdo e depois fechar.</p><p>O comando <b>with</b> abre o arquivo e garante que ele será fechado sozinho ao final, mesmo se ocorrer um erro no meio.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Arquivo aberto e não fechado consome recursos e pode corromper dados. Em Dados, quase todo trabalho começa lendo um arquivo (CSV, TXT, JSON) e termina gravando um resultado.</p><p>O <b>with</b> remove a parte mais fácil de esquecer: o fechamento.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que abrir um arquivo. A forma recomendada na documentação oficial é abrir com <b>with</b>, ler ou escrever dentro do bloco, e deixar o fechamento por conta dele.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A função <b>open(caminho, modo)</b> devolve um objeto de arquivo. O <b>modo</b> diz a intenção: <code>r</code> ler, <code>w</code> escrever (apaga o que existia), <code>a</code> acrescentar ao final.</p><p>Acrescente <code>encoding='utf-8'</code> para acentos funcionarem em qualquer sistema.</p>"},
+   {t:"code",h:"<span class='cm'># Escrever um arquivo de texto</span>\nwith open('notas.txt', 'w', encoding='utf-8') as f:\n    f.write('linha 1\\n')\n    f.write('linha 2\\n')\n\n<span class='cm'># Ler de volta, linha por linha</span>\nwith open('notas.txt', 'r', encoding='utf-8') as f:\n    for linha in f:\n        print(linha.strip())"},
+   {t:"table",h:"<table class='cmd'><tr><th>Modo</th><th>O que faz</th></tr><tr><td>r</td><td>Lê. Dá erro se o arquivo não existe.</td></tr><tr><td>w</td><td>Escreve do zero. Apaga o conteúdo anterior.</td></tr><tr><td>a</td><td>Acrescenta no final. Mantém o que já existia.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Abrir no modo <code>w</code> achando que vai só ler: apaga o arquivo inteiro.</p><p>Esquecer <code>encoding='utf-8'</code> e ver acentos quebrados.</p><p>Abrir sem <b>with</b> e esquecer de chamar <code>f.close()</code>.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use sempre <b>with</b>. Use <code>encoding='utf-8'</code> de forma explícita. Para vários arquivos de dados reais, prefira bibliotecas próprias (como pandas, no tema 10) em vez de tratar texto na mão.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Crie um arquivo com três linhas e leia de volta mostrando cada uma.</p><p><b>2.</b> Abra um arquivo no modo <code>a</code> e acrescente uma linha sem apagar as anteriores.</p><p><b>3.</b> Leia um arquivo que pode não existir, tratando o erro com try/except para mostrar uma mensagem amigável.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'># 1</span>\nwith open('x.txt','w',encoding='utf-8') as f:\n    f.write('a\\nb\\nc\\n')\nwith open('x.txt','r',encoding='utf-8') as f:\n    for l in f: print(l.strip())\n\n<span class='cm'># 2</span>\nwith open('x.txt','a',encoding='utf-8') as f:\n    f.write('d\\n')\n\n<span class='cm'># 3</span>\ntry:\n    with open('nao_existe.txt','r',encoding='utf-8') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('Arquivo não encontrado.')"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>open abre, with fecha sozinho. Modo r lê, w apaga e escreve, a acrescenta. encoding='utf-8' para acentos. Erro de arquivo é FileNotFoundError.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Pergunta clássica: por que usar with? Resposta: garante o fechamento do arquivo mesmo com erro, evitando vazamento de recursos.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Arquivos<ul><li>open(caminho, modo, encoding)</li><li>with → fecha sozinho</li><li>Modos<ul><li>r ler</li><li>w escrever do zero</li><li>a acrescentar</li></ul></li><li>Erro: FileNotFoundError</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> grave em um arquivo o resultado de um cálculo feito por uma função do tema 05, depois leia e imprima.</p><p><b>Conexão:</b> ler arquivos é a porta de entrada para Dados. No tema 10, o pandas faz isso de forma direta com read_csv, e no SQL você fará o equivalente lendo tabelas.</p>"}
+  ],
+  cards:[
+    ["Qual a vantagem do with?","Fecha o arquivo automaticamente, mesmo se houver erro."],
+    ["O modo 'w' faz o quê com o conteúdo antigo?","Apaga tudo e escreve do zero."],
+    ["Como evitar acentos quebrados?","Use encoding='utf-8' no open."],
+    ["Qual erro ocorre ao ler um arquivo inexistente?","FileNotFoundError."]] },
 { id:"py-pandas", num:"10", cat:"Ponte para Dados", title:"Introdução ao pandas", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 03 (estruturas), 06 (módulos e import) e 09 (objetos e métodos).</p>"},
@@ -2056,8 +2004,7 @@ const REF_THEMES = [
   cards:[
     ["Por onde começar em Machine Learning?","Pelo scikit-learn, com problemas tabulares."],
     ["O que é Deep Learning?","Aprendizado com redes neurais, usado em imagem, texto e voz."],
-    ["Para que serve o Hugging Face?","Reaproveitar modelos prontos de linguagem e visão."]] }
-,
+    ["Para que serve o Hugging Face?","Reaproveitar modelos prontos de linguagem e visão."]] },
 { id:"ref-creditos", num:"06", cat:"Créditos", title:"Referências e créditos", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é",h:"<p>Esta página reúne as referências do material: quem é responsável por cada tecnologia, a documentação oficial usada como fonte e o que foi usado para construir o aplicativo.</p><p>Citar a fonte é boa prática profissional: dá crédito a quem produziu e permite que você confira a informação direto na origem.</p>"},
@@ -2291,8 +2238,7 @@ const PL_THEMES = [
     ["O que SOMASE faz?","Soma apenas as células que atendem a uma condição."],
     ["Quando usar as versões no plural (SES)?","Quando há mais de uma condição."],
     ["Como se escreve o critério \">100\"?","Entre aspas."],
-    ["Qual cuidado entre SOMASE e SOMASES?","A ordem dos argumentos muda; no plural a soma vem primeiro."]] }
-,
+    ["Qual cuidado entre SOMASE e SOMASES?","A ordem dos argumentos muda; no plural a soma vem primeiro."]] },
 { id:"pl-datas", num:"09", cat:"Datas", title:"Datas e horas", date:DATE1,
   blocks:[
    {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (cálculos) e 04 (funções).</p>"},
