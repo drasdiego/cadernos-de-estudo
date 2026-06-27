@@ -114,10 +114,11 @@
   .cm { color: #64748b; font-style: italic; }   
   .fn { color: #fbbf24; }                        
 
-  table.cmd { width: 100%; border-collapse: collapse; margin: 8px 0; page-break-inside: avoid; }
+  table.cmd { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 8px 0; page-break-inside: avoid; }
+  table.cmd th, table.cmd td { width: auto !important; word-break: break-word; }
   table.cmd th { background: #1e3a8a; color: #fff; text-align: left; padding: 7px 11px; font-size: 9.5pt; }
   table.cmd td { border-bottom: 1px solid #e2e8f0; padding: 7px 11px; font-size: 9.8pt; vertical-align: top; }
-  table.cmd td:first-child { font-family: 'Latin Modern Mono', monospace; font-weight: 700; color: #1e3a8a; white-space: nowrap; }
+  table.cmd td:first-child { font-family: 'Latin Modern Mono', monospace; font-weight: 700; color: #1e3a8a; }
   table.cmd tr:nth-child(even) td { background: #f8fafc; }
 
   .toc-item { display: flex; align-items: baseline; padding: 6px 0; border-bottom: 1px dashed #cbd5e1; font-size: 11pt; }
