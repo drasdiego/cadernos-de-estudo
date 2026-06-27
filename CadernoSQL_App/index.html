@@ -1346,6 +1346,73 @@ const PY_THEMES = [
          ["Para que serve enumerate?","Percorrer obtendo índice e valor ao mesmo tempo, sem usar range(len(...))."],
          ["List comprehension versus generator?","A compreensão cria a lista toda na memória; o generator gera item a item sob demanda, poupando memória."],
          ["O que range(5) gera?","Os números de 0 a 4 (de 0 até n-1)."]] }
+,
+{ id:"py-funcoes", num:"05", cat:"Funções", title:"Funções", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 a 04 (tipos, coleções e controle de fluxo).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Uma <strong>função</strong> é um bloco de código com nome que faz uma tarefa. Ela pode receber entradas (os <strong>parâmetros</strong>) e devolver um resultado com <code>return</code>.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Funções evitam repetir código e organizam o programa em partes pequenas. Isso segue o princípio DRY (do inglês Don't Repeat Yourself, ou seja, \"não se repita\").</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que um trecho se repete, ou quando dar um nome a uma etapa deixa o código mais claro.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Você define com <code>def nome(parâmetros):</code> e o corpo recuado. <code>return</code> devolve um valor e encerra a função. Se não houver return, a função devolve <code>None</code>.</p>"},
+   {t:"code",h:"<span class='cm'># Exemplo concreto</span>\n<span class='kw'>def</span> saudacao(nome):\n    <span class='kw'>return</span> <span class='st'>f\"Olá, {nome}\"</span>\n\nprint(saudacao(<span class='st'>\"Ana\"</span>))   <span class='cm'># Olá, Ana</span>\n\n<span class='cm'># Parâmetro com valor padrão</span>\n<span class='kw'>def</span> potencia(base, expoente=2):\n    <span class='kw'>return</span> base ** expoente\nprint(potencia(5))      <span class='cm'># 25</span>\nprint(potencia(5, 3))   <span class='cm'># 125</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo de parâmetro</th><th>Como é</th></tr><tr><td>Posicional</td><td>Pela ordem. f(1, 2)</td></tr><tr><td>Nomeado</td><td>Pelo nome. f(base=1)</td></tr><tr><td>Com padrão</td><td>Tem valor default. def f(x=2)</td></tr><tr><td>*args</td><td>Vários posicionais juntos numa tupla.</td></tr><tr><td>**kwargs</td><td>Vários nomeados juntos num dict.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p><strong>Default mutável:</strong> nunca use lista ou dict como valor padrão (<code>def f(x=[])</code>); ela é criada uma vez e fica compartilhada entre chamadas. Use <code>x=None</code> e crie a lista dentro. Outro erro: confundir <code>return</code> (devolve) com <code>print</code> (só mostra).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Escreva uma <strong>docstring</strong> (texto entre aspas triplas logo abaixo do def, que documenta o que a função faz). Mantenha a função curta, com um só propósito. Use type hints para indicar os tipos.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> crie uma função que recebe dois números e devolve a soma.</li><li><strong>Intermediário:</strong> crie uma função media(notas) que recebe uma lista e devolve a média.</li><li><strong>Avançado:</strong> crie uma função que aceita vários números com *args e devolve o maior.</li></ul>"},
+   {t:"code",h:"<span class='cm'># Soluções</span>\n<span class='kw'>def</span> soma(a, b): <span class='kw'>return</span> a + b\n\n<span class='kw'>def</span> media(notas): <span class='kw'>return</span> sum(notas) / len(notas)\n\n<span class='kw'>def</span> maior(*nums): <span class='kw'>return</span> max(nums)\nprint(maior(3, 9, 1))   <span class='cm'># 9</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>def cria a função; parâmetros são as entradas; return devolve o resultado (sem ele, vem None). Cuidado com default mutável. Documente com docstring.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> o que são *args e **kwargs; o perigo do argumento padrão mutável; escopo de variáveis (regra LEGB: Local, Enclosing, Global, Built-in). <strong>Pergunta de recrutador:</strong> \"O que essa função retorna se não tiver return?\" Resposta: None.</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Função<ul><li>def nome(parâmetros)</li><li>return devolve (sem ele, None)</li><li>Parâmetros: posicional, nomeado, padrão, *args, **kwargs</li><li>Documentar: docstring</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> escreva uma função <code>boletim(notas)</code> que devolve a média e se está aprovado (média maior ou igual a 7). <strong>Conecta com o próximo:</strong> ao crescer, você separa funções em arquivos: são os módulos, o tema 06.</p>"}
+  ],
+  cards:[["O que uma função devolve se não tiver return?","None."],
+         ["Por que não usar uma lista como valor padrão de parâmetro?","Porque ela é criada uma vez e fica compartilhada entre todas as chamadas, causando bugs. Use None e crie dentro."],
+         ["O que são *args e **kwargs?","*args junta vários argumentos posicionais numa tupla; **kwargs junta vários nomeados num dict."],
+         ["O que é uma docstring?","Um texto entre aspas triplas no início da função que documenta o que ela faz."]] },
+{ id:"py-modulos", num:"06", cat:"Organização", title:"Módulos, pacotes e import", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Tema 05 (funções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Um <strong>módulo</strong> é um arquivo <code>.py</code> com código (funções, variáveis). Um <strong>pacote</strong> é uma pasta com vários módulos. <code>import</code> traz esse código para o seu programa.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Permite dividir um projeto grande em partes e reaproveitar bibliotecas prontas, em vez de colocar tudo num arquivo só.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Para separar responsabilidades (cada arquivo com um tema) e para usar a biblioteca padrão ou pacotes do PyPI (Python Package Index, o repositório oficial de pacotes).</p>"},
+   {t:"concept",l:"Como funciona",h:"<p><code>import math</code> traz o módulo inteiro (usa-se <code>math.sqrt</code>). <code>from math import sqrt</code> traz só um nome (usa-se <code>sqrt</code>). Pacotes externos são instalados com <code>pip install</code>.</p>"},
+   {t:"code",h:"<span class='cm'># Duas formas de importar</span>\n<span class='kw'>import</span> math\nprint(math.pi)\n\n<span class='kw'>from</span> math <span class='kw'>import</span> sqrt\nprint(sqrt(25))   <span class='cm'># 5.0</span>\n\n<span class='cm'># Só roda quando o arquivo é executado direto, não quando é importado</span>\n<span class='kw'>if</span> __name__ == <span class='st'>\"__main__\"</span>:\n    print(<span class='st'>\"rodando direto\"</span>)"},
+   {t:"table",h:"<table class='cmd'><tr><th>Forma</th><th>Quando usar</th></tr><tr><td>import modulo</td><td>Padrão. Deixa claro de onde vem (modulo.func).</td></tr><tr><td>from modulo import x</td><td>Quando usa muito um nome só.</td></tr><tr><td>from modulo import *</td><td>Evite: traz tudo e polui o espaço de nomes.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Dar a um arquivo seu o mesmo nome de um módulo da biblioteca padrão (ex.: <code>random.py</code>): o Python importa o seu por engano. Import circular (dois arquivos que importam um ao outro).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Coloque os imports no topo do arquivo. Use um ambiente virtual para os pacotes do projeto. Proteja o código executável com <code>if __name__ == \"__main__\":</code>.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> importe <code>random</code> e sorteie um número de 1 a 6.</li><li><strong>Intermediário:</strong> crie um arquivo <code>utils.py</code> com a função soma e importe no seu programa.</li><li><strong>Avançado:</strong> instale com pip o pacote <code>requests</code> num venv e explique qual problema ele resolve (fazer requisições HTTP de forma simples).</li></ul>"},
+   {t:"code",h:"<span class='cm'># Solução (básico)</span>\n<span class='kw'>import</span> random\nprint(random.randint(1, 6))\n\n<span class='cm'># utils.py</span>\n<span class='kw'>def</span> soma(a, b): <span class='kw'>return</span> a + b\n<span class='cm'># programa.py</span>\n<span class='kw'>from</span> utils <span class='kw'>import</span> soma\nprint(soma(2, 3))"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Módulo = arquivo .py; pacote = pasta de módulos. import traz código. from x import y traz um nome. pip instala do PyPI. __name__ == \"__main__\" separa execução direta de importação.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> diferença entre módulo e pacote; o que faz <code>if __name__ == \"__main__\"</code>; diferença entre a biblioteca padrão e o PyPI. <strong>Pergunta de recrutador:</strong> \"Como você isola as dependências de um projeto?\" Resposta: ambiente virtual (venv).</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Organização<ul><li>Módulo: arquivo .py</li><li>Pacote: pasta de módulos</li><li>import / from import</li><li>Externos: PyPI + pip + venv</li><li>__name__ == \"__main__\"</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> crie um módulo <code>calc.py</code> com soma, subtração e média, e use no programa principal. <strong>Conecta com o próximo:</strong> programas reais lidam com falhas (arquivo que não existe, entrada inválida); isso é tratado com exceções, o tema 07.</p>"}
+  ],
+  cards:[["Módulo versus pacote?","Módulo é um arquivo .py; pacote é uma pasta com vários módulos."],
+         ["import math versus from math import sqrt?","O primeiro traz o módulo todo (math.sqrt); o segundo traz só o nome sqrt."],
+         ["O que faz if __name__ == \"__main__\"?","Garante que um trecho só roda quando o arquivo é executado direto, e não quando é importado."],
+         ["O que é o PyPI?","O Python Package Index, repositório oficial de pacotes de terceiros, instalados com pip."]] },
+{ id:"py-excecoes", num:"07", cat:"Robustez", title:"Erros e exceções", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 e 05 (fluxo e funções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Uma <strong>exceção</strong> é um erro que acontece durante a execução do programa. Se ninguém tratar, o programa para e mostra o erro.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Programas reais lidam com o inesperado: arquivo que falta, internet que cai, usuário que digita texto onde devia ser número. Tratar a exceção evita que tudo trave.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando uma operação pode falhar por algo fora do seu controle. Não use exceção para o fluxo normal do programa.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p><code>try</code> tenta o código. <code>except</code> captura o erro. <code>else</code> roda se deu tudo certo. <code>finally</code> roda sempre (deu certo ou não). <code>raise</code> levanta um erro de propósito.</p>"},
+   {t:"code",h:"<span class='cm'># Exemplo concreto</span>\n<span class='kw'>try</span>:\n    idade = int(input(<span class='st'>\"Idade: \"</span>))\n<span class='kw'>except</span> ValueError:\n    print(<span class='st'>\"Digite um número válido\"</span>)\n<span class='kw'>else</span>:\n    print(<span class='st'>f\"Você tem {idade} anos\"</span>)\n<span class='kw'>finally</span>:\n    print(<span class='st'>\"fim\"</span>)"},
+   {t:"table",h:"<table class='cmd'><tr><th>Exceção comum</th><th>Quando ocorre</th></tr><tr><td>ValueError</td><td>Valor de tipo certo, mas inválido. int('abc').</td></tr><tr><td>TypeError</td><td>Operação entre tipos incompatíveis. 'a' + 1.</td></tr><tr><td>KeyError</td><td>Chave que não existe no dict.</td></tr><tr><td>IndexError</td><td>Índice fora da lista.</td></tr><tr><td>FileNotFoundError</td><td>Arquivo não encontrado.</td></tr><tr><td>ZeroDivisionError</td><td>Divisão por zero.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Capturar tudo com <code>except Exception</code> (ou pior, <code>except:</code> vazio): isso esconde bugs de verdade. Usar exceção para controlar o fluxo normal em vez de um if.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Capture a exceção <strong>específica</strong> que você espera (ValueError, FileNotFoundError). Dê uma mensagem clara. Nunca silencie um erro sem motivo. Use <code>raise</code> com uma mensagem quando quiser sinalizar um problema.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> proteja uma divisão de ZeroDivisionError.</li><li><strong>Intermediário:</strong> peça um número e repita até o usuário digitar algo válido (try dentro de um while).</li><li><strong>Avançado:</strong> crie uma função que levanta (raise) ValueError se a idade for negativa.</li></ul>"},
+   {t:"code",h:"<span class='cm'># Soluções</span>\n<span class='kw'>try</span>:\n    print(10 / 0)\n<span class='kw'>except</span> ZeroDivisionError:\n    print(<span class='st'>\"não dá para dividir por zero\"</span>)\n\n<span class='kw'>def</span> validar(idade):\n    <span class='kw'>if</span> idade &lt; 0:\n        <span class='kw'>raise</span> ValueError(<span class='st'>\"idade não pode ser negativa\"</span>)\n    <span class='kw'>return</span> idade"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Exceção = erro em tempo de execução. try tenta, except captura, else roda se deu certo, finally sempre roda. raise levanta o erro. Capture o tipo específico.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> o papel de try/except/else/finally; por que evitar except genérico; quando usar raise. <strong>Pergunta de recrutador:</strong> \"O que acontece no finally se houver um return no try?\" Resposta: o finally roda mesmo assim, antes de a função retornar.</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Exceções<ul><li>try: tenta</li><li>except: captura (específico)</li><li>else: se deu certo</li><li>finally: sempre</li><li>raise: levanta</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça dois números e mostre a divisão, tratando divisão por zero e entrada inválida. <strong>Conecta com o próximo:</strong> uma das fontes mais comuns de erro é ler arquivos; isso se faz com a instrução with, o próximo tema.</p>"}
+  ],
+  cards:[["Para que serve o bloco finally?","Para rodar um código sempre, tenha dado erro ou não (ex.: fechar um arquivo)."],
+         ["Por que evitar except Exception genérico?","Porque ele captura qualquer erro, escondendo bugs reais. Capture o tipo específico esperado."],
+         ["O que faz raise?","Levanta uma exceção de propósito, para sinalizar um problema (ex.: raise ValueError('...'))."],
+         ["Qual exceção ocorre em int('abc')?","ValueError: o tipo é certo (texto), mas o valor não dá para converter."]] }
 ];
 
 const PY_QUIZ = [
@@ -1359,6 +1426,13 @@ const PY_QUIZ = [
  {q:"range(5) gera:",o:["1 a 5","0 a 5","0 a 4","5 a 0"],c:2,e:"Vai de 0 a n-1, ou seja, 0, 1, 2, 3, 4."},
  {q:"A forma recomendada de formatar texto é:",o:["concatenar com +","f-strings","usar vírgulas no print","% antigo sempre"],c:1,e:"f-strings (f\"{x}\") são claras e suportam formatação como {v:.2f}."},
  {q:"0.1 + 0.2 == 0.3 em Python resulta em:",o:["True","False","Erro","0.3"],c:1,e:"False, por causa da representação binária de float. Arredonde para comparar."}
+,
+ {q:"O que uma função retorna se não tiver return?",o:["0","None","Um erro","A última linha"],c:1,e:"Sem return, a função devolve None."},
+ {q:"Por que não usar uma lista como valor padrão de parâmetro?",o:["É proibido pela sintaxe","Ela é criada uma vez e fica compartilhada entre as chamadas","Deixa o código lento","Não aceita números"],c:1,e:"O default mutável é compartilhado entre chamadas e causa bugs. Use None e crie dentro."},
+ {q:"O que faz if __name__ == \"__main__\"?",o:["Importa um módulo","Faz o trecho rodar só quando o arquivo é executado direto","Cria uma função","Captura um erro"],c:1,e:"Separa a execução direta do arquivo da importação dele."},
+ {q:"Para tratar um erro em tempo de execução, usa-se:",o:["if / else","try / except","for","def"],c:1,e:"try tenta o código e except captura a exceção."},
+ {q:"Qual bloco roda sempre, com erro ou não?",o:["try","except","else","finally"],c:3,e:"finally roda em qualquer caso (ótimo para liberar recursos)."},
+ {q:"int('abc') levanta qual exceção?",o:["TypeError","KeyError","ValueError","IndexError"],c:2,e:"ValueError: o tipo é texto, mas o valor não dá para converter em número."}
 ];
 
 const SUBJECTS = {

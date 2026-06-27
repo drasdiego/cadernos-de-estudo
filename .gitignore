@@ -8,3 +8,5 @@ __pycache__/
 _engine.txt
 *.tmp
 _py.txt
+_py2.txt
+_pyq.txt
