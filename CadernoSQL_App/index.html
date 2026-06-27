@@ -567,6 +567,99 @@ const SQL_THEMES = [
          ["Por que usar views?","Reuso (salvar consulta difícil), segurança (esconder colunas) e simplificação."],
          ["DROP VIEW apaga os dados?","Não. Apaga só a view; os dados das tabelas originais permanecem."],
          ["A view reflete mudanças nos dados?","Sim, é dinâmica: mostra sempre os dados atuais das tabelas."]] }
+,
+{ id:"indices", num:"25", cat:"MySQL na prática", title:"Índices (indexes)", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 05 (DDL), 11 (chaves) e 14 (WHERE).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Um índice (em inglês index) é uma estrutura auxiliar que o banco mantém para encontrar linhas rapidamente, sem ler a tabela inteira.</p><p>É como o índice remissivo no fim de um livro: em vez de folhear página por página, você vai direto ao termo e à página.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Sem índice, para responder um WHERE o MySQL faz varredura completa (em inglês full table scan): lê todas as linhas. Em tabelas grandes isso é lento.</p><p>Segundo a documentação oficial, o índice é o fator que mais acelera consultas. É também o tema de performance mais cobrado em entrevistas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Crie índice em colunas usadas com frequência em WHERE, em JOIN (junção de tabelas) e em ORDER BY. A chave primária (PK, primary key) já tem índice automático.</p><p>Não indexe tudo: cada índice ocupa espaço e deixa INSERT, UPDATE e DELETE mais lentos, porque o índice precisa ser atualizado junto.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O InnoDB (o mecanismo de armazenamento padrão do MySQL) organiza os índices em uma estrutura chamada B-tree, que mantém os valores ordenados para busca rápida.</p><p>Cria-se com CREATE INDEX e verifica-se o uso com EXPLAIN (tema 28).</p>"},
+   {t:"code",h:"<span class='cm'>-- Criar um índice na coluna usada no filtro</span>\nCREATE INDEX idx_cliente_email ON cliente (email);\n\n<span class='cm'>-- Agora esta consulta usa o índice</span>\nSELECT * FROM cliente WHERE email = 'a@b.com';\n\n<span class='cm'>-- Índice composto: serve para filtros por (uf, cidade)</span>\nCREATE INDEX idx_uf_cidade ON cliente (uf, cidade);"},
+   {t:"table",h:"<table class='cmd'><tr><th>Situação</th><th>Vale indexar?</th></tr><tr><td>Coluna muito usada no WHERE</td><td>Sim</td></tr><tr><td>Coluna de JOIN (chave estrangeira)</td><td>Sim</td></tr><tr><td>Tabela pequena</td><td>Pouco ganho</td></tr><tr><td>Coluna que quase não filtra</td><td>Não compensa</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Indexar todas as colunas achando que sempre acelera: atrasa as gravações e ocupa espaço.</p><p>Usar função na coluna do WHERE (por exemplo YEAR(data)) impede o uso do índice.</p><p>Esquecer de indexar a chave estrangeira usada em JOINs.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Indexe o que aparece em WHERE, JOIN e ORDER BY. Em índice composto, coloque primeiro a coluna mais seletiva. Confirme com EXPLAIN se o índice está sendo usado de verdade, em vez de supor.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Crie um índice na coluna cpf da tabela cliente.</p><p><b>2.</b> Crie um índice composto por (uf, cidade).</p><p><b>3.</b> Explique por que WHERE YEAR(data_venda) = 2025 pode não usar o índice da coluna data_venda.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'>-- 1</span>\nCREATE INDEX idx_cliente_cpf ON cliente (cpf);\n\n<span class='cm'>-- 2</span>\nCREATE INDEX idx_uf_cidade ON cliente (uf, cidade);\n\n<span class='cm'>-- 3: a função YEAR transforma a coluna, e o índice é sobre o valor original.</span>\n<span class='cm'>-- Melhor filtrar por faixa, preservando o índice:</span>\nSELECT * FROM venda\nWHERE data_venda >= '2025-01-01' AND data_venda < '2026-01-01';"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Índice acelera leitura, mas pesa na gravação. Indexe WHERE, JOIN e ORDER BY. PK já é indexada. Função na coluna anula o índice. InnoDB usa B-tree.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Pergunta clássica: por que não indexar tudo? Porque cada índice ocupa espaço e deixa INSERT, UPDATE e DELETE mais lentos. Outra: por que YEAR(data) no WHERE atrapalha? Porque transforma a coluna e impede o uso do índice.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Índice<ul><li>Para que: achar linhas rápido</li><li>Onde: WHERE, JOIN, ORDER BY</li><li>Custo: espaço e gravação mais lenta</li><li>Estrutura: B-tree (InnoDB)</li><li>Cuidado: função na coluna anula</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> em uma tabela de vendas, crie índices nas colunas de filtro e de JOIN e descreva o que espera melhorar.</p><p><b>Conexão:</b> índice é a base do tema 28 (performance e EXPLAIN). No pandas, o DataFrame também tem index, com a mesma ideia de acesso rápido.</p>"}
+  ],
+  cards:[
+    ["Para que serve um índice?","Encontrar linhas rapidamente, sem varrer a tabela inteira."],
+    ["Qual o custo de criar índices demais?","Ocupam espaço e deixam INSERT, UPDATE e DELETE mais lentos."],
+    ["Onde mais vale indexar?","Colunas usadas em WHERE, JOIN e ORDER BY."],
+    ["Qual estrutura o InnoDB usa nos índices?","B-tree (valores ordenados para busca rápida)."]] },
+{ id:"transacoes", num:"26", cat:"MySQL na prática", title:"Transações e ACID", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 06 (DML) e 09 (DTL — transação de dados).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Uma transação é um conjunto de comandos que devem acontecer como um bloco único: ou todos têm efeito, ou nenhum tem.</p><p>Exemplo clássico: transferir dinheiro tira de uma conta e põe em outra. As duas etapas precisam valer juntas. Se uma falha, a outra é desfeita.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Sem transação, uma falha no meio deixa os dados inconsistentes (dinheiro saiu de uma conta e não entrou na outra). Transação protege a integridade dos dados.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que duas ou mais alterações dependem uma da outra. Operações de leitura simples não precisam. O InnoDB suporta transações; o MyISAM, mecanismo antigo, não.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Inicia-se com START TRANSACTION. Se tudo deu certo, COMMIT confirma e grava em definitivo. Se algo deu errado, ROLLBACK desfaz tudo, voltando ao estado anterior.</p>"},
+   {t:"code",h:"START TRANSACTION;\n\nUPDATE conta SET saldo = saldo - 100 WHERE id = 1;\nUPDATE conta SET saldo = saldo + 100 WHERE id = 2;\n\n<span class='cm'>-- Deu tudo certo: confirma</span>\nCOMMIT;\n\n<span class='cm'>-- Se algo falhasse, usaríamos no lugar:</span>\n<span class='cm'>-- ROLLBACK;</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Letra de ACID</th><th>O que garante</th></tr><tr><td>Atomicidade</td><td>Tudo ou nada: o bloco não fica pela metade.</td></tr><tr><td>Consistência</td><td>Os dados saem de um estado válido para outro válido.</td></tr><tr><td>Isolamento</td><td>Transações simultâneas não se atrapalham.</td></tr><tr><td>Durabilidade</td><td>Após COMMIT, o dado persiste mesmo se cair a energia.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esquecer o COMMIT: as mudanças ficam pendentes e podem se perder.</p><p>Usar tabelas MyISAM e esperar ROLLBACK: ele não existe nesse mecanismo.</p><p>Manter uma transação aberta por muito tempo, travando outras (problema de bloqueio, em inglês lock).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Mantenha a transação curta. Trate o erro e decida entre COMMIT e ROLLBACK. Use InnoDB. Entenda o nível de isolamento padrão do MySQL antes de assumir o comportamento.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Escreva uma transação que debita 50 de uma conta e credita 50 em outra.</p><p><b>2.</b> Explique o que ROLLBACK faria se o segundo UPDATE falhasse.</p><p><b>3.</b> Diga, com suas palavras, o que cada letra de ACID protege.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'>-- 1</span>\nSTART TRANSACTION;\nUPDATE conta SET saldo = saldo - 50 WHERE id = 10;\nUPDATE conta SET saldo = saldo + 50 WHERE id = 20;\nCOMMIT;\n\n<span class='cm'>-- 2: ROLLBACK desfaz o primeiro UPDATE, voltando os saldos ao estado inicial.</span>\n<span class='cm'>-- 3: Atomicidade (tudo ou nada), Consistência (estado válido),</span>\n<span class='cm'>--    Isolamento (sem interferência) e Durabilidade (persiste após COMMIT).</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Transação = bloco tudo ou nada. START TRANSACTION, COMMIT confirma, ROLLBACK desfaz. ACID: Atomicidade, Consistência, Isolamento, Durabilidade. Precisa de InnoDB.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que significa ACID? Explique cada letra. Qual a diferença entre COMMIT e ROLLBACK? Qual o nível de isolamento padrão do MySQL? Resposta oficial: REPEATABLE READ no InnoDB.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Transação<ul><li>START TRANSACTION</li><li>COMMIT (confirma)</li><li>ROLLBACK (desfaz)</li><li>ACID<ul><li>Atomicidade</li><li>Consistência</li><li>Isolamento</li><li>Durabilidade</li></ul></li><li>Mecanismo: InnoDB</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> modele uma transferência entre contas com START TRANSACTION, dois UPDATE e COMMIT, e descreva quando usaria ROLLBACK.</p><p><b>Conexão:</b> liga-se ao tema 09 (DTL). O isolamento conecta com concorrência, um tema de sistemas que você verá em Engenharia de Software.</p>"}
+  ],
+  cards:[
+    ["O que é uma transação?","Um bloco de comandos que vale por inteiro: tudo ou nada."],
+    ["O que faz COMMIT e ROLLBACK?","COMMIT confirma em definitivo; ROLLBACK desfaz tudo."],
+    ["O que significa ACID?","Atomicidade, Consistência, Isolamento e Durabilidade."],
+    ["Qual o isolamento padrão do InnoDB?","REPEATABLE READ (conforme a documentação oficial)."]] },
+{ id:"normaliza", num:"27", cat:"MySQL na prática", title:"Normalização (1FN, 2FN, 3FN)", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 11 (chaves), 12 (relacionamentos) e 13 (modelos de dados).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Normalização é o processo de organizar as tabelas para evitar dados repetidos e inconsistências. As regras vêm em etapas chamadas formas normais (em inglês normal forms): 1FN, 2FN e 3FN.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Dado repetido em vários lugares causa anomalias: você atualiza em um lugar e esquece no outro, gerando contradição. Normalizar deixa cada fato guardado em um único lugar.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Ao projetar o banco. Em sistemas de operação (cadastros, vendas), normaliza-se para manter integridade. Em análise de dados, às vezes desnormaliza-se de propósito, para ganhar velocidade de leitura. São objetivos diferentes.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p><b>1FN:</b> cada coluna guarda um único valor, sem listas dentro da célula.</p><p><b>2FN:</b> estando na 1FN, toda coluna depende da chave inteira, não de parte dela.</p><p><b>3FN:</b> estando na 2FN, nenhuma coluna depende de outra coluna comum, apenas da chave.</p>"},
+   {t:"code",h:"<span class='cm'>-- Fora da 1FN: telefones em uma célula só</span>\n<span class='cm'>-- cliente(id, nome, telefones = '111, 222')</span>\n\n<span class='cm'>-- Na 1FN: um telefone por linha, em tabela própria</span>\nCREATE TABLE telefone (\n  id INT PRIMARY KEY,\n  cliente_id INT,\n  numero VARCHAR(20),\n  FOREIGN KEY (cliente_id) REFERENCES cliente(id)\n);"},
+   {t:"table",h:"<table class='cmd'><tr><th>Forma normal</th><th>Regra central</th></tr><tr><td>1FN</td><td>Um valor por célula, sem listas.</td></tr><tr><td>2FN</td><td>Depende da chave inteira, não de parte.</td></tr><tr><td>3FN</td><td>Sem depender de coluna que não seja a chave.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Guardar lista de valores em uma coluna (quebra a 1FN).</p><p>Repetir o nome do produto em toda linha de venda em vez de referenciar por id.</p><p>Normalizar ao extremo e criar JOINs demais, prejudicando a leitura quando não era necessário.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Mire a 3FN em bancos de operação. Use chave estrangeira para ligar tabelas. Avalie desnormalizar apenas em cenários de análise com leitura intensa, de forma consciente, não por descuido.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Aponte a violação de 1FN em uma coluna que guarda 'azul, verde' como texto.</p><p><b>2.</b> Separe pedido e item_pedido para respeitar a 2FN.</p><p><b>3.</b> Explique por que guardar nome_cidade junto de cep na mesma tabela pode ferir a 3FN.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'>-- 1: 'azul, verde' é uma lista em uma célula. Crie uma linha por cor.</span>\n\n<span class='cm'>-- 2: itens em tabela própria, ligada ao pedido</span>\nCREATE TABLE item_pedido (\n  id INT PRIMARY KEY,\n  pedido_id INT,\n  produto_id INT,\n  quantidade INT,\n  FOREIGN KEY (pedido_id) REFERENCES pedido(id)\n);\n\n<span class='cm'>-- 3: cep determina a cidade; cidade depende do cep, não da chave da tabela.</span>\n<span class='cm'>--    O ideal é uma tabela de cep separada.</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Normalizar evita repetição e anomalias. 1FN: um valor por célula. 2FN: depende da chave inteira. 3FN: não depende de coluna que não seja a chave. Operação normaliza; análise às vezes desnormaliza.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Explique 1FN, 2FN e 3FN com um exemplo. Quando desnormalizar? Em leitura intensa de análise, trocando integridade por velocidade, de forma consciente.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Normalização<ul><li>Objetivo: sem repetição, sem anomalia</li><li>1FN: um valor por célula</li><li>2FN: depende da chave inteira</li><li>3FN: só depende da chave</li><li>Análise: às vezes desnormaliza</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> pegue uma planilha bagunçada (cliente com vários telefones na mesma célula) e redesenhe em tabelas até a 3FN.</p><p><b>Conexão:</b> liga aos temas 11 a 13 (chaves, relacionamentos e modelos) e prepara o terreno para JOINs (tema 21) bem desenhados.</p>"}
+  ],
+  cards:[
+    ["O que normalização evita?","Dados repetidos e anomalias de atualização."],
+    ["Qual a regra da 1FN?","Um único valor por célula, sem listas."],
+    ["Qual a regra da 3FN?","Nenhuma coluna depende de outra que não seja a chave."],
+    ["Quando se desnormaliza de propósito?","Em análise com leitura intensa, trocando integridade por velocidade."]] },
+{ id:"explain", num:"28", cat:"MySQL na prática", title:"Performance e EXPLAIN", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 14 (WHERE), 21 (JOINs) e 25 (índices).</p>"},
+   {t:"concept",l:"O que é",h:"<p>EXPLAIN é um comando que mostra o plano de execução: como o MySQL pretende rodar a sua consulta, qual índice vai usar e quantas linhas espera examinar.</p><p>É como ver a rota que o aplicativo de mapas escolheu antes de dirigir.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Otimizar no chute não funciona. EXPLAIN mostra, com base em fatos, se a consulta usa índice ou faz varredura completa. É a ferramenta oficial para diagnosticar consultas lentas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando uma consulta está lenta, ou antes de subir uma consulta importante para produção. Coloque EXPLAIN na frente do SELECT e leia o resultado.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O resultado traz colunas como <b>type</b> (como as linhas são acessadas), <b>key</b> (qual índice foi escolhido) e <b>rows</b> (estimativa de linhas lidas). Quanto menor o rows e melhor o type, mais eficiente.</p>"},
+   {t:"code",h:"<span class='cm'>-- Ver o plano de execução de uma consulta</span>\nEXPLAIN\nSELECT * FROM cliente WHERE email = 'a@b.com';\n\n<span class='cm'>-- Lendo o resultado:</span>\n<span class='cm'>-- key = idx_cliente_email  -> usou o índice (bom)</span>\n<span class='cm'>-- key = NULL               -> varredura completa (ruim em tabela grande)</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Coluna do EXPLAIN</th><th>O que observar</th></tr><tr><td>type</td><td>const e ref são bons; ALL indica varredura completa.</td></tr><tr><td>key</td><td>O índice usado. NULL significa nenhum.</td></tr><tr><td>rows</td><td>Estimativa de linhas lidas. Menor é melhor.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Otimizar sem medir, mudando a consulta no escuro.</p><p>Ver type = ALL e ignorar: é o sinal de varredura completa.</p><p>Usar SELECT * quando só precisa de poucas colunas, lendo dados à toa.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Meça com EXPLAIN antes e depois de uma mudança. Selecione só as colunas necessárias. Garanta índice nas colunas de WHERE e JOIN. Evite função sobre a coluna filtrada.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Rode EXPLAIN em um SELECT com WHERE sobre uma coluna sem índice e observe type e key.</p><p><b>2.</b> Crie o índice e rode EXPLAIN de novo, comparando rows.</p><p><b>3.</b> Reescreva um SELECT * pedindo só as três colunas necessárias.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'>-- 1</span>\nEXPLAIN SELECT * FROM venda WHERE cliente_id = 7;\n\n<span class='cm'>-- 2</span>\nCREATE INDEX idx_venda_cliente ON venda (cliente_id);\nEXPLAIN SELECT * FROM venda WHERE cliente_id = 7;\n<span class='cm'>-- Espera-se key preenchida e rows bem menor.</span>\n\n<span class='cm'>-- 3</span>\nSELECT id, data_venda, valor FROM venda WHERE cliente_id = 7;"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>EXPLAIN mostra o plano. Olhe type (evite ALL), key (índice usado) e rows (menor é melhor). Meça antes e depois. Índice e SELECT enxuto ajudam.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Como investigar uma consulta lenta? Resposta forte: rodo EXPLAIN, vejo se há varredura completa (type = ALL, key = NULL), crio o índice adequado e comparo o rows antes e depois.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Performance<ul><li>EXPLAIN → plano de execução</li><li>type → ALL é ruim</li><li>key → índice usado</li><li>rows → menor é melhor</li><li>Ações: índice, SELECT enxuto, sem função na coluna</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> escolha uma consulta com JOIN, rode EXPLAIN, crie os índices certos e registre a queda no rows.</p><p><b>Conexão:</b> fecha o ciclo com o tema 25 (índices) e com observabilidade, um conceito de Engenharia de Software: decidir com base em medição, não em achismo.</p>"}
+  ],
+  cards:[
+    ["Para que serve o EXPLAIN?","Mostrar o plano de execução: índice usado e linhas estimadas."],
+    ["O que significa type = ALL?","Varredura completa da tabela, ruim em tabelas grandes."],
+    ["O que ver na coluna key?","Qual índice foi usado; NULL significa nenhum."],
+    ["Como investigar consulta lenta?","Rodar EXPLAIN, achar varredura completa, criar índice e comparar rows."]] }
 ];
 
 const SQL_QUIZ = [
@@ -602,6 +695,14 @@ const SQL_QUIZ = [
  {q:"O que é uma subquery (subconsulta)?",o:["Uma tabela nova","Uma consulta dentro de outra consulta","Um tipo de JOIN","Uma chave primária"],c:1,e:"É um SELECT dentro de outro SELECT, usado como coluna ou como filtro."},
  {q:"O que é uma View?",o:["Uma cópia física da tabela","Uma tabela virtual: um SELECT salvo que não armazena dados","Um índice","Um backup"],c:1,e:"A view é uma tabela virtual (consulta salva); reflete os dados atuais e não ocupa espaço."},
  {q:"DROP VIEW apaga os dados das tabelas originais?",o:["Sim, apaga tudo","Não, apaga só a view","Só apaga metade","Depende do SGBD"],c:1,e:"DROP VIEW remove apenas a visão; os dados das tabelas permanecem."}
+,
+ {q:"Qual o principal benefício de um índice?",o:["Economiza espaço em disco","Encontra linhas sem varrer a tabela inteira","Impede dados duplicados","Cria backup automático"],c:1,e:"O índice acelera a busca, evitando a varredura completa da tabela."},
+ {q:"Por que não criar índice em todas as colunas?",o:["O MySQL não permite","Ocupa espaço e deixa as gravações mais lentas","Some os dados","Quebra os JOINs"],c:1,e:"Cada índice precisa ser atualizado em INSERT, UPDATE e DELETE, e ocupa espaço."},
+ {q:"O que ROLLBACK faz em uma transação?",o:["Confirma em definitivo","Desfaz tudo, voltando ao estado anterior","Cria um índice","Salva um backup"],c:1,e:"ROLLBACK reverte as alterações; COMMIT é quem confirma."},
+ {q:"O que significa o A de ACID?",o:["Acesso","Atomicidade: tudo ou nada","Auditoria","Atualização"],c:1,e:"Atomicidade garante que a transação não fique pela metade."},
+ {q:"Qual o nível de isolamento padrão do InnoDB no MySQL?",o:["READ UNCOMMITTED","READ COMMITTED","REPEATABLE READ","SERIALIZABLE"],c:2,e:"Conforme a documentação oficial, o padrão do InnoDB é REPEATABLE READ."},
+ {q:"Na 1FN (primeira forma normal), cada célula deve conter:",o:["Uma lista de valores","Um único valor","Uma fórmula","Uma chave estrangeira"],c:1,e:"A 1FN exige um valor por célula, sem listas dentro do campo."},
+ {q:"No resultado do EXPLAIN, type = ALL indica:",o:["Uso ideal de índice","Varredura completa da tabela","Erro de sintaxe","Transação aberta"],c:1,e:"type = ALL significa full table scan, ruim em tabelas grandes."}
 ];
 
 let SQLjs=null,DB=null,dbReady=false,dbError=null,dbStarted=false,activeEx=[];
@@ -997,6 +1098,51 @@ const VIZ_THEMES = [
   cards:[["Quais os 3 pilares do storytelling com dados?","História, Público e Pergunta."],
          ["O que é EDA?","Análise Exploratória de Dados: investigação inicial para resumir, achar padrões e outliers antes de modelar."],
          ["Variável contínua vs. discreta?","Contínua = medições com casas decimais (altura); discreta = contagens inteiras (nº de filhos)."]] }
+,
+{ id:"viz-enganosos", num:"09", cat:"Boas práticas", title:"Gráficos que enganam", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 03 (escala de precisão) e 04 a 06 (tipos de gráfico).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São gráficos que, por escolhas erradas, levam o leitor a uma conclusão falsa. Às vezes por descuido, às vezes de propósito.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Um gráfico enganoso destrói a confiança no seu trabalho e leva a decisões erradas. Reconhecer os truques protege a sua análise e a sua leitura das análises dos outros.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Use esta lista como verificação final antes de publicar qualquer gráfico, e como filtro crítico ao ler relatórios de terceiros.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Os erros mais comuns: eixo que não começa no zero (exagera diferenças), pizza com muitas fatias (impossível comparar), eixo invertido, escalas diferentes lado a lado e gráfico 3D que distorce proporções.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Truque</th><th>O efeito enganoso</th></tr><tr><td>Eixo sem o zero</td><td>Faz uma diferença pequena parecer enorme.</td></tr><tr><td>Pizza com muitas fatias</td><td>Impossível comparar tamanhos.</td></tr><tr><td>3D</td><td>Distorce a proporção das barras.</td></tr><tr><td>Escalas diferentes</td><td>Comparação injusta entre gráficos.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Cortar o eixo vertical para dramatizar uma alta.</p><p>Usar pizza para mais de quatro ou cinco categorias.</p><p>Aplicar efeito 3D que engorda visualmente algumas barras.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Comece o eixo de valores no zero em gráficos de barra. Prefira barras à pizza quando há muitas categorias. Evite 3D. Use a mesma escala ao comparar gráficos lado a lado.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Explique por que um gráfico de barras deve começar no zero.</p><p><b>2.</b> Diga quando a pizza deixa de funcionar.</p><p><b>3.</b> Aponte o problema de comparar dois gráficos com escalas diferentes.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Sem o zero, a altura das barras deixa de ser proporcional ao valor e exagera diferenças.</p><p><b>2.</b> Com muitas fatias parecidas, o olho não distingue tamanhos.</p><p><b>3.</b> Escalas diferentes fazem valores iguais parecerem diferentes, levando a conclusões erradas.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Barra começa no zero. Pizza só para poucas categorias. Sem 3D. Mesma escala ao comparar. O gráfico deve revelar, não distorcer.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Por que barras começam no zero? Para manter a proporção entre altura e valor. Quando evitar pizza? Com muitas categorias ou valores próximos.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Gráficos que enganam<ul><li>Eixo sem zero → exagera</li><li>Pizza demais → não compara</li><li>3D → distorce</li><li>Escalas diferentes → injusto</li><li>Regra: revelar, não distorcer</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> pegue um gráfico com eixo cortado e refaça começando no zero, comparando a impressão.</p><p><b>Conexão:</b> aplica-se direto ao Power BI e ao próximo tema, sobre escolher o gráfico certo.</p>"}
+  ],
+  cards:[
+    ["Por que barras devem começar no zero?","Para manter a altura proporcional ao valor."],
+    ["Quando a pizza falha?","Com muitas categorias ou valores próximos."],
+    ["Qual o problema do 3D?","Distorce a proporção das formas."],
+    ["E escalas diferentes lado a lado?","Tornam a comparação injusta e enganosa."]] },
+{ id:"viz-escolha", num:"10", cat:"Boas práticas", title:"Como escolher o gráfico certo", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 a 06 (tipos de gráfico) e 09 (gráficos que enganam).</p>"},
+   {t:"concept",l:"O que é",h:"<p>É um método para escolher o gráfico a partir da pergunta que você quer responder, em vez de escolher pela aparência.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>O gráfico certo torna a mensagem óbvia em segundos. O errado esconde a informação. A escolha vem da pergunta, não do gosto.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Antes de criar qualquer visual. Defina primeiro a intenção: comparar, mostrar partes de um todo, ver evolução no tempo, ver relação ou ver distribuição.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Cada intenção tem gráficos naturais. Comparar: barras. Evolução no tempo: linha. Partes de um todo: barras empilhadas (melhor que pizza). Relação entre dois números: dispersão. Distribuição: histograma ou box plot.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Sua pergunta</th><th>Gráfico indicado</th></tr><tr><td>Comparar categorias</td><td>Barras.</td></tr><tr><td>Evolução no tempo</td><td>Linha.</td></tr><tr><td>Partes de um todo</td><td>Barras empilhadas.</td></tr><tr><td>Relação entre dois números</td><td>Dispersão.</td></tr><tr><td>Distribuição</td><td>Histograma ou box plot.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Escolher o gráfico pela beleza e depois forçar os dados nele.</p><p>Usar linha para categorias sem ordem temporal.</p><p>Usar pizza onde barras comparariam melhor.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Escreva a pergunta em uma frase antes de escolher. Use linha só quando há ordem no eixo (tempo). Prefira barras para comparar. Mantenha o visual simples e rotulado.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Que gráfico mostra a venda mês a mês ao longo do ano?</p><p><b>2.</b> Que gráfico compara o faturamento de cinco lojas?</p><p><b>3.</b> Que gráfico mostra a relação entre horas de estudo e nota?</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Linha: há evolução no tempo.</p><p><b>2.</b> Barras: comparação entre categorias.</p><p><b>3.</b> Dispersão: relação entre dois números.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>A pergunta define o gráfico. Comparar: barras. Tempo: linha. Todo: empilhadas. Relação: dispersão. Distribuição: histograma ou box plot.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Como escolher um gráfico? Pela pergunta a responder. Quando usar linha? Quando há ordem temporal no eixo. Por que barras antes de pizza? Porque o olho compara comprimentos melhor que ângulos.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Escolher o gráfico<ul><li>Comparar → barras</li><li>Tempo → linha</li><li>Todo → empilhadas</li><li>Relação → dispersão</li><li>Distribuição → histograma / box plot</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> para três perguntas de negócio, escolha e justifique o gráfico de cada uma.</p><p><b>Conexão:</b> fecha o caderno de Visualização e orienta as escolhas de visual no Power BI.</p>"}
+  ],
+  cards:[
+    ["O que define a escolha do gráfico?","A pergunta que você quer responder."],
+    ["Qual gráfico para evolução no tempo?","Linha."],
+    ["Qual gráfico para comparar categorias?","Barras."],
+    ["Qual gráfico para relação entre dois números?","Dispersão."]] }
 ];
 
 const VIZ_QUIZ = [
@@ -1018,6 +1164,12 @@ const VIZ_QUIZ = [
  {q:"Cores complementares (lados opostos do círculo cromático) servem para:",o:["Reduzir o contraste","Gerar o maior contraste e destacar","Indicar magnitude","Esconder dados"],c:1,e:"Complementares geram forte contraste, úteis para destacar um elemento qualitativo."},
  {q:"Para mostrar 'qual canal teve mais chamados', o tipo de análise é:",o:["Composição","Comparação","Relação","Distribuição"],c:1,e:"Comparar quantidades entre categorias é comparação (barras)."},
  {q:"Cores secundárias são:",o:["Amarelo, vermelho, azul","Laranja, roxo, verde","Preto e branco","Tons de cinza"],c:1,e:"Secundárias nascem da mistura de duas primárias: laranja, roxo e verde."}
+,
+ {q:"Por que um gráfico de barras deve começar no zero?",o:["Por estética","Para manter a altura proporcional ao valor","Para caber na tela","Não precisa"],c:1,e:"Sem o zero, a altura deixa de ser proporcional e exagera diferenças."},
+ {q:"Quando a pizza deixa de funcionar bem?",o:["Com poucas fatias","Com muitas categorias ou valores próximos","Em relatórios","Com cores"],c:1,e:"O olho não distingue fatias parecidas; prefira barras."},
+ {q:"Qual gráfico mostra evolução ao longo do tempo?",o:["Pizza","Linha","Dispersão","Barras empilhadas"],c:1,e:"A linha é natural para ordem temporal."},
+ {q:"Qual gráfico mostra a relação entre dois números?",o:["Linha","Dispersão","Pizza","Barras"],c:1,e:"O gráfico de dispersão mostra relação entre duas variáveis numéricas."},
+ {q:"O que define a escolha do gráfico?",o:["A cor preferida","A pergunta que se quer responder","O tamanho da tela","O software"],c:1,e:"A intenção (comparar, evoluir, relacionar) guia o gráfico."}
 ];
 
 const EST_THEMES = [
@@ -1097,6 +1249,74 @@ const EST_THEMES = [
          ["O que é o nível de significância α?","O risco aceito de erro tipo I (falso positivo); padrão 0,05."],
          ["Erro tipo I vs. tipo II?","Tipo I = falso positivo (rejeitar H0 verdadeira). Tipo II = falso negativo (não rejeitar H0 falsa)."],
          ["Para que serve o teste t de Student?","Comparar as médias de dois grupos, útil em amostras pequenas."]] }
+,
+{ id:"est-variaveis", num:"07", cat:"Fundamentos", title:"Tipos de variáveis", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (medidas de centralidade).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Variável é cada característica que você mede ou observa nos dados, como idade, sexo ou valor da compra. Os tipos dizem que conta cada uma aceita.</p><p>Dividem-se em qualitativas (categorias) e quantitativas (números).</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>O tipo da variável decide o que faz sentido fazer com ela: calcular média só vale para número, contar frequência vale para categoria. Escolher o gráfico e o teste certo também depende do tipo.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Logo no início de qualquer análise, ao olhar as colunas. Classificar cada variável evita erros como tirar média de um código que parece número, mas é categoria (por exemplo, CEP).</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Qualitativa nominal: categorias sem ordem (cor, cidade). Qualitativa ordinal: categorias com ordem (escolaridade). Quantitativa discreta: contagem inteira (número de filhos). Quantitativa contínua: medição com casas decimais (altura).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Exemplo</th></tr><tr><td>Nominal</td><td>Cor dos olhos, cidade.</td></tr><tr><td>Ordinal</td><td>Escolaridade, nota A/B/C.</td></tr><tr><td>Discreta</td><td>Número de filhos.</td></tr><tr><td>Contínua</td><td>Altura, peso, valor.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Tirar média de uma categoria codificada como número (CEP, código de produto).</p><p>Tratar nota ordinal como se as distâncias fossem iguais.</p><p>Usar gráfico de número para uma variável que é categoria.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Classifique cada coluna antes de analisar. Para categoria, conte frequência. Para número, use média e desvio. Combine o tipo da variável com o gráfico e o teste corretos.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Classifique: cor favorita, idade, número de irmãos, faixa de renda.</p><p><b>2.</b> Diga por que não faz sentido a média de uma variável nominal.</p><p><b>3.</b> Dê um exemplo de variável contínua e um de discreta.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Cor: nominal. Idade: contínua. Número de irmãos: discreta. Faixa de renda: ordinal.</p><p><b>2.</b> Nominal não tem ordem nem distância numérica, então somar e dividir não tem sentido.</p><p><b>3.</b> Contínua: peso. Discreta: quantidade de produtos vendidos.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Qualitativa: nominal (sem ordem) e ordinal (com ordem). Quantitativa: discreta (contagem) e contínua (medição). O tipo define o cálculo, o gráfico e o teste.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre variável contínua e discreta? Contínua admite casas decimais (altura); discreta é contagem inteira (filhos). Por que classificar variáveis? Porque guia todo o resto da análise.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Variáveis<ul><li>Qualitativa<ul><li>Nominal (sem ordem)</li><li>Ordinal (com ordem)</li></ul></li><li>Quantitativa<ul><li>Discreta (contagem)</li><li>Contínua (medição)</li></ul></li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> pegue uma planilha e classifique cada coluna em um dos quatro tipos.</p><p><b>Conexão:</b> liga ao caderno de Visualização (o tipo guia o gráfico) e aos tipos de dados do SQL (tema 17).</p>"}
+  ],
+  cards:[
+    ["Quais os dois grandes grupos de variáveis?","Qualitativas (categorias) e quantitativas (números)."],
+    ["Diferença entre nominal e ordinal?","Nominal não tem ordem; ordinal tem ordem entre as categorias."],
+    ["Diferença entre discreta e contínua?","Discreta é contagem inteira; contínua admite casas decimais."],
+    ["Por que classificar variáveis?","Porque define cálculo, gráfico e teste adequados."]] },
+{ id:"est-probabilidade", num:"08", cat:"Probabilidade", title:"Probabilidade básica", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Tema 07 (tipos de variáveis).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Probabilidade é a chance de um evento acontecer, medida de 0 a 1 (ou de 0% a 100%). Zero é impossível, um é certo.</p><p>É a base da estatística que tira conclusões a partir de amostras.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Toda inferência (testes, intervalos de confiança, modelos) se apoia em probabilidade. Entender a chance evita conclusões exageradas a partir do acaso.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que houver incerteza: prever, estimar risco, avaliar se um resultado é raro ou comum. É o alicerce do teste de hipótese (tema 06).</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Para casos igualmente prováveis, a probabilidade é casos favoráveis dividido por casos possíveis. A soma de todas as possibilidades dá 1. Eventos independentes multiplicam suas chances.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Regra</th><th>Ideia</th></tr><tr><td>Intervalo</td><td>Toda probabilidade fica entre 0 e 1.</td></tr><tr><td>Complemento</td><td>P(não A) = 1 menos P(A).</td></tr><tr><td>Soma (excludentes)</td><td>P(A ou B) = P(A) mais P(B).</td></tr><tr><td>Produto (independentes)</td><td>P(A e B) = P(A) vezes P(B).</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Achar que resultados passados mudam a próxima jogada de uma moeda justa (falácia do apostador).</p><p>Somar probabilidades de eventos que podem ocorrer juntos.</p><p>Confundir evento raro com impossível.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Verifique se os eventos são independentes antes de multiplicar. Use o complemento quando calcular o contrário for mais fácil. Pense em frequência: em muitas repetições, qual a proporção esperada.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Qual a probabilidade de sair cara em uma moeda justa?</p><p><b>2.</b> Qual a chance de tirar um número par em um dado de seis faces?</p><p><b>3.</b> Qual a probabilidade de duas caras em dois lançamentos independentes?</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> 1 dividido por 2, ou seja, 0,5 (50%).</p><p><b>2.</b> 3 favoráveis (2, 4, 6) em 6 possíveis, ou seja, 0,5.</p><p><b>3.</b> 0,5 vezes 0,5 = 0,25 (25%).</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Probabilidade vai de 0 a 1. Complemento é 1 menos a chance. Excludentes somam, independentes multiplicam. É a base da inferência.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que é a falácia do apostador? Achar que o passado influencia eventos independentes. Quando multiplicar probabilidades? Quando os eventos são independentes.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Probabilidade<ul><li>Entre 0 e 1</li><li>Complemento: 1 menos P(A)</li><li>Excludentes: somam</li><li>Independentes: multiplicam</li><li>Base da inferência</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> calcule as chances de eventos simples com moeda e dado, conferindo se somam 1.</p><p><b>Conexão:</b> sustenta o teste de hipótese (tema 06) e o valor-p, e aparece nos modelos de Machine Learning.</p>"}
+  ],
+  cards:[
+    ["Entre quais valores fica a probabilidade?","Entre 0 (impossível) e 1 (certo)."],
+    ["Como se calcula o complemento?","1 menos a probabilidade do evento."],
+    ["Quando se multiplicam probabilidades?","Quando os eventos são independentes."],
+    ["O que é a falácia do apostador?","Achar que o passado altera eventos independentes."]] },
+{ id:"est-regressao", num:"09", cat:"Modelos", title:"Regressão linear simples", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 05 (correlação) e 08 (probabilidade).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Regressão linear simples encontra a reta que melhor descreve a relação entre duas variáveis numéricas, para estimar uma a partir da outra.</p><p>Exemplo: estimar o gasto a partir da renda.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>É o primeiro modelo preditivo e a porta de entrada para Machine Learning. Mostra a ideia central: aprender uma relação dos dados para fazer previsões.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando há relação aproximadamente linear entre duas variáveis numéricas e você quer prever ou entender o efeito de uma sobre a outra. Não use quando a relação é claramente curva.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O modelo tem a forma y = a + b vezes x. O <b>a</b> é onde a reta corta o eixo (valor base), o <b>b</b> é a inclinação (quanto y muda quando x sobe uma unidade). O método ajusta a e b minimizando o erro.</p>"},
+   {t:"code",h:"from sklearn.linear_model import LinearRegression\nimport numpy as np\n\nx = np.array([[1],[2],[3],[4]])\ny = np.array([2, 4, 5, 8])\n\nmodelo = LinearRegression().fit(x, y)\nprint(modelo.coef_)        <span class='cm'># inclinação (b)</span>\nprint(modelo.intercept_)   <span class='cm'># valor base (a)</span>\nprint(modelo.predict([[5]]))  <span class='cm'># previsão para x = 5</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Termo</th><th>O que significa</th></tr><tr><td>a (intercepto)</td><td>Valor de y quando x é zero.</td></tr><tr><td>b (coeficiente)</td><td>Quanto y muda a cada unidade de x.</td></tr><tr><td>R quadrado</td><td>Quanto da variação de y o modelo explica (0 a 1).</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Confundir correlação com causa: a reta não prova que x causa y.</p><p>Aplicar reta em relação claramente curva.</p><p>Prever muito fora da faixa dos dados observados (extrapolação arriscada).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Olhe o gráfico de dispersão antes de ajustar. Avalie o R quadrado para saber se o modelo explica bem. Lembre que relação não é causa. Separe dados de treino e teste, como no caderno de IA.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Explique o que significam a e b na reta y = a + b x.</p><p><b>2.</b> Diga o que um R quadrado de 0,9 indica.</p><p><b>3.</b> Aponte o risco de prever y para um x muito maior que os dados observados.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> a é o valor base de y quando x é zero; b é o quanto y muda a cada unidade de x.</p><p><b>2.</b> O modelo explica 90% da variação de y, um ajuste forte.</p><p><b>3.</b> Extrapolar para fora da faixa observada pode dar previsões sem base real.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Regressão linear ajusta y = a + b x. a é base, b é inclinação. R quadrado mede o ajuste. Relação não é causa. É a base preditiva da IA.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que o coeficiente b representa? A variação de y por unidade de x. Correlação prova causa? Não. O que é R quadrado? A fração da variação explicada pelo modelo.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Regressão linear<ul><li>y = a + b x</li><li>a → valor base</li><li>b → inclinação</li><li>R quadrado → qualidade do ajuste</li><li>Relação não é causa</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> com scikit-learn, ajuste uma reta a poucos pontos e faça uma previsão.</p><p><b>Conexão:</b> liga a correlação (tema 05) ao caderno de IA e ao scikit-learn do Guia de Referência.</p>"}
+  ],
+  cards:[
+    ["O que a regressão linear simples faz?","Ajusta a reta que melhor relaciona duas variáveis numéricas."],
+    ["O que é o coeficiente b?","A inclinação: quanto y muda a cada unidade de x."],
+    ["O que mede o R quadrado?","Quanto da variação de y o modelo explica (0 a 1)."],
+    ["Correlação prova causa?","Não; relação estatística não implica causa."]] }
 ];
 
 const EST_QUIZ = [
@@ -1110,6 +1330,13 @@ const EST_QUIZ = [
  {q:"O nível de significância (α) mais comum em estudos é:",o:["0,5","0,05","0,5%","1,0"],c:1,e:"0,05 (5%) é o padrão; testes clínicos usam 0,01."},
  {q:"Numa distribuição normal simétrica, média, mediana e moda:",o:["São muito diferentes","Coincidem no centro","Não existem","São sempre zero"],c:1,e:"Na curva de sino simétrica, as três medidas caem no mesmo ponto central."},
  {q:"A amostragem estratificada divide a população em:",o:["Grupos heterogêneos e sorteia grupos inteiros","Estratos homogêneos e sorteia dentro de cada um","Ordem alfabética","Nada"],c:1,e:"Estratos são internamente parecidos; sorteia-se uma parte de cada estrato."}
+,
+ {q:"Qual a diferença entre variável contínua e discreta?",o:["Não há diferença","Contínua admite casas decimais; discreta é contagem inteira","Discreta é sempre texto","Contínua é categoria"],c:1,e:"Contínua mede (altura); discreta conta (número de filhos)."},
+ {q:"Por que não faz sentido a média de uma variável nominal?",o:["É proibido","Não tem ordem nem distância numérica","É lento","Falta dados"],c:1,e:"Nominal é categoria sem ordem; somar e dividir não tem significado."},
+ {q:"Probabilidade fica entre quais valores?",o:["0 e 100","0 e 1","-1 e 1","1 e 10"],c:1,e:"Vai de 0 (impossível) a 1 (certo)."},
+ {q:"Quando se multiplicam probabilidades de dois eventos?",o:["Quando são iguais","Quando são independentes","Sempre","Nunca"],c:1,e:"Eventos independentes têm suas chances multiplicadas."},
+ {q:"Na reta y = a + b x, o que b representa?",o:["O valor base de y","A inclinação: variação de y por unidade de x","O erro","A média de x"],c:1,e:"b é o coeficiente angular, quanto y muda a cada unidade de x."},
+ {q:"Correlação forte prova causa?",o:["Sim, sempre","Não; relação não implica causa","Só com R quadrado alto","Só em amostras grandes"],c:1,e:"Correlação indica relação, não causa."}
 ];
 
 const BI_THEMES = [
@@ -1188,6 +1415,96 @@ const BI_THEMES = [
   cards:[["De onde se publica um relatório?","Do Power BI Desktop (botão Publicar) para um workspace no Service."],
          ["Que tipo de e-mail o Power BI exige?","Corporativo ou institucional; e-mails pessoais não são aceitos."],
          ["O que é \"Publicar na Web\"?","Gera um link público acessível por qualquer pessoa — perigoso para dados sensíveis."]] }
+,
+{ id:"bi-estrela", num:"07", cat:"Modelagem avançada", title:"Esquema estrela (star schema)", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (Power Query) e 03 (fato, dimensão e relacionamentos).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Esquema estrela (em inglês star schema) é a forma de organizar o modelo recomendada pela Microsoft. No centro fica uma tabela de fato (os números, como vendas) e ao redor as tabelas de dimensão (os contextos, como produto, cliente e tempo).</p><p>Desenhado, parece uma estrela: a fato no meio, as dimensões nas pontas.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>A documentação oficial aponta o esquema estrela como o modelo que o Power BI entende melhor. Ele deixa os cálculos DAX mais simples, o desempenho melhor e os filtros mais previsíveis.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Em praticamente todo relatório de análise. É a estrutura padrão recomendada. Evite trazer uma tabela única e gigante (modelo achatado) ou cadeias longas de tabelas ligadas em série.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A tabela de fato guarda as medidas e as chaves que apontam para as dimensões. Cada dimensão descreve um assunto. Os relacionamentos vão da dimensão (lado um) para a fato (lado muitos).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo de tabela</th><th>O que guarda</th></tr><tr><td>Fato</td><td>Os números do negócio: valor, quantidade, datas das vendas.</td></tr><tr><td>Dimensão</td><td>Os contextos: produto, cliente, calendário, região.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Juntar tudo em uma tabela só, perdendo flexibilidade de filtro.</p><p>Criar relacionamentos muitos-para-muitos sem necessidade.</p><p>Esquecer uma tabela de calendário própria para análises por tempo.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Modele em estrela. Crie uma tabela calendário dedicada. Mantenha as dimensões enxutas e descritivas. Trate e limpe os dados no Power Query antes de montar o modelo.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Classifique em fato ou dimensão: Vendas, Produto, Cliente, Calendário.</p><p><b>2.</b> Desenhe no papel uma estrela com a fato Vendas e três dimensões.</p><p><b>3.</b> Explique por que uma tabela calendário separada ajuda nas análises por mês e ano.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Fato: Vendas. Dimensões: Produto, Cliente, Calendário.</p><p><b>2.</b> Vendas no centro, ligada a Produto, Cliente e Calendário nas pontas.</p><p><b>3.</b> A tabela calendário oferece colunas prontas de mês, trimestre e ano, permitindo agrupar e comparar períodos de forma consistente.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Esquema estrela é o modelo recomendado: fato no centro, dimensões ao redor. Deixa DAX simples, desempenho bom e filtros previsíveis. Use tabela calendário dedicada.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Qual o modelo recomendado no Power BI? Esquema estrela. Por quê? Simplifica o DAX, melhora o desempenho e torna os filtros previsíveis.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Esquema estrela<ul><li>Fato → números (centro)</li><li>Dimensões → contextos (pontas)</li><li>Relacionamento: dimensão (um) → fato (muitos)</li><li>Sempre uma tabela calendário</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> reorganize um relatório de tabela única em um esquema estrela com fato Vendas e dimensões Produto, Cliente e Calendário.</p><p><b>Conexão:</b> liga-se à normalização do SQL (tema 27): separar assuntos em tabelas próprias é a mesma ideia, aqui voltada à análise.</p>"}
+  ],
+  cards:[
+    ["Qual o modelo recomendado pela Microsoft?","O esquema estrela: fato no centro, dimensões ao redor."],
+    ["O que a tabela de fato guarda?","Os números do negócio, como valor e quantidade."],
+    ["O que a dimensão guarda?","Os contextos: produto, cliente, calendário, região."],
+    ["Por que ter uma tabela calendário?","Para agrupar e comparar por mês, trimestre e ano de forma consistente."]] },
+{ id:"bi-contexto", num:"08", cat:"Cálculos avançados", title:"DAX: contexto de filtro e CALCULATE", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 (DAX: medidas) e 07 (esquema estrela).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Contexto de filtro (em inglês filter context) é o conjunto de filtros aplicados quando uma medida é calculada. É ele que faz o mesmo total mostrar valores diferentes em cada linha ou célula do visual.</p><p>CALCULATE é a função que muda esse contexto de propósito.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Quase todo erro de DAX que confunde iniciantes vem de não entender o contexto de filtro. Saber lê-lo é o que separa quem decora fórmulas de quem realmente domina o DAX.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Use CALCULATE quando precisar de um cálculo que ignore ou altere os filtros atuais: total geral ao lado do parcial, comparação com o ano anterior, percentual sobre o todo.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O visual define o contexto inicial (por exemplo, a linha do produto X). A medida soma respeitando esse filtro. CALCULATE recebe a expressão e novos filtros, e recalcula sob o contexto modificado.</p>"},
+   {t:"code",h:"Vendas Totais = SUM(Vendas[Valor])\n\n<span class='cm'>-- Ignora o filtro de produto: total geral em toda linha</span>\nVendas Geral =\nCALCULATE(\n    SUM(Vendas[Valor]),\n    ALL(Produto)\n)\n\n<span class='cm'>-- Participação do produto no total</span>\nParticipacao =\nDIVIDE([Vendas Totais], [Vendas Geral])"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CALCULATE</td><td>Recalcula mudando o contexto de filtro.</td></tr><tr><td>ALL</td><td>Remove filtros de uma tabela ou coluna.</td></tr><tr><td>FILTER</td><td>Cria um conjunto de linhas sob uma condição.</td></tr><tr><td>DIVIDE</td><td>Divide com segurança, tratando divisão por zero.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esperar o total geral sem usar CALCULATE com ALL, e ver sempre o valor filtrado.</p><p>Usar a barra / para dividir e quebrar quando o denominador é zero, em vez de DIVIDE.</p><p>Confundir contexto de linha (linha a linha) com contexto de filtro (filtros do visual).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Prefira medidas a colunas calculadas para valores que reagem aos filtros. Use DIVIDE em vez da barra. Nomeie as medidas com clareza. Pense sempre: qual o contexto de filtro nesta célula?</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Escreva uma medida de soma simples do valor de vendas.</p><p><b>2.</b> Crie uma medida de total geral que ignore o filtro de produto.</p><p><b>3.</b> Calcule a participação de cada produto sobre o total geral.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'>-- 1</span>\nVendas Totais = SUM(Vendas[Valor])\n\n<span class='cm'>-- 2</span>\nVendas Geral = CALCULATE([Vendas Totais], ALL(Produto))\n\n<span class='cm'>-- 3</span>\nParticipacao = DIVIDE([Vendas Totais], [Vendas Geral])"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Contexto de filtro são os filtros ativos no cálculo. CALCULATE muda esse contexto. ALL remove filtros. DIVIDE divide com segurança. Medidas reagem ao contexto.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que é contexto de filtro? Os filtros ativos quando a medida é avaliada. O que CALCULATE faz? Recalcula sob um contexto modificado. Esse é o conceito central do DAX.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DAX avançado<ul><li>Contexto de filtro → filtros ativos</li><li>CALCULATE → muda o contexto</li><li>ALL → remove filtros</li><li>DIVIDE → divisão segura</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> monte uma tabela com vendas por produto, ao lado do total geral e do percentual de participação.</p><p><b>Conexão:</b> a ideia de calcular sobre um grupo e sobre o todo aparece também nas funções de janela do SQL avançado.</p>"}
+  ],
+  cards:[
+    ["O que é contexto de filtro?","O conjunto de filtros ativos quando a medida é calculada."],
+    ["O que CALCULATE faz?","Recalcula a expressão sob um contexto de filtro modificado."],
+    ["Qual função remove filtros?","ALL."],
+    ["Por que usar DIVIDE?","Divide tratando divisão por zero, evitando erro."]] },
+{ id:"bi-medidacoluna", num:"09", cat:"Cálculos avançados", title:"Medida ou coluna calculada", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 (DAX) e 08 (contexto de filtro).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São as duas formas de criar cálculos em DAX. A coluna calculada gera um valor por linha da tabela, guardado no modelo. A medida calcula no momento do visual, reagindo aos filtros.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Escolher errado entre as duas é um dos erros mais comuns no Power BI. A escolha afeta o tamanho do arquivo, o desempenho e se o número responde ou não aos filtros.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Use medida para valores que somam ou agregam e devem reagir aos filtros: total, média, percentual. Use coluna calculada quando precisa de um valor fixo por linha, por exemplo para usar como filtro ou categoria.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A coluna calculada é processada na atualização e ocupa espaço no modelo. A medida não ocupa espaço: é calculada sob demanda, no contexto de filtro do visual.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Aspecto</th><th>Coluna / Medida</th></tr><tr><td>Quando calcula</td><td>Coluna: na atualização. Medida: no visual.</td></tr><tr><td>Reage a filtro</td><td>Coluna: não. Medida: sim.</td></tr><tr><td>Ocupa espaço</td><td>Coluna: sim. Medida: não.</td></tr><tr><td>Uso típico</td><td>Coluna: categoria/filtro. Medida: total/percentual.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Criar coluna calculada para somar valores, inflando o arquivo sem reagir a filtros.</p><p>Tentar usar uma medida como categoria fixa em um eixo, onde caberia uma coluna.</p><p>Encher o modelo de colunas calculadas que poderiam ser feitas no Power Query.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Na dúvida, prefira medida. Faça transformações de dados no Power Query, não em colunas calculadas. Reserve a coluna calculada para o que precisa existir linha a linha.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Decida: total de vendas por região é medida ou coluna.</p><p><b>2.</b> Decida: faixa de preço (barato, médio, caro) por produto é medida ou coluna.</p><p><b>3.</b> Explique por que somar valores em coluna calculada costuma ser um erro.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Medida: agrega e deve reagir aos filtros.</p><p><b>2.</b> Coluna calculada: é uma categoria fixa por linha, usada como filtro ou eixo.</p><p><b>3.</b> Porque o valor fica fixo, não reage aos filtros do visual e ainda ocupa espaço no modelo.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Medida calcula no visual, reage a filtros e não ocupa espaço. Coluna calcula na atualização, é fixa por linha e ocupa espaço. Na dúvida, medida.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Qual a diferença entre medida e coluna calculada? Medida calcula sob demanda e reage aos filtros; coluna é fixa por linha e ocupa espaço. Quando usar cada uma é pergunta frequente.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DAX: onde calcular<ul><li>Medida → no visual, reage a filtro, sem espaço</li><li>Coluna → na atualização, fixa, ocupa espaço</li><li>Regra: na dúvida, medida</li><li>Transformação pesada → Power Query</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> crie uma medida de total de vendas e uma coluna calculada de faixa de preço, e use as duas no mesmo visual.</p><p><b>Conexão:</b> a coluna fixa lembra um campo derivado no SQL; a medida lembra uma agregação calculada na consulta.</p>"}
+  ],
+  cards:[
+    ["Quando usar medida?","Para valores que agregam e devem reagir aos filtros."],
+    ["Quando usar coluna calculada?","Para um valor fixo por linha, como categoria ou filtro."],
+    ["Qual ocupa espaço no modelo?","A coluna calculada; a medida não."],
+    ["Regra prática na dúvida?","Prefira medida."]] },
+{ id:"bi-conexao", num:"10", cat:"Dados e atualização", title:"Import, DirectQuery e atualização", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 (visão geral) e 06 (publicação).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São as formas de o Power BI conectar aos dados. No modo Importação (Import), os dados são copiados para dentro do arquivo. No DirectQuery, o relatório consulta a fonte ao vivo, sem copiar.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>A escolha define a velocidade do relatório, o quanto os dados ficam atualizados e a necessidade de gateway. É uma decisão de arquitetura, não um detalhe.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Use Importação na maioria dos casos: é mais rápido para o usuário. Use DirectQuery quando os dados são grandes demais para copiar ou precisam estar sempre ao vivo, aceitando relatórios mais lentos.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>No modo Importação, é preciso atualizar (em inglês refresh) para trazer dados novos. Quando a fonte fica na máquina da empresa, um gateway (uma ponte segura) leva os dados até a nuvem nas atualizações agendadas.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Aspecto</th><th>Import / DirectQuery</th></tr><tr><td>Onde ficam os dados</td><td>Import: copiados no arquivo. DirectQuery: na fonte.</td></tr><tr><td>Velocidade do relatório</td><td>Import: rápida. DirectQuery: depende da fonte.</td></tr><tr><td>Atualização</td><td>Import: por refresh. DirectQuery: sempre ao vivo.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Usar DirectQuery sem necessidade e ter relatórios lentos.</p><p>Esquecer de agendar a atualização e mostrar dados velhos.</p><p>Não configurar o gateway e ver a atualização falhar para fontes locais.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Prefira Importação por padrão. Reserve DirectQuery para volume muito grande ou dados que precisam estar ao vivo. Agende a atualização conforme a necessidade do negócio. Configure o gateway para fontes que ficam na empresa.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Escolha o modo para um relatório mensal de vendas de tamanho médio.</p><p><b>2.</b> Escolha o modo para um painel que precisa refletir estoque em tempo real.</p><p><b>3.</b> Explique para que serve o gateway.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Importação: rápido e a atualização diária ou mensal basta.</p><p><b>2.</b> DirectQuery: o estoque precisa estar ao vivo.</p><p><b>3.</b> O gateway é a ponte segura que leva dados de fontes locais até a nuvem nas atualizações.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Import copia os dados (rápido, precisa refresh). DirectQuery consulta ao vivo (atual, mais lento). Gateway conecta fontes locais à nuvem. Padrão: Importação.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Qual a diferença entre Import e DirectQuery? Import copia e é rápido; DirectQuery consulta ao vivo e fica sempre atual. Para que serve o gateway? Levar dados locais até a nuvem com segurança.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Conexão de dados<ul><li>Import → copia, rápido, refresh</li><li>DirectQuery → ao vivo, mais lento</li><li>Gateway → ponte para fontes locais</li><li>Padrão: Importação</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> escolha o modo de conexão para dois cenários e justifique cada escolha por velocidade e atualidade.</p><p><b>Conexão:</b> DirectQuery roda consultas SQL na fonte; entender índices e EXPLAIN (temas 25 e 28) ajuda a manter esses relatórios rápidos.</p>"}
+  ],
+  cards:[
+    ["O que é o modo Importação?","Os dados são copiados para dentro do arquivo do Power BI."],
+    ["O que é DirectQuery?","O relatório consulta a fonte ao vivo, sem copiar os dados."],
+    ["Para que serve o gateway?","Ponte segura que leva dados de fontes locais até a nuvem."],
+    ["Qual o modo padrão recomendado?","Importação, por ser mais rápido para o usuário."]] }
 ];
 
 const BI_QUIZ = [
@@ -1201,6 +1518,14 @@ const BI_QUIZ = [
  {q:"No modelo estrela (star schema), a tabela central é a:",o:["Dimensão","Fato","Medida","View"],c:1,e:"A tabela fato fica no centro, ligada às várias tabelas de dimensão ao redor."},
  {q:"Uma medida DAX (ex.: SUM) é calculada:",o:["Uma vez e salva na tabela","Na hora, reagindo aos filtros do relatório","No Power Query","Só no Excel"],c:1,e:"Medidas são calculadas em tempo de execução e respeitam o contexto de filtro."},
  {q:"O Gateway no Power BI serve para:",o:["Criar gráficos","Ser a ponte que atualiza dados locais na nuvem","Escrever DAX","Trocar a licença"],c:1,e:"O Gateway conecta dados on-premise (locais) ao Service para atualização."}
+,
+ {q:"Qual modelo de dados a Microsoft recomenda no Power BI?",o:["Tabela única","Esquema estrela","Lista ligada","Floco de neve obrigatório"],c:1,e:"O esquema estrela (fato no centro, dimensões ao redor) é o recomendado."},
+ {q:"No esquema estrela, a tabela de fato guarda:",o:["Descrições de produto","Os números do negócio, como valor e quantidade","Apenas datas","Nomes de clientes"],c:1,e:"A fato guarda as métricas; as dimensões guardam os contextos."},
+ {q:"O que é contexto de filtro no DAX?",o:["O nome da medida","O conjunto de filtros ativos quando a medida é calculada","Um tipo de gráfico","A cor do visual"],c:1,e:"O contexto de filtro são os filtros aplicados no momento do cálculo."},
+ {q:"Qual função do DAX muda o contexto de filtro?",o:["SUM","CALCULATE","FORMAT","TODAY"],c:1,e:"CALCULATE recalcula a expressão sob um contexto modificado."},
+ {q:"Para um valor que deve reagir aos filtros do visual, use:",o:["Coluna calculada","Medida","Tabela de fato","Gateway"],c:1,e:"A medida calcula no visual e reage ao contexto de filtro."},
+ {q:"Qual a diferença do modo Importação para o DirectQuery?",o:["São iguais","Import copia os dados; DirectQuery consulta a fonte ao vivo","Import é sempre ao vivo","DirectQuery copia tudo"],c:1,e:"Import copia e é rápido; DirectQuery consulta ao vivo e fica sempre atual."},
+ {q:"Para que serve o gateway no Power BI?",o:["Criar gráficos","Levar dados de fontes locais até a nuvem com segurança","Escrever DAX","Publicar no celular"],c:1,e:"O gateway é a ponte segura entre fontes locais e o serviço na nuvem."}
 ];
 
 const IA_THEMES = [
@@ -1243,6 +1568,96 @@ const IA_THEMES = [
   cards:[["IA generativa, diferente da tradicional, faz o quê?","Cria novos dados (imagens, textos), em vez de apenas analisar os existentes."],
          ["O que são GANs?","Duas redes que competem (uma cria, a outra avalia), melhorando a qualidade do que é gerado."],
          ["Principais riscos da IA generativa?","Erros (artefatos), viés dos dados e privacidade — exige revisão humana."]] }
+,
+{ id:"ia-aprendizado", num:"04", cat:"Fundamentos", title:"Tipos de aprendizado", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (Machine Learning e IA).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São as três grandes formas de um modelo aprender com dados: supervisionado, não supervisionado e por reforço. Cada uma resolve um tipo diferente de problema.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Escolher a abordagem errada inviabiliza o projeto. O primeiro passo de qualquer trabalho de IA é classificar o problema em uma dessas três famílias.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Supervisionado: quando você tem exemplos com a resposta certa (rótulo). Não supervisionado: quando quer achar grupos ou padrões sem resposta pronta. Por reforço: quando um agente aprende por tentativa e erro com recompensas.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>No supervisionado, o modelo aprende a relação entre entradas e rótulos (prever preço, classificar e-mail). No não supervisionado, agrupa por semelhança (segmentar clientes). No reforço, o agente recebe prêmio ou punição e ajusta a estratégia.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Quando usar</th></tr><tr><td>Supervisionado</td><td>Há exemplos com resposta certa (rótulo).</td></tr><tr><td>Não supervisionado</td><td>Achar grupos e padrões sem rótulo.</td></tr><tr><td>Por reforço</td><td>Aprender por tentativa, erro e recompensa.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Tentar prever um rótulo sem ter dados rotulados.</p><p>Confundir classificação (categoria) com regressão (número).</p><p>Esperar que o não supervisionado dê a resposta certa: ele revela padrões, não rótulos.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Classifique o problema antes de escolher o modelo. No supervisionado, separe se é classificação ou regressão. Comece simples, com scikit-learn, antes de partir para abordagens complexas.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Prever o preço de um imóvel é qual tipo?</p><p><b>2.</b> Separar clientes em grupos parecidos é qual tipo?</p><p><b>3.</b> Um robô que aprende a andar por tentativa é qual tipo?</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Supervisionado (regressão): há um número alvo conhecido.</p><p><b>2.</b> Não supervisionado: agrupamento sem rótulo.</p><p><b>3.</b> Por reforço: aprende por recompensa.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Supervisionado usa rótulos (prever ou classificar). Não supervisionado acha grupos. Reforço aprende por recompensa. Classifique o problema primeiro.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre supervisionado e não supervisionado? Um usa dados rotulados; o outro busca padrões sem rótulo. Diferença entre classificação e regressão? Categoria contra número.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Tipos de aprendizado<ul><li>Supervisionado → com rótulo<ul><li>Classificação (categoria)</li><li>Regressão (número)</li></ul></li><li>Não supervisionado → grupos</li><li>Reforço → recompensa</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> classifique cinco problemas de negócio em supervisionado, não supervisionado ou reforço.</p><p><b>Conexão:</b> a regressão linear (Estatística, tema 09) é o exemplo mais simples de aprendizado supervisionado.</p>"}
+  ],
+  cards:[
+    ["O que é aprendizado supervisionado?","O modelo aprende com exemplos que têm a resposta certa (rótulo)."],
+    ["O que é aprendizado não supervisionado?","Busca grupos e padrões em dados sem rótulo."],
+    ["O que é aprendizado por reforço?","Um agente aprende por tentativa, erro e recompensa."],
+    ["Classificação x regressão?","Classificação prevê categoria; regressão prevê número."]] },
+{ id:"ia-overfitting", num:"05", cat:"Avaliação", title:"Treino, teste e overfitting", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 e 04 (tipos de aprendizado).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Para confiar em um modelo, separam-se os dados em treino (onde ele aprende) e teste (onde se mede o desempenho em dados nunca vistos).</p><p>Overfitting (sobreajuste) é quando o modelo decora o treino e vai mal no teste.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Um modelo que acerta tudo no treino mas erra no teste é inútil na prática. Medir em dados novos é o que mostra se o modelo realmente aprendeu ou apenas decorou.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Em todo projeto supervisionado. Nunca avalie o modelo nos mesmos dados em que ele treinou. A divisão treino e teste é regra básica.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Divide-se a base, por exemplo 80% para treino e 20% para teste. Treina-se no primeiro e mede-se no segundo. Se o acerto cai muito do treino para o teste, há overfitting. O oposto, underfitting (subajuste), é quando o modelo é simples demais e vai mal nos dois.</p>"},
+   {t:"code",h:"from sklearn.model_selection import train_test_split\n\nX_treino, X_teste, y_treino, y_teste = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\nmodelo.fit(X_treino, y_treino)\nprint(modelo.score(X_teste, y_teste))  <span class='cm'># desempenho em dados novos</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Situação</th><th>Sinal</th></tr><tr><td>Overfitting</td><td>Ótimo no treino, ruim no teste.</td></tr><tr><td>Underfitting</td><td>Ruim no treino e no teste.</td></tr><tr><td>Bom ajuste</td><td>Desempenho parecido nos dois.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Avaliar o modelo nos mesmos dados do treino e achar que é ótimo.</p><p>Deixar dados de teste vazarem para o treino.</p><p>Aumentar a complexidade sem necessidade, piorando o overfitting.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Sempre separe treino e teste. Compare o desempenho nos dois. Prefira o modelo mais simples que resolve. Use validação cruzada quando os dados forem poucos.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Explique por que não se avalia no mesmo dado do treino.</p><p><b>2.</b> Um modelo com 99% no treino e 60% no teste tem qual problema?</p><p><b>3.</b> O que indica desempenho ruim no treino e no teste?</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Porque ele já viu esses dados; o acerto não prova que generaliza.</p><p><b>2.</b> Overfitting: decorou o treino.</p><p><b>3.</b> Underfitting: o modelo é simples demais.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Separe treino e teste. Overfitting: bom no treino, ruim no teste. Underfitting: ruim nos dois. Avalie sempre em dados novos. Simples é melhor.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que é overfitting? O modelo decora o treino e falha em dados novos. Como detectar? Comparando treino e teste. Como reduzir? Mais dados, modelo mais simples, regularização.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Treino e teste<ul><li>Treino → aprende</li><li>Teste → mede em dado novo</li><li>Overfitting → decora o treino</li><li>Underfitting → simples demais</li><li>Meta: generalizar</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> divida uma base em treino e teste e compare o acerto nos dois.</p><p><b>Conexão:</b> usa o R quadrado da regressão (Estatística, tema 09) e o train_test_split do scikit-learn.</p>"}
+  ],
+  cards:[
+    ["Por que separar treino e teste?","Para medir o desempenho em dados que o modelo nunca viu."],
+    ["O que é overfitting?","O modelo decora o treino e vai mal no teste."],
+    ["O que é underfitting?","O modelo é simples demais e vai mal nos dois."],
+    ["Como reduzir overfitting?","Mais dados, modelo mais simples ou regularização."]] },
+{ id:"ia-metricas", num:"06", cat:"Avaliação", title:"Métricas de avaliação", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 e 05 (aprendizado, treino e teste).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São os números que medem se um modelo de classificação acerta bem. As principais: acurácia, precisão, recall e a matriz de confusão, que organiza acertos e erros.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Acurácia sozinha engana quando as classes são desbalanceadas. Saber ler precisão e recall evita confiar em um modelo que parece bom, mas falha onde importa.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que avaliar classificação. Em problemas desbalanceados (fraude, doença rara), precisão e recall valem mais que acurácia.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Acurácia: proporção de acertos no total. Precisão: dos que o modelo disse positivo, quantos eram mesmo. Recall: dos positivos reais, quantos o modelo encontrou. A matriz de confusão mostra acertos e erros por classe.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Métrica</th><th>Responde a pergunta</th></tr><tr><td>Acurácia</td><td>Quanto acertei no total?</td></tr><tr><td>Precisão</td><td>Dos que apontei, quantos eram certos?</td></tr><tr><td>Recall</td><td>Dos reais, quantos eu peguei?</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Olhar só a acurácia em base desbalanceada e ter uma falsa sensação de bom modelo.</p><p>Confundir precisão com recall.</p><p>Ignorar o custo de cada tipo de erro no problema real.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Em classes desbalanceadas, priorize precisão e recall. Pense no custo do erro: deixar passar uma fraude pesa diferente de um alarme falso. Use a matriz de confusão para enxergar onde o modelo erra.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Em uma base com 99% de e-mails normais, por que acurácia engana?</p><p><b>2.</b> Para detectar doença rara, recall alto importa por quê?</p><p><b>3.</b> O que a matriz de confusão mostra?</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Um modelo que diz sempre normal já acerta 99%, sem detectar nada de útil.</p><p><b>2.</b> Recall alto significa encontrar a maioria dos doentes, evitando deixar passar casos.</p><p><b>3.</b> Quantos acertos e erros houve em cada classe.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Acurácia engana em base desbalanceada. Precisão: dos apontados, quantos certos. Recall: dos reais, quantos achei. Matriz de confusão mostra os erros por classe.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre precisão e recall? Precisão olha os apontados; recall olha os reais encontrados. Quando acurácia engana? Em classes desbalanceadas.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Métricas<ul><li>Acurácia → acertos no total</li><li>Precisão → apontados corretos</li><li>Recall → reais encontrados</li><li>Matriz de confusão → erros por classe</li><li>Desbalanceado → precisão e recall</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> para um classificador simples, calcule acurácia, precisão e recall e interprete os três.</p><p><b>Conexão:</b> usa a probabilidade (Estatística, tema 08) e fecha o ciclo de avaliação iniciado no tema 05.</p>"}
+  ],
+  cards:[
+    ["Quando a acurácia engana?","Em bases desbalanceadas, onde uma classe domina."],
+    ["O que é precisão?","Dos casos apontados como positivos, quantos eram realmente positivos."],
+    ["O que é recall?","Dos positivos reais, quantos o modelo encontrou."],
+    ["O que mostra a matriz de confusão?","Os acertos e erros do modelo por classe."]] },
+{ id:"ia-prompt", num:"07", cat:"Aplicação", title:"Engenharia de prompt", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (LLMs) e 03 (IA generativa).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Engenharia de prompt (em inglês prompt engineering) é a prática de escrever boas instruções para um modelo de linguagem, de forma a obter respostas mais úteis e confiáveis.</p><p>Prompt é o texto de comando que você envia ao modelo.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>O mesmo modelo entrega resultados muito diferentes conforme a instrução. Saber pedir bem é a habilidade prática que mais aproveita as ferramentas de IA no trabalho.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que usar um assistente de IA para escrever, resumir, classificar ou analisar. Vale tanto no chat quanto ao integrar o modelo a um sistema.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Um bom prompt costuma trazer: papel (quem o modelo deve ser), tarefa clara, contexto necessário, formato de saída desejado e exemplos. Quanto mais explícito, menos o modelo precisa adivinhar.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Elemento</th><th>Para que serve</th></tr><tr><td>Papel</td><td>Define o ponto de vista da resposta.</td></tr><tr><td>Tarefa</td><td>Diz exatamente o que fazer.</td></tr><tr><td>Contexto</td><td>Dá os dados e restrições necessários.</td></tr><tr><td>Formato</td><td>Define como a resposta deve sair.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Pedir de forma vaga e esperar a resposta exata.</p><p>Não dar contexto e o modelo preencher com suposições (alucinação).</p><p>Pedir muitas coisas de uma vez sem separar em etapas.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Seja específico sobre tarefa e formato. Dê exemplos do resultado esperado. Quebre pedidos complexos em passos. Sempre revise a saída: o modelo pode errar com confiança.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Reescreva resumir isto de forma mais específica.</p><p><b>2.</b> Adicione papel e formato a um pedido de e-mail.</p><p><b>3.</b> Explique por que dar um exemplo melhora a resposta.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Resuma este texto em tres frases, em linguagem simples, para um leitor leigo.</p><p><b>2.</b> Aja como atendente cordial e escreva um e-mail curto, em tom formal, com saudação e despedida.</p><p><b>3.</b> O exemplo mostra o padrão desejado, reduzindo a chance de o modelo fugir do formato.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Prompt é a instrução. Bom prompt traz papel, tarefa, contexto, formato e exemplos. Seja específico, quebre em etapas e revise a saída.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que é engenharia de prompt? Escrever instruções claras para obter melhores respostas de um modelo. O que é alucinação? Quando o modelo inventa uma resposta plausível, mas falsa.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Engenharia de prompt<ul><li>Papel</li><li>Tarefa clara</li><li>Contexto</li><li>Formato</li><li>Exemplos</li><li>Sempre revisar a saída</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> pegue um pedido vago e reescreva com papel, tarefa, contexto e formato, comparando as respostas.</p><p><b>Conexão:</b> aproveita os LLMs (tema 02) e apoia o seu dia a dia em Ouvidoria e Dados ao redigir e resumir com IA.</p>"}
+  ],
+  cards:[
+    ["O que é engenharia de prompt?","A prática de escrever boas instruções para um modelo de linguagem."],
+    ["Quais elementos um bom prompt costuma ter?","Papel, tarefa, contexto, formato e exemplos."],
+    ["O que é alucinação em IA?","Quando o modelo inventa uma resposta plausível, mas falsa."],
+    ["Por que dar exemplos no prompt?","Mostram o padrão desejado e melhoram a resposta."]] }
 ];
 
 const IA_QUIZ = [
@@ -1252,6 +1667,14 @@ const IA_QUIZ = [
  {q:"Um LLM basicamente:",o:["Cria imagens 3D","Entende e gera linguagem, prevendo a próxima palavra","Faz cálculos de planilha","Conecta bancos de dados"],c:1,e:"É treinado em muito texto para compreender e gerar linguagem humana."},
  {q:"\"Alucinação\" em IA é:",o:["Um erro de internet","Inventar fatos com convicção","Um tipo de gráfico","Uma licença"],c:1,e:"Quando o modelo gera informações incorretas como se fossem verdadeiras."},
  {q:"A IA generativa, diferente da tradicional:",o:["Só classifica dados","Cria novos dados (texto, imagem)","Apaga dados","Só faz backup"],c:1,e:"A generativa produz conteúdo novo semelhante aos dados de treino."}
+,
+ {q:"Qual tipo de aprendizado usa dados com a resposta certa (rótulo)?",o:["Não supervisionado","Supervisionado","Por reforço","Generativo"],c:1,e:"O supervisionado aprende a partir de exemplos rotulados."},
+ {q:"Separar clientes em grupos parecidos, sem rótulo, é:",o:["Supervisionado","Não supervisionado","Por reforço","Regressão"],c:1,e:"Agrupamento sem rótulo é não supervisionado."},
+ {q:"Modelo ótimo no treino e ruim no teste indica:",o:["Underfitting","Overfitting","Bom ajuste","Falta de dados de teste"],c:1,e:"Overfitting: o modelo decorou o treino e não generaliza."},
+ {q:"Por que não avaliar o modelo nos mesmos dados do treino?",o:["É mais lento","Ele já viu esses dados; o acerto não prova generalização","É proibido","Gasta memória"],c:1,e:"A avaliação precisa ser em dados novos para valer."},
+ {q:"Em base desbalanceada, qual métrica costuma enganar?",o:["Recall","Precisão","Acurácia","Matriz de confusão"],c:2,e:"A acurácia engana quando uma classe domina a base."},
+ {q:"Recall responde a qual pergunta?",o:["Quanto acertei no total","Dos apontados, quantos certos","Dos positivos reais, quantos encontrei","Qual a média"],c:2,e:"Recall mede quantos dos positivos reais o modelo achou."},
+ {q:"O que é engenharia de prompt?",o:["Treinar um modelo do zero","Escrever boas instruções para obter melhores respostas","Limpar dados","Criar gráficos"],c:1,e:"É a prática de escrever instruções claras para um modelo de linguagem."}
 ];
 
 const PY_THEMES = [
@@ -1512,13 +1935,102 @@ const PY_QUIZ = [
  {q:"df.groupby('cliente')['valor'].sum() equivale a qual ideia em SQL?",o:["WHERE","ORDER BY","GROUP BY com SUM","LIMIT"],c:2,e:"groupby com soma espelha o GROUP BY com SUM do SQL."}
 ];
 
+const REF_THEMES = [
+{ id:"ref-py", num:"01", cat:"Guia de Referência", title:"Python essencial", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Para que serve",h:"<p>São as ferramentas que vêm com o Python ou que se instalam para o dia a dia. A maior parte já está na biblioteca padrão (em inglês standard library), sem precisar instalar nada.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>os e pathlib</td><td>Lidar com pastas e caminhos de arquivos.</td></tr><tr><td>datetime</td><td>Trabalhar com datas e horas.</td></tr><tr><td>json</td><td>Ler e gravar dados no formato JSON.</td></tr><tr><td>csv</td><td>Ler e gravar planilhas em texto (CSV).</td></tr><tr><td>collections</td><td>Estruturas prontas como Counter e defaultdict.</td></tr><tr><td>venv e pip</td><td>Criar ambiente isolado (venv) e instalar pacotes (pip).</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>Para abrir arquivos simples de texto ou CSV, a biblioteca padrão basta. Quando os dados viram tabela de verdade e você precisa filtrar e agrupar, troque para o pandas (próximo tema).</p><p>pip e venv são a base: venv isola as bibliotecas de cada projeto, evitando conflito de versões.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Crie um venv por projeto. Use pathlib em vez de juntar caminhos com texto. Prefira a biblioteca padrão antes de instalar algo novo: menos dependências, menos manutenção.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>Python: <a href='https://docs.python.org/pt-br/3/' target='_blank'>docs.python.org/pt-br/3</a></li><li>pip: <a href='https://pip.pypa.io/' target='_blank'>pip.pypa.io</a></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>A biblioteca padrão resolve muito sem instalar. venv isola projetos, pip instala pacotes. Para tabelas de verdade, use pandas.</p>"}
+  ],
+  cards:[
+    ["Para que serve o venv?","Criar um ambiente isolado de bibliotecas por projeto."],
+    ["O que o pip faz?","Instala pacotes externos do Python."],
+    ["Qual módulo lida com datas?","datetime."]] },
+{ id:"ref-dados", num:"02", cat:"Guia de Referência", title:"Dados em Python", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Para que serve",h:"<p>São as bibliotecas centrais para analisar dados em Python: carregar, limpar, transformar e resumir tabelas.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>pandas</td><td>Tabelas (DataFrame): filtrar, agrupar, resumir.</td></tr><tr><td>NumPy</td><td>Cálculo numérico rápido com vetores. Base do pandas.</td></tr><tr><td>openpyxl</td><td>Ler e escrever arquivos Excel (.xlsx).</td></tr><tr><td>SQLAlchemy</td><td>Conectar o Python a bancos SQL.</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>O ponto de partida é o pandas: quase tudo passa por ele. NumPy entra quando você precisa de contas pesadas em grandes vetores de números. openpyxl quando a entrega final é uma planilha Excel.</p><p>SQLAlchemy quando os dados vivem em um banco e você quer trazê-los para o pandas.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Aprenda pandas com profundidade: é o centro do trabalho em Dados. Pense em paralelo com SQL, pois a lógica de filtrar, agrupar e ordenar é a mesma. Use NumPy só quando o ganho de desempenho justificar.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>pandas: <a href='https://pandas.pydata.org/docs/' target='_blank'>pandas.pydata.org/docs</a></li><li>NumPy: <a href='https://numpy.org/doc/' target='_blank'>numpy.org/doc</a></li><li>SQLAlchemy: <a href='https://docs.sqlalchemy.org/' target='_blank'>docs.sqlalchemy.org</a></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>pandas é o centro. NumPy é a base numérica. openpyxl para Excel. SQLAlchemy liga Python ao banco. A lógica espelha o SQL.</p>"}
+  ],
+  cards:[
+    ["Qual a biblioteca central de Dados em Python?","pandas."],
+    ["O que é NumPy?","Cálculo numérico rápido com vetores; base do pandas."],
+    ["O que conecta Python a bancos SQL?","SQLAlchemy."]] },
+{ id:"ref-viz", num:"03", cat:"Guia de Referência", title:"Visualização de dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Para que serve",h:"<p>São as bibliotecas que transformam tabelas em gráficos, para comunicar resultados de forma visual.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>Matplotlib</td><td>Base de gráficos em Python. Controle total, mais manual.</td></tr><tr><td>Seaborn</td><td>Gráficos estatísticos bonitos com pouco código. Usa o Matplotlib por baixo.</td></tr><tr><td>Plotly</td><td>Gráficos interativos, com zoom e dicas ao passar o mouse.</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>Para um gráfico rápido durante a análise, Seaborn entrega bom resultado com pouco esforço. Quando precisa de controle fino de cada detalhe, vá para o Matplotlib. Quando o gráfico será explorado pelo usuário (web, dashboard), use o Plotly.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Comece pelo Seaborn para velocidade. Escolha o tipo de gráfico pela pergunta, não pela estética. Mantenha rótulos claros e evite excesso de cores, em linha com o caderno de Visualização.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>Matplotlib: <a href='https://matplotlib.org/stable/' target='_blank'>matplotlib.org/stable</a></li><li>Seaborn: <a href='https://seaborn.pydata.org/' target='_blank'>seaborn.pydata.org</a></li><li>Plotly: <a href='https://plotly.com/python/' target='_blank'>plotly.com/python</a></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Matplotlib é a base (controle). Seaborn é rápido (estatístico). Plotly é interativo. Escolha o gráfico pela pergunta.</p>"}
+  ],
+  cards:[
+    ["Qual biblioteca é a base dos gráficos em Python?","Matplotlib."],
+    ["Quando usar Seaborn?","Para gráficos estatísticos rápidos, com pouco código."],
+    ["Quando usar Plotly?","Quando o gráfico precisa ser interativo."]] },
+{ id:"ref-sql", num:"04", cat:"Guia de Referência", title:"SQL e MySQL", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Para que serve",h:"<p>São o banco de dados e as ferramentas para consultar, administrar e conectar o SQL ao restante do trabalho.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Ferramenta</th><th>Para que serve</th></tr><tr><td>MySQL</td><td>O banco de dados (SGBD) onde os dados ficam.</td></tr><tr><td>MySQL Workbench</td><td>Cliente visual oficial para escrever e rodar consultas.</td></tr><tr><td>DBeaver</td><td>Cliente que conecta a vários bancos diferentes.</td></tr><tr><td>SQLAlchemy</td><td>Liga o Python ao banco para trazer dados ao pandas.</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>SGBD significa Sistema de Gerenciamento de Banco de Dados: o programa que guarda e organiza os dados. O MySQL é o SGBD. Para escrever consultas no dia a dia, use um cliente como o Workbench ou o DBeaver.</p><p>Quando quiser analisar no Python, o SQLAlchemy traz o resultado do banco para um DataFrame.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use a documentação oficial do MySQL como referência principal. Teste consultas no cliente antes de levar para o código. Lembre dos índices e do EXPLAIN (temas 25 e 28) ao buscar desempenho.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>MySQL: <a href='https://dev.mysql.com/doc/' target='_blank'>dev.mysql.com/doc</a></li><li>DBeaver: <a href='https://dbeaver.com/docs/' target='_blank'>dbeaver.com/docs</a></li><li>SQLAlchemy: <a href='https://docs.sqlalchemy.org/' target='_blank'>docs.sqlalchemy.org</a></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>MySQL é o banco (SGBD). Workbench e DBeaver são clientes para consultar. SQLAlchemy conecta ao Python. Doc oficial é a referência.</p>"}
+  ],
+  cards:[
+    ["O que é um SGBD?","Sistema de Gerenciamento de Banco de Dados; o MySQL é um deles."],
+    ["Para que serve o MySQL Workbench?","É o cliente visual para escrever e rodar consultas."],
+    ["O que liga o Python ao banco SQL?","SQLAlchemy."]] },
+{ id:"ref-bi", num:"05", cat:"Guia de Referência", title:"Power BI", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Para que serve",h:"<p>São as partes do Power BI que você combina para transformar dados em painéis (dashboards) interativos.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Recurso</th><th>Para que serve</th></tr><tr><td>Power BI Desktop</td><td>Programa onde você cria os relatórios.</td></tr><tr><td>Power Query</td><td>Limpa e transforma os dados antes da análise (etapa de ETL).</td></tr><tr><td>DAX</td><td>Linguagem de cálculo para medidas e colunas.</td></tr><tr><td>Power BI Service</td><td>Nuvem para publicar e compartilhar os painéis.</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>ETL significa Extrair, Transformar e Carregar (em inglês Extract, Transform, Load): preparar o dado bruto. Isso é feito no Power Query. Os cálculos (total, média, percentual) vêm com o DAX, sigla de Data Analysis Expressions (Expressões de Análise de Dados).</p><p>Cria-se no Desktop e publica-se no Service.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Trate os dados no Power Query, não na mão. Escreva medidas DAX claras e nomeadas. Use a documentação oficial da Microsoft em português como referência. Conecte com o caderno de Visualização para escolher bem os gráficos.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>Power BI: <a href='https://learn.microsoft.com/pt-br/power-bi/' target='_blank'>learn.microsoft.com/pt-br/power-bi</a></li><li>DAX: <a href='https://learn.microsoft.com/pt-br/dax/' target='_blank'>learn.microsoft.com/pt-br/dax</a></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Desktop cria, Power Query limpa (ETL), DAX calcula, Service publica. Doc oficial da Microsoft em português é a referência.</p>"}
+  ],
+  cards:[
+    ["O que significa ETL?","Extrair, Transformar e Carregar: preparar o dado bruto."],
+    ["O que é DAX?","Data Analysis Expressions: a linguagem de cálculo do Power BI."],
+    ["Onde se limpa o dado no Power BI?","No Power Query."]] },
+{ id:"ref-ia", num:"06", cat:"Guia de Referência", title:"IA e Machine Learning", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Para que serve",h:"<p>São as bibliotecas para criar modelos que aprendem com dados, do aprendizado de máquina clássico aos modelos de linguagem atuais.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>scikit-learn</td><td>Machine Learning clássico: classificação, regressão, agrupamento.</td></tr><tr><td>PyTorch</td><td>Deep Learning (redes neurais), pesquisa e produção.</td></tr><tr><td>TensorFlow</td><td>Deep Learning, alternativa ao PyTorch.</td></tr><tr><td>Hugging Face</td><td>Modelos prontos de linguagem e visão para reaproveitar.</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>Machine Learning (aprendizado de máquina) é ensinar o computador a achar padrões em dados. Para a maioria dos problemas tabulares, comece pelo scikit-learn. Deep Learning (aprendizado profundo) usa redes neurais e entra em imagem, texto e voz, com PyTorch ou TensorFlow.</p><p>Para usar modelos de linguagem já treinados, o Hugging Face poupa muito trabalho.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Domine o scikit-learn antes do Deep Learning: a base estatística vem primeiro. Separe sempre dados de treino e de teste. Só vá para redes neurais quando o problema realmente pedir.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>scikit-learn: <a href='https://scikit-learn.org/stable/' target='_blank'>scikit-learn.org/stable</a></li><li>PyTorch: <a href='https://pytorch.org/docs/' target='_blank'>pytorch.org/docs</a></li><li>Hugging Face: <a href='https://huggingface.co/docs' target='_blank'>huggingface.co/docs</a></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>scikit-learn para ML clássico (começo). PyTorch e TensorFlow para Deep Learning. Hugging Face para modelos prontos. Base estatística primeiro.</p>"}
+  ],
+  cards:[
+    ["Por onde começar em Machine Learning?","Pelo scikit-learn, com problemas tabulares."],
+    ["O que é Deep Learning?","Aprendizado com redes neurais, usado em imagem, texto e voz."],
+    ["Para que serve o Hugging Face?","Reaproveitar modelos prontos de linguagem e visão."]] }
+];
+const REF_QUIZ = [
+ {q:"Qual a biblioteca central para análise de dados em Python?",o:["NumPy","pandas","Matplotlib","os"],c:1,e:"pandas é o centro do trabalho com tabelas (DataFrame)."},
+ {q:"Para um gráfico estatístico rápido com pouco código, use:",o:["Matplotlib","Seaborn","Power Query","SQLAlchemy"],c:1,e:"Seaborn entrega gráficos estatísticos com pouco código, sobre o Matplotlib."},
+ {q:"No Power BI, onde se limpa e transforma o dado bruto?",o:["DAX","Power Query","Service","Seaborn"],c:1,e:"O Power Query faz a etapa de ETL (extrair, transformar, carregar)."},
+ {q:"O que é DAX?",o:["Um banco de dados","A linguagem de cálculo do Power BI","Um gráfico","Um cliente SQL"],c:1,e:"DAX (Data Analysis Expressions) cria medidas e colunas calculadas."},
+ {q:"Por onde começar no Machine Learning para dados em tabela?",o:["PyTorch","TensorFlow","scikit-learn","Hugging Face"],c:2,e:"scikit-learn cobre o ML clássico, ideal para problemas tabulares."},
+ {q:"O que conecta o Python a um banco SQL para trazer dados ao pandas?",o:["openpyxl","SQLAlchemy","Plotly","venv"],c:1,e:"SQLAlchemy liga o Python ao banco de dados."}
+];
 const SUBJECTS = {
   sql:        { name:"SQL", code:"SQL", themes:SQL_THEMES, quiz:SQL_QUIZ, themeEx:SQL_THEMEEX, practice:true, ready:true },
   viz:        { name:"Visualização de Dados", code:"VIZ", themes:VIZ_THEMES, quiz:VIZ_QUIZ, themeEx:{}, practice:false, ready:true },
   estatistica:{ name:"Estatística", code:"EST", themes:EST_THEMES, quiz:EST_QUIZ, themeEx:{}, practice:false, ready:true },
   powerbi:    { name:"Power BI", code:"BI", themes:BI_THEMES, quiz:BI_QUIZ, themeEx:{}, practice:false, ready:true },
   ia:         { name:"Inteligência Artificial", code:"IA", themes:IA_THEMES, quiz:IA_QUIZ, themeEx:{}, practice:false, ready:true },
-  python:     { name:"Python", code:"PY", themes:PY_THEMES, quiz:PY_QUIZ, themeEx:{}, practice:false, ready:true }
+  python:     { name:"Python", code:"PY", themes:PY_THEMES, quiz:PY_QUIZ, themeEx:{}, practice:false, ready:true },
+  referencia:  { name:"Guia de Referência", code:"REF", themes:REF_THEMES, quiz:REF_QUIZ, themeEx:{}, practice:false, ready:true }
 };
 let curSubject='sql';
 let THEMES=SUBJECTS.sql.themes, QUIZ=SUBJECTS.sql.quiz, THEME_EX=SUBJECTS.sql.themeEx;
