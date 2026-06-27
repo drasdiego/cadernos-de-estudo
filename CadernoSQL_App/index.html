@@ -2037,6 +2037,23 @@ const INTRO_THEMES = [
     ["Quantos modos de estudo o app tem?","Quatro: Estudar, Flashcards, Quiz e Praticar."],
     ["Em qual caderno o app corrige sua consulta sozinho?","No SQL, no modo Praticar."],
     ["A estrutura dos temas muda entre cadernos?","Não. É sempre a mesma ordem, para dar previsibilidade."]] }
+,
+{ id:"intro-ref", num:"02", cat:"Comece por aqui", title:"Referências e créditos", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Esta página reúne as referências do material: quem é responsável por cada tecnologia, a documentação oficial usada como fonte e o que foi usado para construir o aplicativo.</p><p>Citar a fonte é boa prática profissional: dá crédito a quem produziu e permite que você confira a informação direto na origem.</p>"},
+   {t:"plain",l:"Responsável por cada tecnologia",h:"<table class='cmd'><tr><th>Tecnologia</th><th>Responsável</th></tr><tr><td>Python</td><td>Python Software Foundation (PSF)</td></tr><tr><td>MySQL</td><td>Oracle Corporation</td></tr><tr><td>SQLite</td><td>D. Richard Hipp (domínio público)</td></tr><tr><td>Microsoft Excel</td><td>Microsoft</td></tr><tr><td>Power BI</td><td>Microsoft</td></tr><tr><td>Google Sheets</td><td>Google</td></tr><tr><td>pandas e NumPy</td><td>Comunidade open source (NumFOCUS)</td></tr><tr><td>Matplotlib e scikit-learn</td><td>Comunidade open source (NumFOCUS)</td></tr></table>"},
+   {t:"plain",l:"Documentação oficial usada como fonte",h:"<ul><li>Python: <a href='https://docs.python.org/pt-br/3/' target='_blank'>docs.python.org/pt-br/3</a></li><li>MySQL: <a href='https://dev.mysql.com/doc/' target='_blank'>dev.mysql.com/doc</a></li><li>Power BI: <a href='https://learn.microsoft.com/pt-br/power-bi/' target='_blank'>learn.microsoft.com/pt-br/power-bi</a></li><li>DAX: <a href='https://learn.microsoft.com/pt-br/dax/' target='_blank'>learn.microsoft.com/pt-br/dax</a></li><li>Excel: <a href='https://support.microsoft.com/pt-br/excel' target='_blank'>support.microsoft.com/pt-br/excel</a></li><li>Google Sheets: <a href='https://support.google.com/docs/topic/9054603' target='_blank'>support.google.com/docs</a></li><li>pandas: <a href='https://pandas.pydata.org/docs/' target='_blank'>pandas.pydata.org/docs</a></li><li>scikit-learn: <a href='https://scikit-learn.org/stable/' target='_blank'>scikit-learn.org/stable</a></li></ul>"},
+   {t:"tip",l:"O que foi usado neste projeto",h:"<p>O aplicativo é um arquivo único feito com as tecnologias base da web: HTML (estrutura), CSS (visual) e JavaScript (interação), sem depender de frameworks externos.</p><p>No modo Praticar, o app roda um banco SQLite dentro do navegador por meio do sql.js, que traduz o SQLite para rodar em JavaScript. Assim a validação das consultas funciona sem internet.</p><p>Para abrir no celular como aplicativo, usa-se um manifesto PWA (Progressive Web App, aplicativo web instalável). O código fica no GitHub (da Microsoft) e a publicação é feita pela Vercel.</p>"},
+   {t:"plain",l:"Resumo das ferramentas do projeto",h:"<table class='cmd'><tr><th>Recurso</th><th>Para que serviu</th></tr><tr><td>HTML, CSS, JavaScript</td><td>Construir todo o aplicativo em um arquivo.</td></tr><tr><td>sql.js (SQLite)</td><td>Rodar e validar consultas no modo Praticar.</td></tr><tr><td>PWA (manifesto)</td><td>Instalar no celular e usar offline.</td></tr><tr><td>GitHub</td><td>Guardar e versionar o código.</td></tr><tr><td>Vercel</td><td>Publicar o app na internet.</td></tr></table>"},
+   {t:"tip",l:"Como citar uma fonte",h:"<p>Ao usar uma informação de terceiros, registre de onde veio: o nome do responsável e o endereço da documentação. Em conteúdo técnico, prefira sempre a documentação oficial, que é a fonte mais confiável e atualizada.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Cada tecnologia tem um responsável (Python pela PSF, MySQL pela Oracle, Power BI e Excel pela Microsoft, Sheets pelo Google). A fonte principal do material é a documentação oficial. O app foi feito com HTML, CSS, JavaScript, sql.js, PWA, GitHub e Vercel.</p>"}
+  ],
+  cards:[
+    ["Quem é responsável pelo Python?","A Python Software Foundation (PSF)."],
+    ["Quem mantém o MySQL?","A Oracle Corporation."],
+    ["Quem faz o Power BI e o Excel?","A Microsoft."],
+    ["O que roda as consultas no modo Praticar?","O sql.js, que executa um SQLite dentro do navegador."],
+    ["Onde o app é publicado?","Código no GitHub e publicação pela Vercel."]] }
 ];
 const INTRO_QUIZ = [
  {q:"Quais são os quatro modos do app?",o:["Ler, copiar, colar e salvar","Estudar, Flashcards, Quiz e Praticar","Excel, SQL, Python e IA","Fácil, médio, difícil e extra"],c:1,e:"Os modos são Estudar, Flashcards, Quiz e Praticar."},
