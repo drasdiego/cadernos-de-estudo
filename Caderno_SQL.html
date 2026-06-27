@@ -174,6 +174,16 @@
   <div class="toc-item"><span class="n">12</span><span class="t">Relacionamentos: 1:1, 1:N, N:M</span><span class="tag2">Diagrama</span></div>
   <div class="toc-item"><span class="n">13</span><span class="t">Modelos de Dados</span><span class="tag2">Mapa mental</span></div>
   <div class="toc-item"><span class="n">14</span><span class="t">Filtros e a cláusula WHERE</span><span class="tag2">Consultas avançadas</span></div>
+  <div class="toc-item"><span class="n">15</span><span class="t">Funções de agregação e GROUP BY</span><span class="tag2">Consultas avançadas</span></div>
+  <div class="toc-item"><span class="n">16</span><span class="t">ORDER BY e operações aritméticas</span><span class="tag2">Consultas avançadas</span></div>
+  <div class="toc-item"><span class="n">17</span><span class="t">Tipos de dados (datatypes)</span><span class="tag2">Tipos e funções</span></div>
+  <div class="toc-item"><span class="n">18</span><span class="t">Funções de string (texto)</span><span class="tag2">Tipos e funções</span></div>
+  <div class="toc-item"><span class="n">19</span><span class="t">Funções numéricas e de data</span><span class="tag2">Tipos e funções</span></div>
+  <div class="toc-item"><span class="n">20</span><span class="t">Conversão e condicionais (CASE, COALESCE)</span><span class="tag2">Tipos e funções</span></div>
+  <div class="toc-item"><span class="n">21</span><span class="t">JOINs — juntando tabelas</span><span class="tag2">Juntando tabelas</span></div>
+  <div class="toc-item"><span class="n">22</span><span class="t">UNION — empilhando resultados</span><span class="tag2">Juntando tabelas</span></div>
+  <div class="toc-item"><span class="n">23</span><span class="t">Subqueries (subconsultas)</span><span class="tag2">Consultas avançadas</span></div>
+  <div class="toc-item"><span class="n">24</span><span class="t">Views (visões)</span><span class="tag2">Consultas avançadas</span></div>
 </div>
 
 <div class="page-break">
@@ -857,9 +867,521 @@
     O <code>WHERE</code> é o coração da consulta no dia a dia de dados. Combine operadores de comparação com <code>AND/OR/NOT</code> e refine com <code>LIKE</code>, <code>BETWEEN</code>, <code>IN</code> e <code>IS NULL</code>. <strong>Próxima ação:</strong> teste cada exemplo mentalmente na tabela PESSOAS.
   </div>
 
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">15</span>Funções de agregação e GROUP BY</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    Funções de agregação calculam um <strong>único resultado</strong> a partir de um <strong>conjunto de valores</strong> (várias linhas). Em vez de ver cada linha, você vê um resumo: total, média, maior, menor.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Função</th><th>O que faz</th></tr>
+    <tr><td>COUNT</td><td>Conta linhas. COUNT(*) conta todas; COUNT(DISTINCT col) conta só valores diferentes. Ignora NULL.</td></tr>
+    <tr><td>SUM</td><td>Soma os valores de uma coluna.</td></tr>
+    <tr><td>AVG</td><td>Calcula a média aritmética.</td></tr>
+    <tr><td>MIN</td><td>Menor valor.</td></tr>
+    <tr><td>MAX</td><td>Maior valor.</td></tr>
+  </table>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Resumo da tabela PESSOAS:</span>
+<span class="kw">SELECT</span>
+  <span class="kw">COUNT</span>(*)      <span class="kw">AS</span> <span class="fn">total</span>,
+  <span class="kw">AVG</span>(<span class="fn">IDADE</span>)  <span class="kw">AS</span> <span class="fn">media_idade</span>,
+  <span class="kw">MAX</span>(<span class="fn">FILHOS</span>) <span class="kw">AS</span> <span class="fn">max_filhos</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span>;
+<span class="cm">-- total=5, media_idade=33, max_filhos=3</span></pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">AS (alias)</span>
+    <code>AS</code> dá um <strong>nome temporário</strong> a uma coluna ou tabela, deixando o resultado mais legível. <code>COUNT(*) AS total</code> faz a coluna aparecer como "total".
+  </div>
+
+  <div class="block concept">
+    <span class="label">GROUP BY &mdash; agrupar</span>
+    Agrupa as linhas por uma coluna para aplicar a agregação <strong>a cada grupo separadamente</strong>. Sem GROUP BY, a agregação trata a tabela inteira como um só grupo.
+  </div>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Quantas pessoas têm cada quantidade de filhos:</span>
+<span class="kw">SELECT</span> <span class="fn">FILHOS</span>, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> <span class="fn">qtd</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span>
+<span class="kw">GROUP BY</span> <span class="fn">FILHOS</span>;
+<span class="cm">-- 0 tem 1, 1 tem 1, 2 tem 2, 3 tem 1</span></pre>
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção &mdash; COUNT e NULL</span>
+    <code>COUNT(*)</code> conta todas as linhas. <code>COUNT(coluna)</code> conta só as linhas em que a coluna <strong>não é NULL</strong>. Útil para saber quantos registros têm aquele dado preenchido.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Agregação + GROUP BY é a base de qualquer relatório: "total por categoria", "média por mês", "contagem por status". <strong>Próxima ação:</strong> pense numa pergunta do seu trabalho que comece com "quantos" ou "qual a média de".
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">16</span>ORDER BY e operações aritméticas</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">ORDER BY &mdash; ordenar</span>
+    Define a <strong>ordem</strong> dos resultados. <strong>ASC</strong> = crescente (A-Z, 0-9), é o padrão. <strong>DESC</strong> = decrescente. É a <strong>última cláusula</strong> do SELECT. Pode ordenar até por colunas não selecionadas e pela <strong>posição numérica</strong> da coluna.
+  </div>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Do mais velho para o mais novo:</span>
+<span class="kw">SELECT</span> <span class="fn">NOME</span>, <span class="fn">IDADE</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span>
+<span class="kw">ORDER BY</span> <span class="fn">IDADE</span> <span class="kw">DESC</span>;
+<span class="cm">-- Marta(48), Miguel(39), Raquel(36), João(22), Eliana(20)</span></pre>
+  </div>
+
+  <div class="block concept">
+    <span class="label">Operações aritméticas</span>
+    Dá para calcular direto no SELECT com <code>+</code> (adição), <code>-</code> (subtração), <code>*</code> (multiplicação), <code>/</code> (divisão) e <code>%</code> (módulo = resto da divisão).
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção &mdash; divisão por zero</span>
+    Dividir por zero <strong>gera erro</strong>. Use o <code>WHERE</code> para descartar esses casos antes do cálculo.
+  </div>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Evita divisão por zero filtrando FILHOS &gt; 0:</span>
+<span class="kw">SELECT</span> <span class="fn">NOME</span>, <span class="fn">IDADE</span> / <span class="fn">FILHOS</span> <span class="kw">AS</span> <span class="fn">idade_por_filho</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span>
+<span class="kw">WHERE</span> <span class="fn">FILHOS</span> &gt; 0;
+<span class="cm">-- Eliana (0 filhos) é desconsiderada</span></pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Ordem de execução (precedência)</span>
+    Para o cálculo sair certo, o SQL segue esta hierarquia: 1. Parênteses <code>( )</code>; 2. Expoentes; 3. Multiplicação <code>*</code> e divisão <code>/</code>; 4. Adição <code>+</code> e subtração <code>-</code>. Use parênteses para deixar a intenção explícita.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <code>ORDER BY</code> organiza a leitura; as operações aritméticas geram métricas direto na consulta. <strong>Próxima ação:</strong> filtre com WHERE antes de dividir, para nunca cair em divisão por zero.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">17</span>Tipos de dados (datatypes)</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    <strong>Tipos de dados</strong> (datatypes) são categorias que definem o tipo de informação que uma coluna pode armazenar. Especificam o <strong>formato, o tamanho e a natureza</strong> do dado, garantindo armazenamento consistente e eficiente.
+  </div>
+
+  <h3>Numéricos</h3>
+  <table class="cmd">
+    <tr><th>Tipo</th><th>Tamanho</th><th>Faixa / uso</th></tr>
+    <tr><td>BOOLEAN</td><td>1 bit</td><td>0 ou 1 (FALSE/TRUE).</td></tr>
+    <tr><td>TINYINT</td><td>1 byte</td><td>-128 a 127.</td></tr>
+    <tr><td>SMALLINT</td><td>2 bytes</td><td>-32.768 a 32.767 (0 a 65.535 se UNSIGNED).</td></tr>
+    <tr><td>INT</td><td>4 bytes</td><td>cerca de -2,1 bi a +2,1 bi.</td></tr>
+    <tr><td>BIGINT</td><td>8 bytes</td><td>números muito grandes.</td></tr>
+    <tr><td>FLOAT</td><td>4 bytes</td><td>decimais (ponto flutuante).</td></tr>
+    <tr><td>DOUBLE</td><td>8 bytes</td><td>decimais com mais precisão.</td></tr>
+  </table>
+
+  <h3>Texto (string)</h3>
+  <table class="cmd">
+    <tr><th>Tipo</th><th>Tamanho</th><th>Uso</th></tr>
+    <tr><td>CHAR</td><td>fixo</td><td>Texto de tamanho fixo. Ex.: uf CHAR(2).</td></tr>
+    <tr><td>VARCHAR</td><td>variável (+1 byte)</td><td>Texto de tamanho variável. Ex.: nome VARCHAR(30).</td></tr>
+  </table>
+
+  <h3>Data e hora</h3>
+  <table class="cmd">
+    <tr><th>Tipo</th><th>Tamanho</th><th>Guarda</th></tr>
+    <tr><td>DATE</td><td>3 bytes</td><td>Só a data (ano, mês, dia).</td></tr>
+    <tr><td>TIME</td><td>3 bytes</td><td>Só a hora.</td></tr>
+    <tr><td>DATETIME</td><td>8 bytes</td><td>Data e hora juntas.</td></tr>
+    <tr><td>TIMESTAMP</td><td>4 bytes</td><td>Um ponto específico no tempo.</td></tr>
+  </table>
+
+  <div class="block tip">
+    <span class="label">CHAR vs VARCHAR</span>
+    <strong>CHAR</strong> é fixo: sempre ocupa o tamanho definido (bom para dados de tamanho constante, como UF ou sexo). <strong>VARCHAR</strong> é variável: ocupa só o necessário, mais 1 byte (bom para nome, e-mail).
+  </div>
+
+  <div class="block attr">
+    <span class="label">Liga com atributos &mdash; UNSIGNED</span>
+    O atributo <code>UNSIGNED</code> remove os negativos e dobra o limite positivo. Ex.: SMALLINT vai de -32.768 a 32.767, mas UNSIGNED vai de 0 a 65.535. Use quando o valor nunca é negativo (idade, quantidade).
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Escolher o tipo certo <strong>economiza espaço</strong> e <strong>evita erros</strong> (guardar data como texto atrapalha ordenação e cálculo). <strong>Próxima ação:</strong> ao criar uma tabela, pergunte para cada coluna: número, texto ou data? E qual o menor tipo que comporta os valores?
+  </div>
+
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">18</span>Funções de string (texto)</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">O que são</span>
+    Funções de <strong>string</strong> manipulam textos: padronizar, extrair partes, juntar e limpar dados. São rotina no trabalho com dados (normalizar nomes, separar um DDD, etc.).
+  </div>
+
+  <table class="cmd">
+    <tr><th>Função</th><th>O que faz</th></tr>
+    <tr><td>CONCAT / ||</td><td>Une (concatena) textos. SQLite/Oracle: a || b. MySQL/SQL Server: CONCAT(a,b).</td></tr>
+    <tr><td>LENGTH / LEN</td><td>Quantidade de caracteres.</td></tr>
+    <tr><td>UPPER / LOWER</td><td>Converte para maiúsculas / minúsculas.</td></tr>
+    <tr><td>SUBSTRING / SUBSTR</td><td>Extrai um pedaço (posição inicial + quantidade).</td></tr>
+    <tr><td>LEFT / RIGHT</td><td>N caracteres da esquerda / direita.</td></tr>
+    <tr><td>REPLACE</td><td>Substitui todas as ocorrências de um texto por outro.</td></tr>
+    <tr><td>LPAD / RPAD</td><td>Preenche à esquerda / direita até um tamanho.</td></tr>
+    <tr><td>LTRIM / RTRIM / TRIM</td><td>Remove espaços (ou caracteres) do início / fim / ambos.</td></tr>
+    <tr><td>SPLIT_PART</td><td>Divide por um delimitador e pega a parte na posição escolhida.</td></tr>
+  </table>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Nome em maiúsculas e o tamanho:</span>
+<span class="kw">SELECT</span> <span class="kw">UPPER</span>(<span class="fn">NOME</span>) <span class="kw">AS</span> <span class="fn">maiusculo</span>, <span class="kw">LENGTH</span>(<span class="fn">NOME</span>) <span class="kw">AS</span> <span class="fn">tamanho</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span>;
+
+<span class="cm">-- Juntando texto com || :</span>
+<span class="kw">SELECT</span> <span class="fn">NOME</span> || <span class="st">' tem '</span> || <span class="fn">IDADE</span> || <span class="st">' anos'</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="kw">WHERE</span> <span class="fn">ID</span>=1;
+<span class="cm">-- Eliana tem 20 anos</span></pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Nomes variam por SGBD</span>
+    <code>CONCAT</code> vs <code>||</code>, <code>LEN</code> vs <code>LENGTH</code>, <code>SUBSTRING</code> vs <code>SUBSTR</code>. O conceito é o mesmo; confira a documentação do seu banco. No app (SQLite) use <code>||</code> e <code>LENGTH</code>.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Limpeza e padronização de texto são constantes em Dados. <strong>Próxima ação:</strong> no modo Praticar, teste <code>UPPER</code>, <code>LENGTH</code> e <code>||</code> na tabela PESSOAS.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">19</span>Funções numéricas e de data</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Funções numéricas</span>
+    Realizam cálculos e ajustes em valores numéricos.
+  </div>
+  <table class="cmd">
+    <tr><th>Função</th><th>O que faz</th></tr>
+    <tr><td>POWER / POW</td><td>Potência. POWER(2,3) = 8.</td></tr>
+    <tr><td>ROUND</td><td>Arredonda para o mais próximo. ROUND(28.456,1) = 28.5.</td></tr>
+    <tr><td>SQRT</td><td>Raiz quadrada. SQRT(9) = 3.</td></tr>
+    <tr><td>TRUNC</td><td>Corta os decimais sem arredondar. TRUNC(111.15) = 111.</td></tr>
+    <tr><td>ABS</td><td>Valor absoluto (sem sinal). ABS(-7) = 7.</td></tr>
+    <tr><td>MOD / %</td><td>Resto da divisão. 10 % 3 = 1.</td></tr>
+  </table>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">SELECT</span> <span class="kw">ROUND</span>(28.456, 1), <span class="kw">SQRT</span>(9), <span class="kw">ABS</span>(-7);
+<span class="cm">-- 28.5 | 3 | 7</span></pre>
+  </div>
+  <div class="block tip">
+    <span class="label">ROUND vs TRUNC</span>
+    <strong>ROUND</strong> arredonda (28.6 vira 29). <strong>TRUNC</strong> corta (28.6 vira 28). Use ROUND para valores finais; TRUNC quando quer só a parte inteira.
+  </div>
+
+  <div class="block concept">
+    <span class="label">Funções de data</span>
+    Manipulam datas e horas: extrair partes, somar intervalos, calcular diferenças.
+  </div>
+  <table class="cmd">
+    <tr><th>Função</th><th>O que faz</th></tr>
+    <tr><td>CURRENT_DATE</td><td>Data atual.</td></tr>
+    <tr><td>DATEADD</td><td>Soma um intervalo a uma data (dias, meses, anos).</td></tr>
+    <tr><td>DATEDIFF</td><td>Diferença entre duas datas.</td></tr>
+    <tr><td>DATE_PART / EXTRACT</td><td>Extrai uma parte (dia, mês, ano) de uma data.</td></tr>
+    <tr><td>DATE_TRUNC</td><td>Zera as partes menores (ex.: trunca por mês).</td></tr>
+    <tr><td>TO_TIMESTAMP</td><td>Converte texto em data/hora.</td></tr>
+  </table>
+  <div class="block tip">
+    <span class="label">Datas no app (SQLite)</span>
+    No SQLite (e no modo Praticar) datas se manipulam com <code>date()</code> e <code>strftime()</code>. Ex.: <code>strftime('%Y', data)</code> extrai o ano. <code>DATEADD/DATEDIFF</code> são do SQL Server; <code>EXTRACT/DATE_PART</code> são do PostgreSQL.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Funções de data são essenciais para relatórios por período (vendas por mês, idade da conta). <strong>Próxima ação:</strong> teste <code>ROUND</code> e <code>strftime('%Y', ...)</code> no Praticar.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">20</span>Conversão e condicionais (CASE, COALESCE)</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conversão de tipos</span>
+    Transformam um dado de um tipo para outro (texto em número, número em texto, etc.).
+  </div>
+  <table class="cmd">
+    <tr><th>Função</th><th>O que faz</th></tr>
+    <tr><td>CAST / CONVERT</td><td>Converte tipos compatíveis. CAST('10' AS INTEGER).</td></tr>
+    <tr><td>TO_CHAR</td><td>Número ou data em texto formatado.</td></tr>
+    <tr><td>TO_DATE</td><td>Texto em data.</td></tr>
+    <tr><td>TO_NUMBER</td><td>Texto em número decimal.</td></tr>
+  </table>
+
+  <div class="block concept">
+    <span class="label">CASE &mdash; decisão dentro do SQL</span>
+    Cria lógica condicional na consulta. Sintaxe: <code>CASE WHEN condição THEN resultado [ELSE padrão] END</code>. Economiza código ao evitar tratar condições fora do banco.
+  </div>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">SELECT</span> <span class="fn">NOME</span>,
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> <span class="fn">IDADE</span> &gt;= 40 <span class="kw">THEN</span> <span class="st">'veterano'</span>
+    <span class="kw">WHEN</span> <span class="fn">IDADE</span> &gt;= 30 <span class="kw">THEN</span> <span class="st">'adulto'</span>
+    <span class="kw">ELSE</span> <span class="st">'jovem'</span>
+  <span class="kw">END</span> <span class="kw">AS</span> <span class="fn">faixa</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span>;</pre>
+  </div>
+  <div class="block tip">
+    <span class="label">IF / IIF</span>
+    <code>IF(condição, valor_se_verdadeiro, valor_se_falso)</code> faz o mesmo que um CASE simples. No SQLite chama-se <code>IIF</code>. Ex.: <code>IIF(IDADE &gt;= 18, 'maior', 'menor')</code>.
+  </div>
+
+  <div class="block concept">
+    <span class="label">COALESCE &mdash; primeiro valor não-nulo</span>
+    Percorre uma lista e retorna o <strong>primeiro valor que não for NULL</strong>. <strong>Analogia:</strong> ligar para o cliente: tenta o comercial; se vazio, o celular; se vazio, o fixo. <code>COALESCE(comercial, celular, fixo)</code>.
+  </div>
+  <div class="block concept">
+    <span class="label">NULLIF &mdash; NULL se forem iguais</span>
+    Compara dois valores: se forem <strong>iguais</strong>, retorna <strong>NULL</strong>; se diferentes, retorna o primeiro. Útil para evitar divisão por zero (<code>NULLIF(divisor, 0)</code>) ou destacar diferenças (meta x realizado).
+  </div>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">SELECT</span> <span class="kw">COALESCE</span>(<span class="kw">NULL</span>, <span class="kw">NULL</span>, <span class="st">'fixo'</span>);  <span class="cm">-- fixo</span>
+<span class="kw">SELECT</span> <span class="kw">NULLIF</span>(50, 50);  <span class="cm">-- NULL (iguais)</span></pre>
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <code>CASE</code> classifica; <code>COALESCE</code> garante um valor mesmo com campos vazios; <code>NULLIF</code> protege cálculos. São o que deixa a consulta "inteligente" e segura contra nulos.
+  </div>
+
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">21</span>JOINs &mdash; juntando tabelas</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">O que é um JOIN</span>
+    <strong>JOIN</strong> (juntar) combina linhas de <strong>duas ou mais tabelas</strong> com base em colunas em comum (geralmente PK de uma e FK de outra). É o que permite ver, num só resultado, dados espalhados em tabelas diferentes.<br>
+    <strong>Atenção:</strong> em grandes volumes, JOINs têm <strong>alto custo computacional</strong> e podem deixar a consulta lenta.
+  </div>
+
+  <div class="map">
+    <span class="label">Os quatro tipos (diagrama de Venn)</span>
+    <svg viewBox="0 0 720 180" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Lato, sans-serif">
+      <defs><clipPath id="cInnerPdf"><circle cx="75" cy="70" r="36"/></clipPath></defs>
+      <circle cx="75" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="115" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="115" cy="70" r="36" fill="#2563eb" clip-path="url(#cInnerPdf)"/>
+      <text x="95" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">INNER JOIN</text>
+      <text x="95" y="143" text-anchor="middle" font-size="9" fill="#64748b">só o que casa nas duas</text>
+      <circle cx="295" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="255" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="275" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">LEFT JOIN</text>
+      <text x="275" y="143" text-anchor="middle" font-size="9" fill="#64748b">tudo da esquerda</text>
+      <circle cx="435" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="475" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="455" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">RIGHT JOIN</text>
+      <text x="455" y="143" text-anchor="middle" font-size="9" fill="#64748b">tudo da direita</text>
+      <circle cx="615" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="655" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="635" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">FULL JOIN</text>
+      <text x="635" y="143" text-anchor="middle" font-size="9" fill="#64748b">tudo dos dois lados</text>
+    </svg>
+  </div>
+
+  <table class="cmd">
+    <tr><th>Tipo</th><th>Retorna</th></tr>
+    <tr><td>INNER JOIN</td><td>Só as linhas que casam nas duas tabelas (a interseção).</td></tr>
+    <tr><td>LEFT JOIN</td><td>Todas as linhas da tabela da esquerda; o que não casa na direita vem NULL.</td></tr>
+    <tr><td>RIGHT JOIN</td><td>Todas as linhas da tabela da direita; o que não casa na esquerda vem NULL.</td></tr>
+    <tr><td>FULL OUTER JOIN</td><td>Todas as linhas dos dois lados; preenche com NULL onde não há par.</td></tr>
+  </table>
+
+  <div class="block tip">
+    <span class="label">Como ler um JOIN</span>
+    <code>FROM A JOIN B ON A.chave = B.chave</code>. O <code>ON</code> diz por qual coluna as tabelas se ligam. Use apelidos (A, B) para encurtar.
+  </div>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Pessoa e produto de cada compra (INNER JOIN):</span>
+<span class="kw">SELECT</span> <span class="fn">P</span>.<span class="fn">NOME</span>, <span class="fn">PR</span>.<span class="fn">NOME</span>
+<span class="kw">FROM</span> <span class="fn">COMPRAS</span> <span class="fn">C</span>
+<span class="kw">JOIN</span> <span class="fn">PESSOAS</span> <span class="fn">P</span>  <span class="kw">ON</span> <span class="fn">P</span>.<span class="fn">ID</span> = <span class="fn">C</span>.<span class="fn">ID_PESSOA</span>
+<span class="kw">JOIN</span> <span class="fn">PRODUTOS</span> <span class="fn">PR</span> <span class="kw">ON</span> <span class="fn">PR</span>.<span class="fn">ID</span> = <span class="fn">C</span>.<span class="fn">ID_PRODUTO</span>;
+
+<span class="cm">-- Todas as pessoas, mesmo quem não comprou (LEFT JOIN):</span>
+<span class="kw">SELECT</span> <span class="fn">P</span>.<span class="fn">NOME</span>, <span class="fn">C</span>.<span class="fn">ID_PRODUTO</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="fn">P</span>
+<span class="kw">LEFT JOIN</span> <span class="fn">COMPRAS</span> <span class="fn">C</span> <span class="kw">ON</span> <span class="fn">C</span>.<span class="fn">ID_PESSOA</span> = <span class="fn">P</span>.<span class="fn">ID</span>;</pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Achar o que NÃO tem par</span>
+    Um <code>LEFT JOIN</code> seguido de <code>WHERE coluna_da_direita IS NULL</code> traz só o que existe <strong>apenas na esquerda</strong>. Ex.: produtos que nunca foram comprados.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <strong>INNER</strong> = interseção; <strong>LEFT/RIGHT</strong> = um lado inteiro + o que casa; <strong>FULL</strong> = tudo. Para relatórios reais (cliente + pedidos + produtos) o JOIN é diário.
+  </div>
+
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">22</span>UNION &mdash; empilhando resultados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">O que é UNION</span>
+    <strong>UNION</strong> combina (empilha) as linhas de <strong>duas ou mais consultas</strong> num único resultado. Diferença para o JOIN: o JOIN junta <strong>colunas</strong> (lado a lado); o UNION junta <strong>linhas</strong> (uma embaixo da outra).
+  </div>
+
+  <div class="block tip">
+    <span class="label">Analogia</span>
+    Você tem uma lista de compras do mercado e outra da farmácia. O UNION é escrever todos os itens num papel só, um abaixo do outro.
+  </div>
+
+  <div class="block attr">
+    <span class="label">Duas regras obrigatórias</span>
+    1. <strong>Mesmo número de colunas</strong> nas duas consultas.<br>
+    2. <strong>Tipos e ordem compatíveis</strong>: a coluna na mesma posição deve ter o mesmo tipo (texto com texto, número com número).
+  </div>
+
+  <table class="cmd">
+    <tr><th>Comando</th><th>O que faz</th></tr>
+    <tr><td>UNION ALL</td><td>Junta tudo sem conferir. Mantém duplicatas. Mais rápido.</td></tr>
+    <tr><td>UNION</td><td>Junta e remove as duplicatas. Resultado limpo, mas exige mais esforço do banco.</td></tr>
+  </table>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Empilha todos os IDs (com repetições):</span>
+<span class="kw">SELECT</span> <span class="fn">ID_PESSOA</span> <span class="kw">FROM</span> <span class="fn">COMPRAS</span>
+<span class="kw">UNION ALL</span>
+<span class="kw">SELECT</span> <span class="fn">ID</span> <span class="kw">FROM</span> <span class="fn">PESSOAS</span>;
+
+<span class="cm">-- Só os valores únicos (sem repetir):</span>
+<span class="kw">SELECT</span> <span class="fn">ID_PESSOA</span> <span class="kw">FROM</span> <span class="fn">COMPRAS</span>
+<span class="kw">UNION</span>
+<span class="kw">SELECT</span> <span class="fn">ID</span> <span class="kw">FROM</span> <span class="fn">PESSOAS</span>;</pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Exemplo visual</span>
+    Lista 1: Verde, Amarelo, Vermelho. Lista 2: Vermelho, Azul, Amarelo.<br>
+    <strong>UNION ALL</strong> = 6 itens (Verde, Amarelo, Vermelho, Vermelho, Azul, Amarelo).<br>
+    <strong>UNION</strong> = 4 itens únicos (Verde, Amarelo, Vermelho, Azul).
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Use <strong>UNION ALL</strong> quando quiser tudo (e é mais rápido); use <strong>UNION</strong> quando precisa de uma lista sem repetições.
+  </div>
+
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">23</span>Subqueries (subconsultas)</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">O que é</span>
+    Uma <strong>subquery</strong> (subconsulta) é uma consulta <strong>dentro</strong> de outra. Como uma boneca russa: você faz um SELECT e, dentro dele, coloca outro SELECT.
+  </div>
+
+  <div class="block concept">
+    <span class="label">Dois usos principais</span>
+    <strong>Como coluna:</strong> traz um valor calculado de outra tabela para cada linha.<br>
+    <strong>Como filtro:</strong> limita os resultados com base numa lista gerada por outra consulta (<code>WHERE ... IN (subconsulta)</code>).
+  </div>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Como filtro: só quem fez alguma compra</span>
+<span class="kw">SELECT</span> <span class="fn">NOME</span> <span class="kw">FROM</span> <span class="fn">PESSOAS</span>
+<span class="kw">WHERE</span> <span class="fn">ID</span> <span class="kw">IN</span> (<span class="kw">SELECT</span> <span class="fn">ID_PESSOA</span> <span class="kw">FROM</span> <span class="fn">COMPRAS</span>);
+
+<span class="cm">-- Como coluna: total de compras de cada pessoa</span>
+<span class="kw">SELECT</span> <span class="fn">NOME</span>,
+  (<span class="kw">SELECT</span> <span class="kw">COUNT</span>(*) <span class="kw">FROM</span> <span class="fn">COMPRAS</span> <span class="kw">WHERE</span> <span class="fn">ID_PESSOA</span>=<span class="fn">P</span>.<span class="fn">ID</span>) <span class="kw">AS</span> <span class="fn">total</span>
+<span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="fn">P</span>;</pre>
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção &mdash; desempenho</span>
+    Não há limite para aninhar subconsultas, mas <strong>muitas camadas deixam a consulta lenta</strong> (o banco tem muito trabalho extra). Use com parcimônia.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Subconsultas respondem perguntas em duas etapas: "quem comprou?" e depois "traga os nomes desses". Ótimas para filtrar com base em outra tabela.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">24</span>Views (visões)</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">O que é uma View</span>
+    Uma <strong>view</strong> (visão) é uma <strong>tabela virtual</strong>: não armazena dados próprios, é apenas um <strong>SELECT salvo</strong> com um nome. Você a consulta como se fosse uma tabela comum.
+  </div>
+
+  <div class="block concept">
+    <span class="label">Por que usar</span>
+    <strong>Reuso:</strong> escreve a consulta difícil uma vez e salva.<br>
+    <strong>Segurança:</strong> mostra só algumas colunas, escondendo dados sensíveis (ex.: salários).<br>
+    <strong>Simplificação:</strong> transforma um código gigante em algo limpo de usar.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Característica</th><th>Detalhe</th></tr>
+    <tr><td>Dinâmica</td><td>Reflete os dados atuais: se a tabela muda, a view mostra a mudança.</td></tr>
+    <tr><td>Permanente</td><td>Continua existindo mesmo após reiniciar o servidor.</td></tr>
+    <tr><td>Leve</td><td>Não ocupa espaço extra: é só a instrução salva.</td></tr>
+  </table>
+
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Criar:</span>
+<span class="kw">CREATE VIEW</span> <span class="fn">vw_adultos</span> <span class="kw">AS</span>
+  <span class="kw">SELECT</span> <span class="fn">NOME</span>, <span class="fn">IDADE</span> <span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="kw">WHERE</span> <span class="fn">IDADE</span> &gt;= 18;
+
+<span class="cm">-- Consultar como se fosse tabela:</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">vw_adultos</span>;</pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Comandos</span>
+    <code>CREATE VIEW nome AS [SELECT]</code> cria; <code>ALTER VIEW</code> altera a consulta; <code>DROP VIEW</code> apaga a view. <strong>DROP VIEW não apaga os dados</strong> das tabelas originais, só a visão.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Views deixam consultas complexas reutilizáveis e seguras (ótimo para esconder colunas sensíveis e padronizar relatórios).
+  </div>
+
   <div class="block tip" style="margin-top:18px">
-    <span class="label">Caderno vivo</span>
-    Novos conteúdos entram organizados por <strong>tema e categoria</strong>, com a data em que foram estudados. Assim o caderno cresce de forma previsível e você rastreia quando aprendeu cada coisa.
+    <span class="label">Fim da matéria de SQL</span>
+    Este caderno cobre o SQL do básico ao intermediário: dos fundamentos às consultas avançadas, funções, JOINs, UNION, subqueries e views. As próximas matérias (Visualização de Dados, Python, Power BI, IA) entram no mesmo app, cada uma como seu próprio caderno.
   </div>
 </div>
 

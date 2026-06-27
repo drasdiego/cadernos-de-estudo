@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Caderno de SQL</title>
+<title>Cadernos de Estudo</title>
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cadernos">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
 <style>
   :root{
     --bg:#f1f5f9; --panel:#ffffff; --panel2:#f8fafc; --ink:#0f172a; --ink2:#334155; --muted:#64748b;
@@ -167,16 +174,40 @@
   .sql-empty{color:var(--muted);font-size:13px;padding:8px 0}
   .sql-ok-msg{margin-top:8px;color:var(--c-recap-ink);font-weight:600;font-size:13.5px}
   .sql-no-msg{margin-top:8px;color:#b91c1c;font-size:13.5px}
+  .subject-sel{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;outline:none;max-width:210px}
+  .subject-sel:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+  .theme-sel{display:none}
   .hidden{display:none!important}
-  @media(max-width:820px){.sidebar{display:none}.modes button{padding:7px 9px}.brand p{display:none}}
+  @media(max-width:820px){
+    .topbar{flex-wrap:wrap;gap:8px;padding:10px 14px}
+    .brand p{display:none}
+    .search{order:5;flex-basis:100%;max-width:none}
+    .sidebar{display:none}
+    .theme-sel{display:block;max-width:none;flex:1 1 160px}
+    .subject-sel{max-width:none;flex:1 1 140px}
+    .modes{flex:1 1 100%;justify-content:space-between}
+    .modes button{padding:8px 10px;flex:1}
+    .content{padding:18px 15px 80px}
+    .theme-head h2{font-size:22px}
+    .card{height:300px}
+  }
 </style>
 </head>
 <body>
 <div class="topbar">
   <div class="brand">
     <div class="logo">SQL</div>
-    <div><h1>Caderno de SQL</h1><p>App de estudos · offline</p></div>
+    <div><h1>Cadernos de Estudo</h1><p>App de estudos · offline</p></div>
   </div>
+  <select id="subjectSel" class="subject-sel" title="Escolher matéria">
+    <option value="sql">SQL</option>
+    <option value="viz">Visualização de Dados</option>
+    <option value="estatistica">Estatística</option>
+    <option value="powerbi">Power BI</option>
+    <option value="ia">Inteligência Artificial</option>
+    <option value="python">Python</option>
+  </select>
+  <select id="themeSel" class="subject-sel theme-sel" title="Ir para o tema"></select>
   <div class="search">
     <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
     <input id="search" placeholder="Buscar tema ou conceito..." autocomplete="off">
@@ -200,7 +231,7 @@
 
 const DATE1 = "26 jun 2026";
 
-const THEMES = [
+const SQL_THEMES = [
 { id:"bd", num:"01", cat:"Fundamentos", title:"O que é Banco de Dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Conceito",h:"<p>Um <strong>banco de dados</strong> é uma coleção organizada de dados armazenados eletronicamente. Ele permite <strong>gerenciar, buscar e manipular</strong> informações de forma eficiente.</p>"},
@@ -418,10 +449,134 @@ const THEMES = [
          ["ORDER BY pode usar a posição da coluna?","Sim. ORDER BY 2 ordena pela segunda coluna do SELECT."],
          ["O que faz o operador % (módulo)?","Retorna o resto da divisão entre dois números."],
          ["Qual a ordem de precedência dos cálculos?","Parênteses, expoentes, multiplicação/divisão, adição/subtração."],
-         ["Como evitar erro de divisão por zero?","Filtrar com WHERE para descartar divisores iguais a 0 (ex.: WHERE FILHOS > 0)."]] }
+         ["Como evitar erro de divisão por zero?","Filtrar com WHERE para descartar divisores iguais a 0 (ex.: WHERE FILHOS > 0)."]] },
+
+{ id:"tipos", num:"17", cat:"Tipos e funções", title:"Tipos de dados (datatypes)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são",h:"<p><strong>Tipos de dados</strong> (datatypes) são categorias que definem o tipo de informação que uma coluna pode armazenar. Especificam o <strong>formato, o tamanho e a natureza</strong> do dado, garantindo armazenamento consistente e eficiente.</p>"},
+   {t:"h3",h:"Numéricos"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Tamanho</th><th>Faixa / uso</th></tr><tr><td>BOOLEAN</td><td>1 bit</td><td>0 ou 1 (FALSE/TRUE).</td></tr><tr><td>TINYINT</td><td>1 byte</td><td>-128 a 127.</td></tr><tr><td>SMALLINT</td><td>2 bytes</td><td>-32.768 a 32.767 (0 a 65.535 se UNSIGNED).</td></tr><tr><td>INT</td><td>4 bytes</td><td>cerca de -2,1 bi a +2,1 bi.</td></tr><tr><td>BIGINT</td><td>8 bytes</td><td>números muito grandes.</td></tr><tr><td>FLOAT</td><td>4 bytes</td><td>decimais (ponto flutuante).</td></tr><tr><td>DOUBLE</td><td>8 bytes</td><td>decimais com mais precisão.</td></tr></table>"},
+   {t:"h3",h:"Texto (string)"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Tamanho</th><th>Uso</th></tr><tr><td>CHAR</td><td>fixo</td><td>Texto de tamanho fixo. Ex.: uf CHAR(2).</td></tr><tr><td>VARCHAR</td><td>variável (+1 byte)</td><td>Texto de tamanho variável. Ex.: nome VARCHAR(30).</td></tr></table>"},
+   {t:"h3",h:"Data e hora"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Tamanho</th><th>Guarda</th></tr><tr><td>DATE</td><td>3 bytes</td><td>Só a data (ano, mês, dia).</td></tr><tr><td>TIME</td><td>3 bytes</td><td>Só a hora.</td></tr><tr><td>DATETIME</td><td>8 bytes</td><td>Data e hora juntas.</td></tr><tr><td>TIMESTAMP</td><td>4 bytes</td><td>Um ponto específico no tempo.</td></tr></table>"},
+   {t:"tip",l:"CHAR vs VARCHAR",h:"<p><strong>CHAR</strong> é fixo: sempre ocupa o tamanho definido (bom para dados de tamanho constante, como UF ou sexo). <strong>VARCHAR</strong> é variável: ocupa só o necessário, mais 1 byte (bom para nome, e-mail).</p>"},
+   {t:"attr",l:"Liga com atributos — UNSIGNED",h:"<p>O atributo <code>UNSIGNED</code> remove os negativos e dobra o limite positivo. Ex.: SMALLINT vai de -32.768 a 32.767, mas UNSIGNED vai de 0 a 65.535. Use quando o valor nunca é negativo (idade, quantidade).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Escolher o tipo certo <strong>economiza espaço</strong> e <strong>evita erros</strong> (guardar data como texto atrapalha ordenação e cálculo). <strong>Próxima ação:</strong> ao criar uma tabela, pergunte para cada coluna: número, texto ou data? E qual o menor tipo que comporta os valores?</p>"}
+  ],
+  cards:[["O que é um datatype?","Categoria que define o tipo de informação de uma coluna (formato, tamanho e natureza do dado)."],
+         ["Quantos bytes ocupa um INT?","4 bytes (faixa aproximada de -2,1 bilhões a +2,1 bilhões)."],
+         ["CHAR vs VARCHAR?","CHAR é fixo (sempre ocupa o tamanho definido); VARCHAR é variável (ocupa o necessário + 1 byte)."],
+         ["Qual tipo guarda data e hora juntas?","DATETIME (8 bytes). DATE guarda só data; TIME só hora."]] },
+
+{ id:"fstr", num:"18", cat:"Tipos e funções", title:"Funções de string (texto)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são",h:"<p>Funções de <strong>string</strong> manipulam textos: padronizar, extrair partes, juntar e limpar dados. São rotina no trabalho com dados (normalizar nomes, separar um DDD, etc.).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CONCAT / ||</td><td>Une (concatena) textos. SQLite/Oracle: a || b. MySQL/SQL Server: CONCAT(a,b).</td></tr><tr><td>LENGTH / LEN</td><td>Quantidade de caracteres.</td></tr><tr><td>UPPER / LOWER</td><td>Converte para maiúsculas / minúsculas.</td></tr><tr><td>SUBSTRING / SUBSTR</td><td>Extrai um pedaço (posição inicial + quantidade).</td></tr><tr><td>LEFT / RIGHT</td><td>N caracteres da esquerda / direita.</td></tr><tr><td>REPLACE</td><td>Substitui todas as ocorrências de um texto por outro.</td></tr><tr><td>LPAD / RPAD</td><td>Preenche à esquerda / direita até um tamanho.</td></tr><tr><td>LTRIM / RTRIM / TRIM</td><td>Remove espaços (ou caracteres) do início / fim / ambos.</td></tr><tr><td>SPLIT_PART</td><td>Divide por um delimitador e pega a parte na posição escolhida.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Nome em maiúsculas e o tamanho:</span>\n<span class='kw'>SELECT</span> <span class='kw'>UPPER</span>(<span class='fn'>NOME</span>) <span class='kw'>AS</span> <span class='fn'>maiusculo</span>, <span class='kw'>LENGTH</span>(<span class='fn'>NOME</span>) <span class='kw'>AS</span> <span class='fn'>tamanho</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;"},
+   {t:"code",h:"<span class='cm'>-- Juntando texto com || :</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span> || <span class='st'>' tem '</span> || <span class='fn'>IDADE</span> || <span class='st'>' anos'</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>ID</span>=1;\n<span class='cm'>-- Eliana tem 20 anos</span>"},
+   {t:"tip",l:"Nomes variam por SGBD",h:"<p><code>CONCAT</code> vs <code>||</code>, <code>LEN</code> vs <code>LENGTH</code>, <code>SUBSTRING</code> vs <code>SUBSTR</code>. O conceito é o mesmo; confira a documentação do seu banco. No app (SQLite) use <code>||</code> e <code>LENGTH</code>.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Limpeza e padronização de texto são constantes em Dados. <strong>Próxima ação:</strong> no modo Praticar, teste <code>UPPER</code>, <code>LENGTH</code> e <code>||</code> na tabela PESSOAS.</p>"}
+  ],
+  cards:[["O que faz LENGTH?","Conta a quantidade de caracteres de um texto."],
+         ["Como concatenar textos no SQLite?","Com o operador || . Ex.: NOME || ' anos'."],
+         ["Para que serve SUBSTR(texto, inicio, qtd)?","Extrai um pedaço do texto a partir de uma posição inicial, pegando uma quantidade de caracteres."],
+         ["O que faz REPLACE?","Substitui todas as ocorrências de um trecho por outro texto."]] },
+
+{ id:"fnum", num:"19", cat:"Tipos e funções", title:"Funções numéricas e de data", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Funções numéricas",h:"<p>Realizam cálculos e ajustes em valores numéricos.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>POWER / POW</td><td>Potência. POWER(2,3) = 8.</td></tr><tr><td>ROUND</td><td>Arredonda para o mais próximo. ROUND(28.456,1) = 28.5.</td></tr><tr><td>SQRT</td><td>Raiz quadrada. SQRT(9) = 3.</td></tr><tr><td>TRUNC</td><td>Corta os decimais sem arredondar. TRUNC(111.15) = 111.</td></tr><tr><td>ABS</td><td>Valor absoluto (sem sinal). ABS(-7) = 7.</td></tr><tr><td>MOD / %</td><td>Resto da divisão. 10 % 3 = 1.</td></tr></table>"},
+   {t:"code",h:"<span class='kw'>SELECT</span> <span class='kw'>ROUND</span>(28.456, 1), <span class='kw'>SQRT</span>(9), <span class='kw'>ABS</span>(-7);\n<span class='cm'>-- 28.5 | 3 | 7</span>"},
+   {t:"tip",l:"ROUND vs TRUNC",h:"<p><strong>ROUND</strong> arredonda (28.6 vira 29). <strong>TRUNC</strong> corta (28.6 vira 28). Use ROUND para valores finais; TRUNC quando quer só a parte inteira.</p>"},
+   {t:"concept",l:"Funções de data",h:"<p>Manipulam datas e horas: extrair partes, somar intervalos, calcular diferenças.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CURRENT_DATE</td><td>Data atual.</td></tr><tr><td>DATEADD</td><td>Soma um intervalo a uma data (dias, meses, anos).</td></tr><tr><td>DATEDIFF</td><td>Diferença entre duas datas.</td></tr><tr><td>DATE_PART / EXTRACT</td><td>Extrai uma parte (dia, mês, ano) de uma data.</td></tr><tr><td>DATE_TRUNC</td><td>Zera as partes menores (ex.: trunca por mês).</td></tr><tr><td>TO_TIMESTAMP</td><td>Converte texto em data/hora.</td></tr></table>"},
+   {t:"tip",l:"Datas no app (SQLite)",h:"<p>No SQLite (e no modo Praticar) datas se manipulam com <code>date()</code> e <code>strftime()</code>. Ex.: <code>strftime('%Y', data)</code> extrai o ano. <code>DATEADD/DATEDIFF</code> são do SQL Server; <code>EXTRACT/DATE_PART</code> são do PostgreSQL.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Funções de data são essenciais para relatórios por período (vendas por mês, idade da conta). <strong>Próxima ação:</strong> teste <code>ROUND</code> e <code>strftime('%Y', ...)</code> no Praticar.</p>"}
+  ],
+  cards:[["ROUND vs TRUNC?","ROUND arredonda para o mais próximo; TRUNC corta os decimais sem arredondar."],
+         ["Quanto é POWER(2,3)?","8 (2 elevado a 3)."],
+         ["Para que serve EXTRACT / DATE_PART?","Extrair uma parte específica de uma data (dia, mês ou ano)."],
+         ["Como extrair o ano de uma data no SQLite?","Com strftime('%Y', data)."]] },
+
+{ id:"fcond", num:"20", cat:"Tipos e funções", title:"Conversão e condicionais (CASE, COALESCE)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conversão de tipos",h:"<p>Transformam um dado de um tipo para outro (texto em número, número em texto, etc.).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CAST / CONVERT</td><td>Converte tipos compatíveis. CAST('10' AS INTEGER).</td></tr><tr><td>TO_CHAR</td><td>Número ou data em texto formatado.</td></tr><tr><td>TO_DATE</td><td>Texto em data.</td></tr><tr><td>TO_NUMBER</td><td>Texto em número decimal.</td></tr></table>"},
+   {t:"concept",l:"CASE — decisão dentro do SQL",h:"<p>Cria lógica condicional na consulta. Sintaxe: <code>CASE WHEN condição THEN resultado [ELSE padrão] END</code>. Economiza código ao evitar tratar condições fora do banco.</p>"},
+   {t:"code",h:"<span class='kw'>SELECT</span> <span class='fn'>NOME</span>,\n  <span class='kw'>CASE</span>\n    <span class='kw'>WHEN</span> <span class='fn'>IDADE</span> &gt;= 40 <span class='kw'>THEN</span> <span class='st'>'veterano'</span>\n    <span class='kw'>WHEN</span> <span class='fn'>IDADE</span> &gt;= 30 <span class='kw'>THEN</span> <span class='st'>'adulto'</span>\n    <span class='kw'>ELSE</span> <span class='st'>'jovem'</span>\n  <span class='kw'>END</span> <span class='kw'>AS</span> <span class='fn'>faixa</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;"},
+   {t:"tip",l:"IF / IIF",h:"<p><code>IF(condição, valor_se_verdadeiro, valor_se_falso)</code> faz o mesmo que um CASE simples. No SQLite chama-se <code>IIF</code>. Ex.: <code>IIF(IDADE &gt;= 18, 'maior', 'menor')</code>.</p>"},
+   {t:"concept",l:"COALESCE — primeiro valor não-nulo",h:"<p>Percorre uma lista e retorna o <strong>primeiro valor que não for NULL</strong>. <strong>Analogia:</strong> ligar para o cliente: tenta o comercial; se vazio, o celular; se vazio, o fixo. <code>COALESCE(comercial, celular, fixo)</code>.</p>"},
+   {t:"concept",l:"NULLIF — NULL se forem iguais",h:"<p>Compara dois valores: se forem <strong>iguais</strong>, retorna <strong>NULL</strong>; se diferentes, retorna o primeiro. Útil para evitar divisão por zero (<code>NULLIF(divisor, 0)</code>) ou destacar diferenças (meta x realizado).</p>"},
+   {t:"code",h:"<span class='kw'>SELECT</span> <span class='kw'>COALESCE</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>, <span class='st'>'fixo'</span>);  <span class='cm'>-- fixo</span>\n<span class='kw'>SELECT</span> <span class='kw'>NULLIF</span>(50, 50);  <span class='cm'>-- NULL (iguais)</span>"},
+   {t:"recap",l:"Na prática",h:"<p><code>CASE</code> classifica; <code>COALESCE</code> garante um valor mesmo com campos vazios; <code>NULLIF</code> protege cálculos. São o que deixa a consulta \"inteligente\" e segura contra nulos. <strong>Próxima ação:</strong> monte um CASE de faixa etária no Praticar.</p>"}
+  ],
+  cards:[["Qual a sintaxe do CASE?","CASE WHEN condição THEN resultado ELSE padrão END."],
+         ["O que faz COALESCE?","Retorna o primeiro valor não-nulo de uma lista."],
+         ["O que faz NULLIF(a, b)?","Retorna NULL se a e b forem iguais; senão retorna a. Bom para evitar divisão por zero."],
+         ["Para que serve CAST?","Converter um dado de um tipo para outro (ex.: texto em número)."]] },
+
+{ id:"joins", num:"21", cat:"Juntando tabelas", title:"JOINs — juntando tabelas", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é um JOIN",h:"<p><strong>JOIN</strong> (juntar) combina linhas de <strong>duas ou mais tabelas</strong> com base em colunas em comum (geralmente PK de uma e FK de outra). É o que permite ver, num só resultado, dados espalhados em tabelas diferentes.</p><p><strong>Atenção:</strong> em grandes volumes, JOINs têm <strong>alto custo computacional</strong> e podem deixar a consulta lenta.</p>"},
+   {t:"map",l:"Os quatro tipos (diagrama de Venn)",h:SVG_JOINS()},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Retorna</th></tr><tr><td>INNER JOIN</td><td>Só as linhas que casam nas duas tabelas (a interseção).</td></tr><tr><td>LEFT JOIN</td><td>Todas as linhas da tabela da esquerda; o que não casa na direita vem NULL.</td></tr><tr><td>RIGHT JOIN</td><td>Todas as linhas da tabela da direita; o que não casa na esquerda vem NULL.</td></tr><tr><td>FULL OUTER JOIN</td><td>Todas as linhas dos dois lados; preenche com NULL onde não há par.</td></tr></table>"},
+   {t:"tip",l:"Como ler um JOIN",h:"<p><code>FROM A JOIN B ON A.chave = B.chave</code>. O <code>ON</code> diz por qual coluna as tabelas se ligam. Use apelidos (A, B) para encurtar.</p>"},
+   {t:"code",h:"<span class='cm'>-- Pessoa e produto de cada compra (INNER JOIN):</span>\n<span class='kw'>SELECT</span> <span class='fn'>P</span>.<span class='fn'>NOME</span>, <span class='fn'>PR</span>.<span class='fn'>NOME</span>\n<span class='kw'>FROM</span> <span class='fn'>COMPRAS</span> <span class='fn'>C</span>\n<span class='kw'>JOIN</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>  <span class='kw'>ON</span> <span class='fn'>P</span>.<span class='fn'>ID</span> = <span class='fn'>C</span>.<span class='fn'>ID_PESSOA</span>\n<span class='kw'>JOIN</span> <span class='fn'>PRODUTOS</span> <span class='fn'>PR</span> <span class='kw'>ON</span> <span class='fn'>PR</span>.<span class='fn'>ID</span> = <span class='fn'>C</span>.<span class='fn'>ID_PRODUTO</span>;"},
+   {t:"code",h:"<span class='cm'>-- Todas as pessoas, mesmo quem não comprou (LEFT JOIN):</span>\n<span class='kw'>SELECT</span> <span class='fn'>P</span>.<span class='fn'>NOME</span>, <span class='fn'>C</span>.<span class='fn'>ID_PRODUTO</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>\n<span class='kw'>LEFT JOIN</span> <span class='fn'>COMPRAS</span> <span class='fn'>C</span> <span class='kw'>ON</span> <span class='fn'>C</span>.<span class='fn'>ID_PESSOA</span> = <span class='fn'>P</span>.<span class='fn'>ID</span>;\n<span class='cm'>-- quem não comprou aparece com ID_PRODUTO = NULL</span>"},
+   {t:"tip",l:"Achar o que NÃO tem par",h:"<p>Um <code>LEFT JOIN</code> seguido de <code>WHERE coluna_da_direita IS NULL</code> traz só o que existe <strong>apenas na esquerda</strong>. Ex.: produtos que nunca foram comprados.</p>"},
+   {t:"recap",l:"Na prática",h:"<p><strong>INNER</strong> = interseção; <strong>LEFT/RIGHT</strong> = um lado inteiro + o que casa; <strong>FULL</strong> = tudo. Para relatórios reais (cliente + pedidos + produtos) o JOIN é diário. <strong>Próxima ação:</strong> no Praticar, junte PESSOAS, COMPRAS e PRODUTOS.</p>"}
+  ],
+  cards:[["O que faz um JOIN?","Combina linhas de duas ou mais tabelas com base em colunas em comum (chaves)."],
+         ["INNER JOIN retorna o quê?","Apenas as linhas que casam nas duas tabelas (a interseção)."],
+         ["LEFT JOIN retorna o quê?","Todas as linhas da tabela da esquerda; onde não há par na direita, vem NULL."],
+         ["Como achar registros sem par?","LEFT JOIN e depois WHERE coluna_da_direita IS NULL."],
+         ["O que o ON define num JOIN?","A coluna que liga as duas tabelas (ex.: ON P.ID = C.ID_PESSOA)."]] },
+
+{ id:"union", num:"22", cat:"Juntando tabelas", title:"UNION — empilhando resultados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é UNION",h:"<p><strong>UNION</strong> combina (empilha) as linhas de <strong>duas ou mais consultas</strong> num único resultado. Diferença para o JOIN: o JOIN junta <strong>colunas</strong> (lado a lado); o UNION junta <strong>linhas</strong> (uma embaixo da outra).</p>"},
+   {t:"tip",l:"Analogia",h:"<p>Você tem uma lista de compras do mercado e outra da farmácia. O UNION é escrever todos os itens num papel só, um abaixo do outro.</p>"},
+   {t:"attr",l:"Duas regras obrigatórias",h:"<p>1. <strong>Mesmo número de colunas</strong> nas duas consultas.<br>2. <strong>Tipos e ordem compatíveis</strong>: a coluna na mesma posição deve ter o mesmo tipo (texto com texto, número com número).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>O que faz</th></tr><tr><td>UNION ALL</td><td>Junta tudo sem conferir. Mantém duplicatas. Mais rápido.</td></tr><tr><td>UNION</td><td>Junta e remove as duplicatas. Resultado limpo, mas exige mais esforço do banco.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Empilha todos os IDs (com repetições):</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>\n<span class='kw'>UNION ALL</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;\n\n<span class='cm'>-- Só os valores únicos (sem repetir):</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>\n<span class='kw'>UNION</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;"},
+   {t:"tip",l:"Exemplo visual",h:"<p>Lista 1: Verde, Amarelo, Vermelho. Lista 2: Vermelho, Azul, Amarelo.<br><strong>UNION ALL</strong> = 6 itens (Verde, Amarelo, Vermelho, Vermelho, Azul, Amarelo).<br><strong>UNION</strong> = 4 itens únicos (Verde, Amarelo, Vermelho, Azul).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Use <strong>UNION ALL</strong> quando quiser tudo (e é mais rápido); use <strong>UNION</strong> quando precisa de uma lista sem repetições. <strong>Próxima ação:</strong> rode os dois no Praticar e compare a quantidade de linhas.</p>"}
+  ],
+  cards:[["O que faz UNION?","Empilha (combina) as linhas de duas ou mais consultas num único resultado."],
+         ["UNION vs UNION ALL?","UNION remove as duplicatas; UNION ALL mantém todas (e é mais rápido)."],
+         ["Quais as regras do UNION?","Mesmo número de colunas e tipos/ordem compatíveis entre as consultas."],
+         ["JOIN vs UNION?","JOIN junta colunas (lado a lado); UNION junta linhas (uma embaixo da outra)."]] },
+
+{ id:"subq", num:"23", cat:"Consultas avançadas", title:"Subqueries (subconsultas)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Uma <strong>subquery</strong> (subconsulta) é uma consulta <strong>dentro</strong> de outra. Como uma boneca russa: você faz um SELECT e, dentro dele, coloca outro SELECT.</p>"},
+   {t:"concept",l:"Dois usos principais",h:"<p><strong>Como coluna:</strong> traz um valor calculado de outra tabela para cada linha.<br><strong>Como filtro:</strong> limita os resultados com base numa lista gerada por outra consulta (<code>WHERE ... IN (subconsulta)</code>).</p>"},
+   {t:"code",h:"<span class='cm'>-- Como filtro: só quem fez alguma compra</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>ID</span> <span class='kw'>IN</span> (<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>);"},
+   {t:"code",h:"<span class='cm'>-- Como coluna: total de compras de cada pessoa</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>,\n  (<span class='kw'>SELECT</span> <span class='kw'>COUNT</span>(*) <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span> <span class='kw'>WHERE</span> <span class='fn'>ID_PESSOA</span>=<span class='fn'>P</span>.<span class='fn'>ID</span>) <span class='kw'>AS</span> <span class='fn'>total</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>;"},
+   {t:"attr",l:"Atenção — desempenho",h:"<p>Não há limite para aninhar subconsultas, mas <strong>muitas camadas deixam a consulta lenta</strong> (o banco tem muito trabalho extra). Use com parcimônia.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Subconsultas respondem perguntas em duas etapas: \"quem comprou?\" e depois \"traga os nomes desses\". <strong>Próxima ação:</strong> no Praticar, liste quem está acima da média de idade com uma subconsulta.</p>"}
+  ],
+  cards:[["O que é uma subquery?","Uma consulta dentro de outra (um SELECT dentro de outro SELECT)."],
+         ["Quais os dois usos de subquery?","Como coluna (valor calculado por linha) e como filtro (WHERE ... IN (subconsulta))."],
+         ["Qual o cuidado com subqueries?","Muitas camadas aninhadas deixam a consulta lenta (alto custo)."]] },
+
+{ id:"views", num:"24", cat:"Consultas avançadas", title:"Views (visões)", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é uma View",h:"<p>Uma <strong>view</strong> (visão) é uma <strong>tabela virtual</strong>: não armazena dados próprios, é apenas um <strong>SELECT salvo</strong> com um nome. Você a consulta como se fosse uma tabela comum.</p>"},
+   {t:"concept",l:"Por que usar",h:"<p><strong>Reuso:</strong> escreve a consulta difícil uma vez e salva.<br><strong>Segurança:</strong> mostra só algumas colunas, escondendo dados sensíveis (ex.: salários).<br><strong>Simplificação:</strong> transforma um código gigante em algo limpo de usar.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Característica</th><th>Detalhe</th></tr><tr><td>Dinâmica</td><td>Reflete os dados atuais: se a tabela muda, a view mostra a mudança.</td></tr><tr><td>Permanente</td><td>Continua existindo mesmo após reiniciar o servidor.</td></tr><tr><td>Leve</td><td>Não ocupa espaço extra: é só a instrução salva.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Criar:</span>\n<span class='kw'>CREATE VIEW</span> <span class='fn'>vw_adultos</span> <span class='kw'>AS</span>\n  <span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> &gt;= 18;\n\n<span class='cm'>-- Consultar como se fosse tabela:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>vw_adultos</span>;"},
+   {t:"tip",l:"Comandos",h:"<p><code>CREATE VIEW nome AS [SELECT]</code> cria; <code>ALTER VIEW</code> altera a consulta; <code>DROP VIEW</code> apaga a view. <strong>DROP VIEW não apaga os dados</strong> das tabelas originais, só a visão.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Views deixam consultas complexas reutilizáveis e seguras (ótimo para esconder colunas sensíveis). <strong>Próxima ação:</strong> no Praticar, crie uma view com as pessoas de um estado.</p>"}
+  ],
+  cards:[["O que é uma view?","Uma tabela virtual: um SELECT salvo com nome, que não armazena dados próprios."],
+         ["Por que usar views?","Reuso (salvar consulta difícil), segurança (esconder colunas) e simplificação."],
+         ["DROP VIEW apaga os dados?","Não. Apaga só a view; os dados das tabelas originais permanecem."],
+         ["A view reflete mudanças nos dados?","Sim, é dinâmica: mostra sempre os dados atuais das tabelas."]] }
 ];
 
-const QUIZ = [
+const SQL_QUIZ = [
  {q:"O que significa o SQL ser uma linguagem \"declarativa\"?",o:["Você escreve cada passo da busca, linha a linha","Você descreve o resultado que quer; o banco decide como obtê-lo","Ela só funciona em um fabricante específico","Ela não usa palavras em inglês"],c:1,e:"Declarativo = você diz o \"o quê\". O imperativo (ex.: for em Python) exigiria o passo a passo."},
  {q:"Quais são as 5 sublinguagens do SQL?",o:["SELECT, INSERT, UPDATE, DELETE, CREATE","DDL, DML, DQL, DCL, DTL","ANSI, ISO, IBM, SQL, BI","PK, FK, NULL, UNIQUE, INDEX"],c:1,e:"DDL (definição), DML (manipulação), DQL (consulta), DCL (controle), DTL (transação)."},
  {q:"Qual comando da DDL apaga a tabela inteira, com os dados?",o:["DELETE","TRUNCATE","DROP TABLE","ALTER TABLE"],c:2,e:"DROP TABLE remove a estrutura inteira. DELETE apaga linhas; é da DML."},
@@ -437,66 +592,112 @@ const QUIZ = [
  {q:"Numa consulta com AND, a linha aparece quando:",o:["Pelo menos uma condição é verdadeira","Todas as condições são verdadeiras","Nenhuma condição é verdadeira","A primeira condição é falsa"],c:1,e:"AND exige todas as condições verdadeiras ao mesmo tempo. Com OR, bastaria uma."},
  {q:"A função COUNT(coluna) conta:",o:["Todas as linhas, inclusive NULL","Apenas as linhas em que a coluna não é NULL","Somente valores negativos","Apenas a primeira linha"],c:1,e:"COUNT(coluna) ignora NULL. Para contar todas as linhas use COUNT(*)."},
  {q:"Qual a ordem padrão (sem especificar) do ORDER BY?",o:["DESC (decrescente)","ASC (crescente)","Aleatória","Pela chave primária"],c:1,e:"O padrão é ASC, crescente. Para inverter, use DESC."},
- {q:"Para evitar erro de divisão por zero, deve-se:",o:["Usar DISTINCT","Filtrar com WHERE os divisores iguais a zero","Trocar / por %","Usar GROUP BY"],c:1,e:"Filtre com WHERE (ex.: WHERE FILHOS > 0) para descartar divisores zero antes do cálculo."}
+ {q:"Para evitar erro de divisão por zero, deve-se:",o:["Usar DISTINCT","Filtrar com WHERE os divisores iguais a zero","Trocar / por %","Usar GROUP BY"],c:1,e:"Filtre com WHERE (ex.: WHERE FILHOS > 0) para descartar divisores zero antes do cálculo."},
+ {q:"Quantos bytes ocupa o tipo INT?",o:["1 byte","2 bytes","4 bytes","8 bytes"],c:2,e:"INT ocupa 4 bytes (faixa de cerca de -2,1 bi a +2,1 bi). BIGINT ocupa 8."},
+ {q:"Qual a diferença entre CHAR e VARCHAR?",o:["CHAR é variável e VARCHAR é fixo","CHAR é fixo e VARCHAR é variável","São idênticos","CHAR só aceita números"],c:1,e:"CHAR tem tamanho fixo; VARCHAR é variável (ocupa o necessário + 1 byte)."},
+ {q:"Qual tipo armazena data e hora juntas?",o:["DATE","TIME","DATETIME","INT"],c:2,e:"DATETIME guarda data e hora (8 bytes). DATE só data; TIME só hora."},
+ {q:"Qual função retorna o primeiro valor não-nulo de uma lista?",o:["NULLIF","COALESCE","CASE","TRIM"],c:1,e:"COALESCE percorre a lista e retorna o primeiro valor que não for NULL."},
+ {q:"NULLIF(a, b) retorna o que quando a e b são iguais?",o:["O valor de a","O valor de b","NULL","Um erro"],c:2,e:"NULLIF retorna NULL quando os dois são iguais; senão retorna o primeiro."},
+ {q:"Qual a diferença entre ROUND e TRUNC?",o:["São iguais","ROUND arredonda; TRUNC corta os decimais","TRUNC arredonda; ROUND corta","Só funcionam com texto"],c:1,e:"ROUND arredonda para o mais próximo; TRUNC simplesmente corta os decimais."},
+ {q:"Para decidir um valor conforme condições dentro do SELECT, usa-se:",o:["WHERE","CASE WHEN ... THEN ... END","GROUP BY","DISTINCT"],c:1,e:"CASE WHEN condição THEN resultado ELSE padrão END cria a lógica condicional na consulta."},
+ {q:"O INNER JOIN retorna:",o:["Tudo das duas tabelas","Só as linhas que casam nas duas tabelas","Tudo da tabela da esquerda","Tudo da tabela da direita"],c:1,e:"INNER JOIN traz apenas a interseção: linhas com par nas duas tabelas."},
+ {q:"O LEFT JOIN retorna:",o:["Só o que casa","Todas as linhas da esquerda; sem par na direita vem NULL","Todas as linhas da direita","Nada quando não há par"],c:1,e:"LEFT JOIN traz todas as linhas da tabela da esquerda; onde não há correspondência, as colunas da direita ficam NULL."},
+ {q:"Para encontrar registros que NÃO têm correspondência em outra tabela, usa-se:",o:["INNER JOIN","LEFT JOIN com WHERE coluna IS NULL","GROUP BY","DISTINCT"],c:1,e:"Um LEFT JOIN seguido de WHERE coluna_da_direita IS NULL isola o que existe só na tabela da esquerda."},
+ {q:"Qual a diferença entre UNION e UNION ALL?",o:["São iguais","UNION remove duplicatas; UNION ALL mantém todas","UNION ALL remove duplicatas; UNION mantém","UNION só funciona com números"],c:1,e:"UNION remove as linhas repetidas; UNION ALL mantém tudo e é mais rápido."},
+ {q:"Para usar UNION, as duas consultas precisam ter:",o:["O mesmo nome de tabela","O mesmo número de colunas e tipos compatíveis","Um JOIN antes","Uma cláusula GROUP BY"],c:1,e:"As consultas devem ter o mesmo número de colunas, com tipos e ordem compatíveis."},
+ {q:"JOIN e UNION se diferenciam porque:",o:["JOIN junta linhas e UNION junta colunas","JOIN junta colunas (lado a lado) e UNION empilha linhas","São a mesma coisa","UNION só funciona com uma tabela"],c:1,e:"JOIN combina colunas de tabelas lado a lado; UNION empilha linhas de consultas, uma embaixo da outra."},
+ {q:"O que é uma subquery (subconsulta)?",o:["Uma tabela nova","Uma consulta dentro de outra consulta","Um tipo de JOIN","Uma chave primária"],c:1,e:"É um SELECT dentro de outro SELECT, usado como coluna ou como filtro."},
+ {q:"O que é uma View?",o:["Uma cópia física da tabela","Uma tabela virtual: um SELECT salvo que não armazena dados","Um índice","Um backup"],c:1,e:"A view é uma tabela virtual (consulta salva); reflete os dados atuais e não ocupa espaço."},
+ {q:"DROP VIEW apaga os dados das tabelas originais?",o:["Sim, apaga tudo","Não, apaga só a view","Só apaga metade","Depende do SGBD"],c:1,e:"DROP VIEW remove apenas a visão; os dados das tabelas permanecem."}
 ];
 
-let DB=null,dbReady=false,dbError=null,dbStarted=false;
+let SQLjs=null,DB=null,dbReady=false,dbError=null,dbStarted=false,activeEx=[];
+const SEED="CREATE TABLE PESSOAS(ID INTEGER,NOME TEXT,IDADE INTEGER,FILHOS INTEGER,UF TEXT);INSERT INTO PESSOAS VALUES (1,'Eliana',20,0,'SP'),(2,'Miguel',39,3,'RJ'),(3,'Raquel',36,2,'SP'),(4,'João',22,1,'MG'),(5,'Marta',48,2,'RJ');CREATE TABLE PRODUTOS(ID INTEGER,NOME TEXT,PRECO REAL,CATEGORIA TEXT);INSERT INTO PRODUTOS VALUES (1,'Café',15.0,'Bebida'),(2,'Pão',8.0,'Padaria'),(3,'Leite',6.0,'Bebida'),(4,'Bolo',25.0,'Padaria'),(5,'Suco',12.0,'Bebida');CREATE TABLE COMPRAS(ID INTEGER,ID_PESSOA INTEGER,ID_PRODUTO INTEGER,QTD INTEGER);INSERT INTO COMPRAS VALUES (1,1,1,2),(2,2,2,1),(3,3,1,1),(4,3,4,2),(5,4,5,3),(6,2,4,1);";
 function initDB(){
   if(dbStarted)return; dbStarted=true;
   if(typeof initSqlJs==='undefined'){ dbError="Motor SQL não encontrado (arquivo sql-asm.js)."; if(mode==='practice')renderPractice(); return; }
-  initSqlJs().then(SQL=>{
-    DB=new SQL.Database();
-    DB.run("CREATE TABLE PESSOAS(ID INTEGER, NOME TEXT, IDADE INTEGER, FILHOS INTEGER);INSERT INTO PESSOAS VALUES (1,'Eliana',20,0),(2,'Miguel',39,3),(3,'Raquel',36,2),(4,'João',22,1),(5,'Marta',48,2);CREATE TABLE COMPRAS(ID INTEGER, ID_PESSOA INTEGER, VALOR REAL);INSERT INTO COMPRAS VALUES (1,1,50.0),(2,2,12.5),(3,3,8.0),(4,3,20.0),(5,6,99.9);");
-    dbReady=true; if(mode==='practice')renderPractice();
-  }).catch(e=>{ dbError=String(e&&e.message||e); if(mode==='practice')renderPractice(); });
+  initSqlJs().then(function(SQL){ SQLjs=SQL; DB=new SQL.Database(); DB.run(SEED); dbReady=true; if(mode==='practice')renderPractice(); }).catch(function(e){ dbError=String(e&&e.message||e); if(mode==='practice')renderPractice(); });
 }
-function runSQL(sql){
-  if(!dbReady)return {error:"Motor ainda carregando, tente novamente em instantes."};
-  try{ const res=DB.exec(sql); if(!res.length)return {empty:true}; const last=res[res.length-1]; return {columns:last.columns,values:last.values}; }
-  catch(e){ return {error:String(e&&e.message||e)}; }
+function freshDB(){ const d=new SQLjs.Database(); d.run(SEED); return d; }
+function execLast(db,sql){ const r=db.exec(sql); if(!r.length)return {empty:true}; const l=r[r.length-1]; return {columns:l.columns,values:l.values}; }
+function runSQL(sql){ if(!dbReady)return {error:"Motor ainda carregando, tente novamente em instantes."}; try{ return execLast(DB,sql); }catch(e){ return {error:String(e&&e.message||e)}; } }
+function esc(s){ return String(s).replace(/[&<>]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m];}); }
+function gridHTML(r){ if(r.error)return '<div class="sql-err">'+esc(r.error)+'</div>'; if(r.empty||!r.values||!r.values.length)return '<div class="sql-empty">Consulta executada. Nenhuma linha retornada.</div>'; let h='<div class="grid-wrap"><table class="grid"><tr>'+r.columns.map(function(c){return '<th>'+esc(c)+'</th>';}).join('')+'</tr>'; r.values.forEach(function(row){ h+='<tr>'+row.map(function(v){return '<td>'+(v===null?'<i>NULL</i>':esc(String(v)))+'</td>';}).join('')+'</tr>'; }); return h+'</table></div>'; }
+function normRows(vals,ordered){ const rows=(vals||[]).map(function(r){return JSON.stringify(r);}); return ordered?rows.join('|'):rows.slice().sort().join('|'); }
+const SQL_THEMEEX={
+ bd:[{q:"Selecione todas as colunas e linhas da tabela PESSOAS.",sol:"SELECT * FROM PESSOAS",dica:"Use SELECT * FROM PESSOAS."}],
+ ddl:[{q:"Crie uma tabela chamada CLIENTE com as colunas id (INTEGER) e nome (TEXT).",sol:"CREATE TABLE CLIENTE(id INTEGER, nome TEXT)",check:"SELECT name FROM sqlite_master WHERE type='table' AND name='CLIENTE'",dica:"CREATE TABLE nome(coluna tipo, coluna tipo)."},
+      {q:"Adicione à tabela PESSOAS uma coluna chamada EMAIL do tipo TEXT.",sol:"ALTER TABLE PESSOAS ADD EMAIL TEXT",check:"SELECT COUNT(*) FROM pragma_table_info('PESSOAS') WHERE name='EMAIL'",dica:"ALTER TABLE tabela ADD coluna tipo."}],
+ dml:[{q:"Insira em PESSOAS uma pessoa: id 6, nome 'Carlos', idade 30, 0 filhos, UF 'SP'.",sol:"INSERT INTO PESSOAS VALUES (6,'Carlos',30,0,'SP')",check:"SELECT NOME, IDADE FROM PESSOAS WHERE ID=6",dica:"INSERT INTO PESSOAS VALUES (valores na ordem das colunas)."},
+      {q:"Atualize a idade da pessoa de ID 1 para 21.",sol:"UPDATE PESSOAS SET IDADE=21 WHERE ID=1",check:"SELECT IDADE FROM PESSOAS WHERE ID=1",dica:"UPDATE tabela SET coluna=valor WHERE condição."},
+      {q:"Apague de PESSOAS quem não tem filhos (FILHOS igual a 0).",sol:"DELETE FROM PESSOAS WHERE FILHOS=0",check:"SELECT NOME FROM PESSOAS ORDER BY NOME",dica:"DELETE FROM tabela WHERE condição. Lembre do WHERE."}],
+ dql:[{q:"Selecione apenas as colunas NOME e IDADE de PESSOAS.",sol:"SELECT NOME, IDADE FROM PESSOAS",dica:"SELECT col1, col2 FROM tabela."},
+      {q:"Selecione o NOME da pessoa cujo ID é 3.",sol:"SELECT NOME FROM PESSOAS WHERE ID=3",dica:"Use WHERE ID=3."}],
+ chaves:[{q:"Liste o NOME das pessoas que compraram, ligando PESSOAS.ID a COMPRAS.ID_PESSOA.",sol:"SELECT NOME FROM PESSOAS WHERE ID IN (SELECT ID_PESSOA FROM COMPRAS)",dica:"Use ID IN (SELECT ID_PESSOA FROM COMPRAS)."}],
+ rel:[{q:"Liste o NOME dos PRODUTOS que aparecem em alguma compra (tabela COMPRAS).",sol:"SELECT NOME FROM PRODUTOS WHERE ID IN (SELECT ID_PRODUTO FROM COMPRAS)",dica:"Use ID IN (SELECT ID_PRODUTO FROM COMPRAS)."}],
+ where:[{q:"Liste o NOME e a IDADE das pessoas com 36 anos ou mais.",sol:"SELECT NOME, IDADE FROM PESSOAS WHERE IDADE >= 36",dica:"Use WHERE com o operador >=."},
+        {q:"Liste o NOME das pessoas cujo nome começa com a letra M.",sol:"SELECT NOME FROM PESSOAS WHERE NOME LIKE 'M%'",dica:"Use LIKE 'M%'."},
+        {q:"Liste o NOME das pessoas com idade entre 20 e 23 (inclusive).",sol:"SELECT NOME FROM PESSOAS WHERE IDADE BETWEEN 20 AND 23",dica:"Use BETWEEN 20 AND 23."},
+        {q:"Liste o NOME das pessoas que moram em SP ou RJ.",sol:"SELECT NOME FROM PESSOAS WHERE UF IN ('SP','RJ')",dica:"Use UF IN ('SP','RJ')."}],
+ agg:[{q:"Conte quantas pessoas existem na tabela (uma coluna com a contagem).",sol:"SELECT COUNT(*) FROM PESSOAS",dica:"Use COUNT(*)."},
+      {q:"Calcule a média de idade (uma coluna).",sol:"SELECT AVG(IDADE) FROM PESSOAS",dica:"Use AVG(IDADE)."},
+      {q:"Mostre quantas pessoas há por UF (colunas: UF e a contagem).",sol:"SELECT UF, COUNT(*) FROM PESSOAS GROUP BY UF",dica:"GROUP BY UF combinado com COUNT(*)."},
+      {q:"Some a quantidade total comprada (coluna QTD da tabela COMPRAS).",sol:"SELECT SUM(QTD) FROM COMPRAS",dica:"Use SUM(QTD)."}],
+ order:[{q:"Liste NOME e IDADE de todos, do mais velho para o mais novo.",sol:"SELECT NOME, IDADE FROM PESSOAS ORDER BY IDADE DESC",ordered:true,dica:"ORDER BY IDADE DESC."},
+        {q:"Liste o NOME de todas as pessoas em ordem alfabética.",sol:"SELECT NOME FROM PESSOAS ORDER BY NOME ASC",ordered:true,dica:"ORDER BY NOME ASC."}],
+ tipos:[{q:"Crie uma tabela FUNCIONARIO com as colunas id (INTEGER), nome (TEXT) e salario (REAL).",sol:"CREATE TABLE FUNCIONARIO(id INTEGER, nome TEXT, salario REAL)",check:"SELECT name FROM sqlite_master WHERE type='table' AND name='FUNCIONARIO'",dica:"CREATE TABLE nome(coluna TIPO, ...)."},
+        {q:"Use CAST para converter o texto '2024' em número inteiro.",sol:"SELECT CAST('2024' AS INTEGER)",dica:"SELECT CAST('2024' AS INTEGER)."}],
+ fstr:[{q:"Mostre o NOME da pessoa de ID 1 em letras maiúsculas.",sol:"SELECT UPPER(NOME) FROM PESSOAS WHERE ID=1",dica:"Use UPPER(NOME)."},
+       {q:"Mostre o NOME e a quantidade de caracteres do nome (LENGTH) da pessoa de ID 2.",sol:"SELECT NOME, LENGTH(NOME) FROM PESSOAS WHERE ID=2",dica:"SELECT NOME, LENGTH(NOME)."},
+       {q:"Monte o texto no formato 'Eliana (20)' para o ID 1, juntando NOME e IDADE com ||.",sol:"SELECT NOME || ' (' || IDADE || ')' FROM PESSOAS WHERE ID=1",dica:"NOME || ' (' || IDADE || ')'."}],
+ fnum:[{q:"Arredonde o número 28.456 para 1 casa decimal (ROUND).",sol:"SELECT ROUND(28.456, 1)",dica:"ROUND(numero, casas)."},
+       {q:"Calcule 2 elevado a 3 usando POWER.",sol:"SELECT POWER(2, 3)",dica:"POWER(base, expoente)."},
+       {q:"Extraia o ano da data '2024-05-01' (strftime).",sol:"SELECT strftime('%Y', '2024-05-01')",dica:"strftime('%Y', data) extrai o ano."}],
+ fcond:[{q:"Mostre NOME e a classificação: 'veterano' se IDADE >= 40, senão 'jovem' (use CASE).",sol:"SELECT NOME, CASE WHEN IDADE>=40 THEN 'veterano' ELSE 'jovem' END FROM PESSOAS",dica:"CASE WHEN IDADE>=40 THEN 'veterano' ELSE 'jovem' END."},
+        {q:"Converta o texto '150' em número inteiro (CAST).",sol:"SELECT CAST('150' AS INTEGER)",dica:"CAST('150' AS INTEGER)."},
+        {q:"Retorne o primeiro valor não-nulo entre NULL e 'reserva' (COALESCE).",sol:"SELECT COALESCE(NULL, 'reserva')",dica:"COALESCE(a, b) retorna o primeiro não-nulo."}],
+ joins:[{q:"Mostre o NOME da pessoa e o NOME do produto de cada compra (junte COMPRAS, PESSOAS e PRODUTOS com INNER JOIN).",sol:"SELECT P.NOME, PR.NOME FROM COMPRAS C JOIN PESSOAS P ON P.ID=C.ID_PESSOA JOIN PRODUTOS PR ON PR.ID=C.ID_PRODUTO",dica:"FROM COMPRAS C JOIN PESSOAS P ON P.ID=C.ID_PESSOA JOIN PRODUTOS PR ON PR.ID=C.ID_PRODUTO."},
+        {q:"Liste TODAS as pessoas (NOME) e o ID_PRODUTO que compraram; quem não comprou deve aparecer com NULL (LEFT JOIN).",sol:"SELECT P.NOME, C.ID_PRODUTO FROM PESSOAS P LEFT JOIN COMPRAS C ON C.ID_PESSOA=P.ID",dica:"FROM PESSOAS P LEFT JOIN COMPRAS C ON C.ID_PESSOA=P.ID."},
+        {q:"Liste o NOME dos PRODUTOS que nunca foram comprados (não aparecem em COMPRAS).",sol:"SELECT PR.NOME FROM PRODUTOS PR LEFT JOIN COMPRAS C ON C.ID_PRODUTO=PR.ID WHERE C.ID_PRODUTO IS NULL",dica:"LEFT JOIN com COMPRAS e depois WHERE C.ID_PRODUTO IS NULL (ou use NOT IN)."}],
+ union:[{q:"Empilhe todos os ID_PESSOA de COMPRAS com todos os ID de PESSOAS, mantendo as repetições (UNION ALL).",sol:"SELECT ID_PESSOA FROM COMPRAS UNION ALL SELECT ID FROM PESSOAS",dica:"SELECT ... UNION ALL SELECT ..."},
+        {q:"Liste os ID_PESSOA de COMPRAS e os ID de PESSOAS sem repetir nenhum valor (UNION).",sol:"SELECT ID_PESSOA FROM COMPRAS UNION SELECT ID FROM PESSOAS",dica:"SELECT ... UNION SELECT ... remove duplicatas."}],
+ subq:[{q:"Liste o NOME das pessoas que NÃO fizeram nenhuma compra (subconsulta com NOT IN).",sol:"SELECT NOME FROM PESSOAS WHERE ID NOT IN (SELECT ID_PESSOA FROM COMPRAS)",dica:"WHERE ID NOT IN (SELECT ID_PESSOA FROM COMPRAS)."},
+       {q:"Para cada pessoa, mostre o NOME e quantas compras fez, usando uma subconsulta com COUNT como coluna.",sol:"SELECT NOME, (SELECT COUNT(*) FROM COMPRAS WHERE ID_PESSOA=PESSOAS.ID) AS total FROM PESSOAS",dica:"SELECT NOME, (SELECT COUNT(*) FROM COMPRAS WHERE ID_PESSOA=PESSOAS.ID) FROM PESSOAS."},
+       {q:"Liste o NOME das pessoas com idade acima da média (subconsulta com AVG).",sol:"SELECT NOME FROM PESSOAS WHERE IDADE > (SELECT AVG(IDADE) FROM PESSOAS)",dica:"WHERE IDADE > (SELECT AVG(IDADE) FROM PESSOAS)."}],
+ views:[{q:"Crie uma view chamada VW_RJ que mostra o NOME das pessoas da UF 'RJ'.",sol:"CREATE VIEW VW_RJ AS SELECT NOME FROM PESSOAS WHERE UF='RJ'",check:"SELECT NOME FROM VW_RJ ORDER BY NOME",dica:"CREATE VIEW VW_RJ AS SELECT NOME FROM PESSOAS WHERE UF='RJ'."},
+        {q:"Crie uma view chamada VW_BEBIDAS com o NOME dos produtos da categoria 'Bebida'.",sol:"CREATE VIEW VW_BEBIDAS AS SELECT NOME FROM PRODUTOS WHERE CATEGORIA='Bebida'",check:"SELECT NOME FROM VW_BEBIDAS ORDER BY NOME",dica:"CREATE VIEW VW_BEBIDAS AS SELECT NOME FROM PRODUTOS WHERE CATEGORIA='Bebida'."}]
+};
+function exItemHTML(e,i){ return '<div class="exercise"><div class="ex-q"><span class="ex-n">'+(i+1)+'</span>'+esc(e.q)+'</div><textarea class="ex-input" id="ex'+i+'" spellcheck="false" placeholder="Escreva sua consulta SQL..."></textarea><div class="ex-actions"><button class="btn primary" onclick="checkEx('+i+')">Rodar e verificar</button><button class="btn" onclick="toggleSol('+i+')">Ver solução</button><span class="ex-badge" id="exbadge'+i+'"></span></div><div class="ex-out" id="exout'+i+'"></div><div class="ex-sol hidden" id="exsol'+i+'"><b>Solução:</b> <code>'+esc(e.sol)+'</code></div></div>'; }
+function renderExList(list){ activeEx=list; let h=''; for(let i=0;i<list.length;i++)h+=exItemHTML(list[i],i); return h; }
+function setBadge(i,s){ const b=document.getElementById('exbadge'+i); if(!b)return; b.className='ex-badge '+s; b.textContent=s==='ok'?'✓ Correto':s==='no'?'✗ Ainda não':s==='err'?'⚠ Erro':''; }
+function checkEx(i){
+  const e=activeEx[i]; if(!e)return;
+  const out=document.getElementById('exout'+i);
+  const sql=(document.getElementById('ex'+i).value||'').trim();
+  if(!sql){ setBadge(i,'no'); out.innerHTML='<div class="sql-empty">Escreva uma consulta antes de verificar.</div>'; return; }
+  if(!dbReady){ out.innerHTML='<div class="sql-empty">Motor ainda carregando, tente em instantes.</div>'; return; }
+  try{
+    let got,exp;
+    if(e.check){ const g=freshDB(); g.run(sql); got=execLast(g,e.check); g.close(); const x=freshDB(); x.run(e.sol); exp=execLast(x,e.check); x.close(); }
+    else { const g=freshDB(); got=execLast(g,sql); g.close(); const x=freshDB(); exp=execLast(x,e.sol); x.close(); }
+    const ok=normRows(got.values,e.ordered)===normRows(exp.values,e.ordered)&&(got.columns||[]).length===(exp.columns||[]).length;
+    setBadge(i,ok?'ok':'no');
+    out.innerHTML=gridHTML(got)+(ok?'<div class="sql-ok-msg">Resultado igual ao esperado. Muito bem.</div>':'<div class="sql-no-msg">Ainda não bate. Compare as linhas e ajuste. Dica: '+esc(e.dica)+'</div>');
+  }catch(err){ setBadge(i,'err'); out.innerHTML='<div class="sql-err">'+esc(String(err&&err.message||err))+'</div>'; }
 }
-function esc(s){ return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
-function gridHTML(r){
-  if(r.error)return '<div class="sql-err">'+esc(r.error)+'</div>';
-  if(r.empty||!r.values||!r.values.length)return '<div class="sql-empty">Consulta executada. Nenhuma linha retornada.</div>';
-  let h='<div class="grid-wrap"><table class="grid"><tr>'+r.columns.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';
-  r.values.forEach(row=>{ h+='<tr>'+row.map(v=>'<td>'+(v===null?'<i>NULL</i>':esc(String(v)))+'</td>').join('')+'</tr>'; });
-  return h+'</table></div>';
-}
-function normRows(vals,ordered){ const rows=(vals||[]).map(r=>JSON.stringify(r)); return ordered?rows.join('|'):rows.slice().sort().join('|'); }
-const EXERCISES=[
- {q:"Liste o NOME e a IDADE das pessoas com 36 anos ou mais.",sol:"SELECT NOME, IDADE FROM PESSOAS WHERE IDADE >= 36",ordered:false,dica:"Use WHERE com o operador >=."},
- {q:"Quantas pessoas existem na tabela? (uma coluna com a contagem)",sol:"SELECT COUNT(*) FROM PESSOAS",ordered:false,dica:"Use COUNT(*)."},
- {q:"Liste o NOME das pessoas cujo nome começa com a letra M.",sol:"SELECT NOME FROM PESSOAS WHERE NOME LIKE 'M%'",ordered:false,dica:"Use LIKE com o curinga %."},
- {q:"Qual é a média de idade? (uma coluna com a média)",sol:"SELECT AVG(IDADE) FROM PESSOAS",ordered:false,dica:"Use AVG(IDADE)."},
- {q:"Liste NOME e IDADE de todos, do mais velho para o mais novo.",sol:"SELECT NOME, IDADE FROM PESSOAS ORDER BY IDADE DESC",ordered:true,dica:"Use ORDER BY IDADE DESC."},
- {q:"Mostre quantas pessoas têm cada quantidade de FILHOS (colunas: FILHOS e a contagem).",sol:"SELECT FILHOS, COUNT(*) FROM PESSOAS GROUP BY FILHOS",ordered:false,dica:"Combine GROUP BY FILHOS com COUNT(*)."},
- {q:"Liste o NOME das pessoas com idade entre 20 e 23 (inclusive).",sol:"SELECT NOME FROM PESSOAS WHERE IDADE BETWEEN 20 AND 23",ordered:false,dica:"Use BETWEEN 20 AND 23."}
-];
+function toggleSol(i){ const el=document.getElementById('exsol'+i); if(el)el.classList.toggle('hidden'); }
+function runFree(){ const sql=(document.getElementById('freebox').value||'').trim(); document.getElementById('freeout').innerHTML=sql?gridHTML(runSQL(sql)):'<div class="sql-empty">Escreva uma consulta.</div>'; }
 function renderPractice(){
   sidebar.style.display='none';
   if(!dbStarted)initDB();
   if(dbError){ content.innerHTML='<div class="theme-wrap"><div class="sql-err">Não foi possível iniciar o motor SQL: '+esc(dbError)+'<br><br>Confirme que o arquivo <b>sql-asm.js</b> está na mesma pasta do app.</div></div>'; return; }
   if(!dbReady){ content.innerHTML='<div class="theme-wrap"><div class="loading">Carregando o banco de dados de prática...</div></div>'; return; }
-  const sample=runSQL("SELECT * FROM PESSOAS");
-  const ex=EXERCISES.map((e,i)=>'<div class="exercise"><div class="ex-q"><span class="ex-n">'+(i+1)+'</span>'+esc(e.q)+'</div><textarea class="ex-input" id="ex'+i+'" spellcheck="false" placeholder="Escreva sua consulta SQL..."></textarea><div class="ex-actions"><button class="btn primary" onclick="checkEx('+i+')">Rodar e verificar</button><button class="btn" onclick="toggleSol('+i+')">Ver solução</button><span class="ex-badge" id="exbadge'+i+'"></span></div><div class="ex-out" id="exout'+i+'"></div><div class="ex-sol hidden" id="exsol'+i+'"><b>Solução:</b> <code>'+esc(e.sol)+'</code></div></div>').join('');
-  content.innerHTML='<div class="theme-wrap"><div class="crumb">Praticar</div><div class="theme-head"><h2><span class="tnum">DB</span>Pratique e valide</h2></div><div class="block concept"><span class="label">Como funciona</span><p>Há um banco de dados <strong>real</strong> rodando dentro do app (SQLite, offline). Escreva a consulta, clique em <strong>Rodar e verificar</strong> e o app compara o seu resultado com o esperado.</p><p>Tabelas disponíveis: <code>PESSOAS</code> (ID, NOME, IDADE, FILHOS) e <code>COMPRAS</code> (ID, ID_PESSOA, VALOR).</p></div><h3 class="sub">Dados de PESSOAS</h3>'+gridHTML(sample)+'<h3 class="sub">Exercícios</h3>'+ex+'<h3 class="sub">Área livre</h3><textarea class="ex-input" id="freebox" spellcheck="false">SELECT NOME, IDADE FROM PESSOAS ORDER BY IDADE DESC;</textarea><div class="ex-actions"><button class="btn primary" onclick="runFree()">Rodar</button></div><div class="ex-out" id="freeout"></div></div>';
+  const combined=[]; let exHTML='';
+  THEMES.forEach(function(t){ const lst=THEME_EX[t.id]; if(lst&&lst.length){ exHTML+='<h3 class="sub">'+esc(t.num+'. '+t.title)+'</h3>'; lst.forEach(function(e){ const i=combined.length; combined.push(e); exHTML+=exItemHTML(e,i); }); } });
+  activeEx=combined;
+  content.innerHTML='<div class="theme-wrap"><div class="crumb">Praticar</div><div class="theme-head"><h2><span class="tnum">DB</span>Pratique e valide</h2></div><div class="block concept"><span class="label">Como funciona</span><p>Há um banco de dados <strong>real</strong> rodando dentro do app (SQLite, offline). Escreva a consulta, clique em <strong>Rodar e verificar</strong> e o app compara o seu resultado com o esperado. Os exercícios cobrem os temas do caderno.</p></div><h3 class="sub">Tabelas disponíveis</h3>'+gridHTML(runSQL("SELECT * FROM PESSOAS"))+gridHTML(runSQL("SELECT * FROM PRODUTOS"))+gridHTML(runSQL("SELECT * FROM COMPRAS"))+exHTML+'<h3 class="sub">Área livre</h3><textarea class="ex-input" id="freebox" spellcheck="false">SELECT P.NOME, PR.NOME AS PRODUTO, C.QTD FROM COMPRAS C JOIN PESSOAS P ON P.ID=C.ID_PESSOA JOIN PRODUTOS PR ON PR.ID=C.ID_PRODUTO;</textarea><div class="ex-actions"><button class="btn primary" onclick="runFree()">Rodar</button></div><div class="ex-out" id="freeout"></div></div>';
   content.scrollTop=0;
 }
-function setBadge(i,s){ const b=document.getElementById('exbadge'+i); if(!b)return; b.className='ex-badge '+s; b.textContent=s==='ok'?'✓ Correto':s==='no'?'✗ Ainda não':s==='err'?'⚠ Erro':''; }
-function checkEx(i){
-  const sql=(document.getElementById('ex'+i).value||'').trim(); const out=document.getElementById('exout'+i),e=EXERCISES[i];
-  if(!sql){ setBadge(i,'no'); out.innerHTML='<div class="sql-empty">Escreva uma consulta antes de verificar.</div>'; return; }
-  const got=runSQL(sql);
-  if(got.error){ setBadge(i,'err'); out.innerHTML=gridHTML(got); return; }
-  const exp=runSQL(e.sol);
-  const ok=normRows(got.values,e.ordered)===normRows(exp.values,e.ordered)&&(got.columns||[]).length===(exp.columns||[]).length;
-  setBadge(i,ok?'ok':'no');
-  out.innerHTML=gridHTML(got)+(ok?'<div class="sql-ok-msg">Resultado igual ao esperado. Muito bem.</div>':'<div class="sql-no-msg">Ainda não bate. Compare as linhas e ajuste. Dica: '+esc(e.dica)+'</div>');
-}
-function toggleSol(i){ const el=document.getElementById('exsol'+i); if(el)el.classList.toggle('hidden'); }
-function runFree(){ const sql=(document.getElementById('freebox').value||'').trim(); document.getElementById('freeout').innerHTML=sql?gridHTML(runSQL(sql)):'<div class="sql-empty">Escreva uma consulta.</div>'; }
-
 function SVG_SUB(){return `<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
 <rect x="300" y="6" width="120" height="44" rx="10" fill="#0f172a"/><text x="360" y="27" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">SQL</text><text x="360" y="43" fill="#93c5fd" font-size="9" text-anchor="middle">5 sublinguagens</text>
 <g stroke="#94a3b8" stroke-width="1.5" fill="none"><path d="M360 50 C360 70,80 66,78 92"/><path d="M360 50 C360 70,220 66,220 92"/><path d="M360 50 C360 70,360 74,360 92"/><path d="M360 50 C360 70,500 66,500 92"/><path d="M360 50 C360 70,642 66,642 92"/></g>
@@ -553,15 +754,548 @@ function SVG_MOD(){return `<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2
 <foreignObject x="270" y="134" width="180" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font:10px Inter,sans-serif;color:#334155;line-height:1.35">Usado em <b>data warehouse</b> e <b>BI</b>. Separa <b>fatos</b> (vendas) de <b>dimensões</b> (tempo, produto, local).</div></foreignObject>
 <foreignObject x="500" y="134" width="180" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font:10px Inter,sans-serif;color:#334155;line-height:1.35">Modelo dimensional: 1 tabela de <b>fato</b> central ligada a várias <b>dimensões</b>, formando uma estrela.</div></foreignObject></svg>`}
 
-const store = {
-  get studied(){ try{return JSON.parse(localStorage.getItem('sql_studied')||'[]')}catch(e){return[]} },
-  set studied(v){ localStorage.setItem('sql_studied', JSON.stringify(v)) },
-  get best(){ return +(localStorage.getItem('sql_quiz_best')||0) },
-  set best(v){ localStorage.setItem('sql_quiz_best', v) },
-  get theme(){ return localStorage.getItem('sql_theme')||'light' },
-  set theme(v){ localStorage.setItem('sql_theme', v) }
+function SVG_JOINS(){return `<svg viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<defs><clipPath id="cInner"><circle cx="75" cy="70" r="36"/></clipPath></defs>
+<circle cx="75" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<circle cx="115" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<circle cx="115" cy="70" r="36" fill="#2563eb" clip-path="url(#cInner)"/>
+<text x="95" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">INNER JOIN</text>
+<text x="95" y="143" text-anchor="middle" font-size="9" fill="#64748b">só o que casa nas duas</text>
+<circle cx="295" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<circle cx="255" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="275" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">LEFT JOIN</text>
+<text x="275" y="143" text-anchor="middle" font-size="9" fill="#64748b">tudo da esquerda</text>
+<circle cx="435" cy="70" r="36" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<circle cx="475" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="455" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">RIGHT JOIN</text>
+<text x="455" y="143" text-anchor="middle" font-size="9" fill="#64748b">tudo da direita</text>
+<circle cx="615" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+<circle cx="655" cy="70" r="36" fill="#2563eb" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="635" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">FULL JOIN</text>
+<text x="635" y="143" text-anchor="middle" font-size="9" fill="#64748b">tudo dos dois lados</text>
+</svg>`}
+
+function SVG_VIZ_ANALYSIS(){return `<svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<rect x="290" y="8" width="140" height="42" rx="10" fill="#0f172a"/><text x="360" y="27" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Qual a pergunta?</text><text x="360" y="42" fill="#93c5fd" font-size="9" text-anchor="middle">escolha o tipo de análise</text>
+<g stroke="#94a3b8" stroke-width="1.5" fill="none"><path d="M360 50 C360 72,100 64,100 92"/><path d="M360 50 C360 72,273 66,273 92"/><path d="M360 50 C360 72,447 66,447 92"/><path d="M360 50 C360 72,620 64,620 92"/></g>
+<rect x="25" y="92" width="150" height="38" rx="8" fill="#2563eb"/><text x="100" y="116" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Comparação</text>
+<rect x="198" y="92" width="150" height="38" rx="8" fill="#7c3aed"/><text x="273" y="116" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Relação</text>
+<rect x="372" y="92" width="150" height="38" rx="8" fill="#0d9488"/><text x="447" y="116" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Distribuição</text>
+<rect x="545" y="92" width="150" height="38" rx="8" fill="#d97706"/><text x="620" y="116" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Composição</text>
+<g font-size="9.5" text-anchor="middle" fill="#334155">
+<text x="100" y="152">Barras</text><text x="100" y="167">Linha</text><text x="100" y="182">Área circular</text>
+<text x="273" y="152">Dispersão</text><text x="273" y="167">Dispersão c/ bolha</text>
+<text x="447" y="152">Histograma</text><text x="447" y="167">Box plot</text>
+<text x="620" y="152">Pizza</text><text x="620" y="167">Empilhado</text><text x="620" y="182">Cascata / Tree map</text></g>
+<text x="360" y="240" fill="#64748b" font-size="10.5" text-anchor="middle" font-style="italic">Diferenças? Comparação. Conexão? Relação.</text>
+<text x="360" y="256" fill="#64748b" font-size="10.5" text-anchor="middle" font-style="italic">Frequência? Distribuição. Partes do todo? Composição.</text>
+</svg>`}
+
+function SVG_COLORWHEEL(){return `<svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<circle cx="360" cy="100" r="26" fill="#facc15"/><text x="360" y="103" text-anchor="middle" font-size="9" font-weight="700" fill="#7c4a03">Amarelo</text>
+<circle cx="411" cy="71" r="26" fill="#f97316"/><text x="411" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Laranja</text>
+<circle cx="411" cy="129" r="26" fill="#ef4444"/><text x="411" y="132" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Vermelho</text>
+<circle cx="360" cy="158" r="26" fill="#7c3aed"/><text x="360" y="161" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Roxo</text>
+<circle cx="309" cy="129" r="26" fill="#2563eb"/><text x="309" y="132" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Azul</text>
+<circle cx="309" cy="71" r="26" fill="#16a34a"/><text x="309" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Verde</text>
+<text x="360" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">Círculo cromático</text>
+<text x="540" y="80" font-size="9.5" fill="#475569">Primárias: amarelo,</text><text x="540" y="94" font-size="9.5" fill="#475569">vermelho, azul.</text>
+<text x="540" y="116" font-size="9.5" fill="#475569">Secundárias: laranja,</text><text x="540" y="130" font-size="9.5" fill="#475569">roxo, verde.</text>
+<text x="120" y="100" font-size="9.5" fill="#475569">Complementares =</text><text x="120" y="114" font-size="9.5" fill="#475569">lados opostos</text><text x="120" y="128" font-size="9.5" fill="#475569">(geram contraste).</text>
+</svg>`}
+
+function SVG_NORMAL(){return `<svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<text x="360" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">Distribuição Normal</text>
+<path d="M120 165 C 250 165, 280 48, 360 48 C 440 48, 470 165, 600 165" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<line x1="120" y1="165" x2="600" y2="165" stroke="#94a3b8" stroke-width="1"/>
+<line x1="360" y1="48" x2="360" y2="165" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="170" y="125" font-size="9" fill="#94a3b8">extremos raros</text><text x="490" y="125" font-size="9" fill="#94a3b8">extremos raros</text>
+<text x="360" y="184" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e3a8a">Média = Mediana = Moda</text>
+<text x="360" y="199" text-anchor="middle" font-size="9" fill="#64748b">simétrica. Se a cauda pende p/ um lado = assimetria</text>
+</svg>`}
+
+function SVG_STAR(){return `<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<text x="360" y="18" text-anchor="middle" font-size="10.5" fill="#64748b" font-style="italic">Star Schema: 1 tabela fato central ligada a várias dimensões</text>
+<line x1="300" y1="120" x2="170" y2="60" stroke="#94a3b8" stroke-width="1.5"/><line x1="420" y1="120" x2="550" y2="60" stroke="#94a3b8" stroke-width="1.5"/><line x1="300" y1="150" x2="170" y2="200" stroke="#94a3b8" stroke-width="1.5"/><line x1="420" y1="150" x2="550" y2="200" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="300" y="105" width="120" height="60" rx="9" fill="#0f172a"/><text x="360" y="131" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">FATO</text><text x="360" y="148" fill="#fbbf24" font-size="9.5" text-anchor="middle">Vendas</text>
+<g font-size="11" font-weight="700" text-anchor="middle" fill="#fff">
+<rect x="100" y="38" width="120" height="44" rx="8" fill="#0d9488"/><text x="160" y="65">Cliente</text>
+<rect x="500" y="38" width="120" height="44" rx="8" fill="#0d9488"/><text x="560" y="65">Produto</text>
+<rect x="100" y="186" width="120" height="44" rx="8" fill="#0d9488"/><text x="160" y="213">Tempo</text>
+<rect x="500" y="186" width="120" height="44" rx="8" fill="#0d9488"/><text x="560" y="213">Vendedor</text></g>
+</svg>`}
+
+function SVG_ML(){return `<svg viewBox="0 0 720 215" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<rect x="285" y="8" width="150" height="42" rx="10" fill="#0f172a"/><text x="360" y="28" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Machine Learning</text><text x="360" y="43" fill="#93c5fd" font-size="9" text-anchor="middle">subárea da IA</text>
+<g stroke="#94a3b8" stroke-width="1.5" fill="none"><path d="M360 50 C360 74,140 66,140 92"/><path d="M360 50 C360 74,360 70,360 92"/><path d="M360 50 C360 74,580 66,580 92"/></g>
+<rect x="60" y="92" width="160" height="40" rx="8" fill="#2563eb"/><text x="140" y="116" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Supervisionado</text>
+<rect x="280" y="92" width="160" height="40" rx="8" fill="#7c3aed"/><text x="360" y="116" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Não supervisionado</text>
+<rect x="500" y="92" width="160" height="40" rx="8" fill="#d97706"/><text x="580" y="116" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Por reforço</text>
+<g font-size="9.5" text-anchor="middle" fill="#334155">
+<text x="140" y="151">dados rotulados</text><text x="140" y="165">(respostas certas)</text>
+<text x="360" y="151">sem rótulos,</text><text x="360" y="165">acha padrões</text>
+<text x="580" y="151">recompensa /</text><text x="580" y="165">penalidade</text></g>
+<text x="360" y="200" text-anchor="middle" font-size="10" fill="#64748b" font-style="italic">IA é o guarda-chuva; ML é a parte que aprende com dados.</text>
+</svg>`}
+
+function SVG_BOXPLOT(){return `<svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<text x="360" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">Box plot (diagrama de caixa)</text>
+<line x1="120" y1="68" x2="560" y2="68" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="120" y1="54" x2="120" y2="82" stroke="#475569" stroke-width="2"/>
+<line x1="560" y1="54" x2="560" y2="82" stroke="#475569" stroke-width="2"/>
+<rect x="240" y="46" width="240" height="44" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<line x1="360" y1="46" x2="360" y2="90" stroke="#1e3a8a" stroke-width="2.5"/>
+<circle cx="650" cy="68" r="6" fill="#dc2626"/>
+<g font-size="9.5" text-anchor="middle" fill="#475569">
+<text x="120" y="108">Mín</text><text x="240" y="108">Q1</text><text x="360" y="108">Mediana</text><text x="480" y="108">Q3</text><text x="560" y="108">Máx</text><text x="650" y="108" fill="#dc2626">Outlier</text></g>
+<text x="360" y="134" text-anchor="middle" font-size="9" fill="#64748b" font-style="italic">A caixa contém os 50% centrais; pontos fora são atípicos.</text>
+</svg>`}
+
+function SVG_BIFLOW(){return `<svg viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<text x="360" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">Fluxo do Power BI</text>
+<rect x="50" y="45" width="160" height="52" rx="9" fill="#2563eb"/><text x="130" y="70" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Desktop</text><text x="130" y="86" fill="#dbeafe" font-size="9" text-anchor="middle">criar relatório</text>
+<rect x="280" y="45" width="160" height="52" rx="9" fill="#0d9488"/><text x="360" y="70" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Service (nuvem)</text><text x="360" y="86" fill="#ccfbf1" font-size="9" text-anchor="middle">publicar / compartilhar</text>
+<rect x="510" y="45" width="160" height="52" rx="9" fill="#7c3aed"/><text x="590" y="70" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Mobile</text><text x="590" y="86" fill="#ede9fe" font-size="9" text-anchor="middle">ver no celular</text>
+<g stroke="#475569" stroke-width="2" fill="#475569"><line x1="210" y1="71" x2="272" y2="71"/><path d="M272 71 l-8 -4 v8 z"/><line x1="440" y1="71" x2="502" y2="71"/><path d="M502 71 l-8 -4 v8 z"/></g>
+<rect x="280" y="128" width="160" height="38" rx="8" fill="#d97706"/><text x="360" y="146" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Gateway</text><text x="360" y="159" fill="#fff" font-size="8.5" text-anchor="middle">ponte p/ dados locais</text>
+<g stroke="#475569" stroke-width="2" fill="#475569"><line x1="360" y1="128" x2="360" y2="101"/><path d="M360 101 l-4 8 h8 z"/></g>
+</svg>`}
+
+function SVG_GALLERY(){return `<svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<g><rect x="35" y="58" width="12" height="30" fill="#2563eb"/><rect x="51" y="44" width="12" height="44" fill="#2563eb"/><rect x="67" y="52" width="12" height="36" fill="#2563eb"/><line x1="32" y1="88" x2="82" y2="88" stroke="#94a3b8"/></g>
+<text x="57" y="106" text-anchor="middle" font-size="9.5" fill="#475569">Barras</text>
+<polyline points="150,72 168,52 186,64 204,42 222,58" fill="none" stroke="#7c3aed" stroke-width="2.5"/><line x1="148" y1="88" x2="224" y2="88" stroke="#94a3b8"/>
+<text x="186" y="106" text-anchor="middle" font-size="9.5" fill="#475569">Linha</text>
+<circle cx="312" cy="60" r="24" fill="#d97706"/><path d="M312 60 L312 36 A24 24 0 0 1 333 73 Z" fill="#fbbf24"/>
+<text x="312" y="106" text-anchor="middle" font-size="9.5" fill="#475569">Pizza</text>
+<g fill="#0d9488"><circle cx="410" cy="70" r="3"/><circle cx="424" cy="58" r="3"/><circle cx="438" cy="64" r="3"/><circle cx="430" cy="48" r="3"/><circle cx="448" cy="52" r="3"/><circle cx="418" cy="46" r="3"/></g>
+<text x="430" y="106" text-anchor="middle" font-size="9.5" fill="#475569">Dispersão</text>
+<g fill="#2563eb"><rect x="516" y="70" width="9" height="18"/><rect x="526" y="58" width="9" height="30"/><rect x="536" y="46" width="9" height="42"/><rect x="546" y="58" width="9" height="30"/><rect x="556" y="70" width="9" height="18"/></g>
+<text x="540" y="106" text-anchor="middle" font-size="9.5" fill="#475569">Histograma</text>
+<g stroke="#475569" stroke-width="2"><line x1="622" y1="60" x2="700" y2="60"/><line x1="622" y1="52" x2="622" y2="68"/><line x1="700" y1="52" x2="700" y2="68"/></g><rect x="645" y="48" width="34" height="24" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/><line x1="660" y1="48" x2="660" y2="72" stroke="#1e3a8a" stroke-width="2"/>
+<text x="661" y="106" text-anchor="middle" font-size="9.5" fill="#475569">Box plot</text>
+</svg>`}
+
+function SVG_CORR(){return `<svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<g fill="#2563eb"><circle cx="60" cy="105" r="3.5"/><circle cx="80" cy="95" r="3.5"/><circle cx="100" cy="85" r="3.5"/><circle cx="120" cy="74" r="3.5"/><circle cx="140" cy="62" r="3.5"/><circle cx="160" cy="52" r="3.5"/></g>
+<line x1="50" y1="120" x2="180" y2="120" stroke="#cbd5e1"/><line x1="50" y1="120" x2="50" y2="40" stroke="#cbd5e1"/>
+<text x="115" y="138" text-anchor="middle" font-size="10" font-weight="700" fill="#16a34a">Positiva</text><text x="115" y="151" text-anchor="middle" font-size="9" fill="#64748b">r ≈ +0,9</text>
+<g fill="#7c3aed"><circle cx="300" cy="52" r="3.5"/><circle cx="320" cy="62" r="3.5"/><circle cx="340" cy="74" r="3.5"/><circle cx="360" cy="85" r="3.5"/><circle cx="380" cy="95" r="3.5"/><circle cx="400" cy="105" r="3.5"/></g>
+<line x1="290" y1="120" x2="420" y2="120" stroke="#cbd5e1"/><line x1="290" y1="120" x2="290" y2="40" stroke="#cbd5e1"/>
+<text x="355" y="138" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626">Negativa</text><text x="355" y="151" text-anchor="middle" font-size="9" fill="#64748b">r ≈ −0,9</text>
+<g fill="#0d9488"><circle cx="530" cy="60" r="3.5"/><circle cx="560" cy="98" r="3.5"/><circle cx="545" cy="76" r="3.5"/><circle cx="600" cy="55" r="3.5"/><circle cx="585" cy="92" r="3.5"/><circle cx="615" cy="72" r="3.5"/><circle cx="572" cy="62" r="3.5"/></g>
+<line x1="520" y1="120" x2="650" y2="120" stroke="#cbd5e1"/><line x1="520" y1="120" x2="520" y2="40" stroke="#cbd5e1"/>
+<text x="585" y="138" text-anchor="middle" font-size="10" font-weight="700" fill="#64748b">Nenhuma</text><text x="585" y="151" text-anchor="middle" font-size="9" fill="#64748b">r ≈ 0</text>
+</svg>`}
+
+function SVG_NEST(){return `<svg viewBox="0 0 720 170" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<rect x="190" y="15" width="340" height="138" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/><text x="206" y="36" font-size="12" font-weight="800" fill="#2563eb">IA</text>
+<rect x="235" y="46" width="250" height="92" rx="12" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/><text x="251" y="65" font-size="11" font-weight="800" fill="#0f766e">Machine Learning</text>
+<rect x="297" y="80" width="126" height="48" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/><text x="360" y="100" text-anchor="middle" font-size="10.5" font-weight="800" fill="#b45309">Deep</text><text x="360" y="115" text-anchor="middle" font-size="10.5" font-weight="800" fill="#b45309">Learning</text>
+<text x="360" y="166" text-anchor="middle" font-size="9" fill="#64748b" font-style="italic">cada um é um subconjunto do anterior</text>
+</svg>`}
+
+const VIZ_THEMES = [
+{ id:"viz-intro", num:"01", cat:"Fundamentos", title:"O que é Visualização de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p><strong>Visualização de dados</strong> é a prática de transformar informações e números em <strong>imagens</strong> (gráficos, mapas) para facilitar o entendimento. O cérebro humano processa imagens <strong>muito mais rápido</strong> do que textos ou tabelas numéricas.</p>"},
+   {t:"tip",l:"Um pouco de história",h:"<p>No século 14, <strong>Nicole Oresme</strong> criou um dos primeiros gráficos de barras da história (obra \"The Latitude of Forms\") para mostrar a velocidade de um objeto acelerando ao longo do tempo. Ou seja: usar formas para entender fenômenos é coisa de séculos.</p>"},
+   {t:"concept",l:"O que é um gráfico",h:"<p>É a <strong>representação geométrica</strong> de um conjunto de dados: usar figuras (linhas, círculos, barras) para mostrar quantidades. Serve para a <strong>análise e interpretação rápida</strong>, sem precisar fazer contas manuais.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Visualização é a ponte entre o dado bruto e a decisão. <strong>Próxima ação:</strong> ao olhar um número, pergunte \"que imagem deixaria isso óbvio para quem vai ler?\".</p>"}
+  ],
+  cards:[["Por que a visualização de dados funciona?","Porque o cérebro processa imagens muito mais rápido do que textos ou tabelas numéricas."],
+         ["O que é um gráfico, tecnicamente?","A representação geométrica de um conjunto de dados, para análise e interpretação rápida."]] },
+
+{ id:"viz-preatentivos", num:"02", cat:"Percepção visual", title:"Atributos pré-atentivos", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são",h:"<p><strong>Atributos pré-atentivos</strong> são informações que o cérebro processa <strong>instantaneamente</strong> (em milissegundos), antes mesmo da atenção consciente. São divididos em quatro grupos: forma, cor, posição e movimento.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Forma</th><th>Como destaca</th></tr><tr><td>Comprimento</td><td>Tamanhos diferentes comparam quantidades (barra maior = valor maior).</td></tr><tr><td>Espessura</td><td>Linhas mais grossas ou finas.</td></tr><tr><td>Orientação</td><td>Mudar o ângulo (uma diagonal entre verticais) chama atenção para anomalias.</td></tr><tr><td>Tamanho</td><td>Círculos maiores/menores indicam volume.</td></tr><tr><td>Forma / Curvatura</td><td>Um quadrado entre círculos; uma curva entre retas.</td></tr><tr><td>Encapsulamento</td><td>Uma borda em volta destaca que o dado pertence a um grupo.</td></tr><tr><td>Desfoque</td><td>Algo borrado parece menos importante / em segundo plano.</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Cor</th><th>Como destaca</th></tr><tr><td>Matiz (hue)</td><td>Cores diferentes separam categorias (Maçã = vermelho, Limão = verde).</td></tr><tr><td>Intensidade</td><td>Tons mais claros ou escuros da mesma cor; escuro costuma indicar valor maior.</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Posição / Movimento</th><th>Como destaca</th></tr><tr><td>Posição 2D</td><td>Um ponto fora da linha indica um outlier (fora da curva).</td></tr><tr><td>Agrupamento espacial</td><td>Elementos próximos formam aglomerados (clusters) relacionados.</td></tr><tr><td>Direção do movimento</td><td>Se todos vão para um lado e um vai para o oposto, este se destaca na hora.</td></tr></table>"},
+   {t:"recap",l:"Na prática",h:"<p>Use um atributo pré-atentivo para destacar <strong>o que importa</strong> (uma cor diferente no item crítico, uma barra mais alta). Quem olha percebe na hora.</p>"}
+  ],
+  cards:[["O que são atributos pré-atentivos?","Informações que o cérebro processa instantaneamente, antes da atenção consciente."],
+         ["Quais são os 4 grupos pré-atentivos?","Forma, cor, posição e movimento."],
+         ["Para que serve o matiz (hue) da cor?","Separar categorias (cores diferentes para coisas diferentes)."]] },
+
+{ id:"viz-precisao", num:"03", cat:"Percepção visual", title:"Escala de precisão e tipos de análise", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Escala de precisão visual",h:"<p>Nem toda forma de mostrar dados é igualmente precisa. Existe uma escala do <strong>mais preciso</strong> (acurado) ao <strong>menos preciso</strong> (genérico) para o olho humano comparar.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Codificação</th><th>Precisão</th></tr><tr><td>Comprimento alinhado</td><td>Mais precisa (barras na mesma base — fácil de comparar).</td></tr><tr><td>Comprimento desalinhado</td><td>Precisa, mas exige mais esforço.</td></tr><tr><td>Inclinação / ângulo</td><td>Intermediária (pizza, linhas): difícil distinguir 30° de 35°.</td></tr><tr><td>Área / intensidade de cor</td><td>Menos precisa (bom para \"quem é maior\", não para o valor exato).</td></tr><tr><td>Volume (3D)</td><td>A mais difícil de julgar.</td></tr><tr><td>Matiz de cor</td><td>Serve só para diferenciar categorias, sem ordem de grandeza.</td></tr></table>"},
+   {t:"tip",l:"Conclusão de design",h:"<p>Para comparar valores com precisão, prefira <strong>barras alinhadas</strong>. Evite 3D e pizza quando o leitor precisa ler valores exatos.</p>"},
+   {t:"concept",l:"Os quatro tipos de análise",h:"<p>O objetivo do gráfico define a escolha. Há quatro perguntas-tipo:</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Pergunta que responde</th></tr><tr><td>Comparação</td><td>Diferenças entre itens ou ao longo do tempo (qual vendeu mais?).</td></tr><tr><td>Relação</td><td>Como uma variável afeta a outra (mais propaganda = mais vendas?).</td></tr><tr><td>Distribuição</td><td>Com que frequência os dados aparecem (qual faixa etária predomina?).</td></tr><tr><td>Composição</td><td>As partes que formam o todo (quanto do gasto foi aluguel?).</td></tr></table>"},
+   {t:"map",l:"Mapa de escolha — qual gráfico usar?",h:SVG_VIZ_ANALYSIS()},
+   {t:"map",l:"Galeria — os principais gráficos",h:SVG_GALLERY()},
+   {t:"recap",l:"Na prática",h:"<p>Antes de escolher o gráfico, defina a pergunta: comparação, relação, distribuição ou composição? Isso já elimina metade das opções. <strong>Exemplo no seu contexto:</strong> \"qual canal de atendimento teve mais chamados?\" é comparação (barras); \"o tempo de espera afeta a nota de satisfação?\" é relação (dispersão).</p>"}
+  ],
+  cards:[["Qual codificação é a mais precisa para comparar valores?","Comprimento alinhado (barras começando na mesma base)."],
+         ["Quais os 4 tipos de análise em visualização?","Comparação, relação, distribuição e composição."],
+         ["Análise de \"partes que formam o todo\" é qual tipo?","Composição."],
+         ["Análise de \"como uma variável afeta outra\" é qual tipo?","Relação."]] },
+
+{ id:"viz-comparacao", num:"04", cat:"Gráficos", title:"Gráficos de comparação", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são",h:"<p>Gráficos de <strong>comparação</strong> colocam dados <strong>lado a lado</strong> para mostrar diferenças de tamanho ou intensidade. O cérebro identifica rápido o que é maior ou menor, sem ler tabelas longas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Para achar o <strong>valor mais alto ou mais baixo</strong> de um conjunto, ou comparar valores atuais com antigos (este ano vs. ano passado) e ver crescimento ou queda.</p>"},
+   {t:"h3",h:"Caminho 1 — Comparação entre itens"},
+   {t:"plain",h:"<p>Quando você compara categorias que não dependem de ordem no tempo (marcas, produtos, regiões):</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Situação</th><th>Gráfico indicado</th></tr><tr><td>Duas variáveis por item</td><td>Colunas de largura variável (altura = um dado, largura = outro).</td></tr><tr><td>Uma variável, muitas categorias</td><td>Tabela com gráficos embutidos (evita poluição visual).</td></tr><tr><td>Uma variável, poucas categorias</td><td>Barras horizontais ou verticais.</td></tr></table>"},
+   {t:"h3",h:"Caminho 2 — Comparação ao longo do tempo"},
+   {t:"table",h:"<table class='cmd'><tr><th>Situação</th><th>Gráfico indicado</th></tr><tr><td>Muitos períodos, dados cíclicos (estações, horas)</td><td>Gráfico de área circular (como um relógio).</td></tr><tr><td>Muitos períodos, não-cíclicos (preço ao longo de 10 anos)</td><td>Gráfico de linha.</td></tr><tr><td>Poucos períodos, poucas categorias (jan vs. fev)</td><td>Barras verticais.</td></tr><tr><td>Poucos períodos, muitas categorias</td><td>Gráfico de linhas (para ver se seguem a mesma tendência).</td></tr></table>"},
+   {t:"recap",l:"Na prática",h:"<p>Primeiro decida: comparar <strong>entre itens</strong> ou <strong>ao longo do tempo</strong>? E quantas categorias/períodos? Isso aponta direto para o gráfico certo. Para poucas categorias, barra simples resolve.</p>"}
+  ],
+  cards:[["Para que servem gráficos de comparação?","Colocar dados lado a lado para ver diferenças de tamanho/intensidade (maior/menor, atual vs. antigo)."],
+         ["Poucas categorias, uma variável: qual gráfico?","Barras horizontais ou verticais."],
+         ["Dados cíclicos ao longo do tempo: qual gráfico?","Gráfico de área circular (funciona como um relógio)."]] },
+
+{ id:"viz-composicao", num:"05", cat:"Gráficos", title:"Gráficos de composição", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é composição",h:"<p>Composição é a análise de como um <strong>valor total se divide em partes</strong>. Mostra a \"fatia\" que cada categoria ocupa e a importância relativa de cada componente.</p>"},
+   {t:"attr",l:"Relativo vs. absoluto",h:"<p><strong>Relativo:</strong> foca na porcentagem (\"temos 30% do mercado\").<br><strong>Absoluto:</strong> foca no valor real (\"vendemos 300 de um total de 1.000\"). A escolha do gráfico depende de qual dos dois importa.</p>"},
+   {t:"h3",h:"Quando muda ao longo do tempo"},
+   {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Barras empilhadas 100%</td><td>Poucos períodos, só a diferença relativa (proporção).</td></tr><tr><td>Barras empilhadas</td><td>Poucos períodos, relativo E absoluto importam.</td></tr><tr><td>Área empilhada 100%</td><td>Muitos períodos, só a diferença relativa.</td></tr><tr><td>Área empilhada</td><td>Muitos períodos, relativo e absoluto importam.</td></tr></table>"},
+   {t:"h3",h:"Estático (um único momento)"},
+   {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Pizza</td><td>Divisão simples, poucas categorias que somam 100%.</td></tr><tr><td>Cascata (waterfall)</td><td>Acumulação/subtração até um total (receita &rarr; impostos &rarr; custos &rarr; lucro).</td></tr><tr><td>Barras 100% com subcomponentes</td><td>Analisar os componentes dos componentes (gasto por área e, dentro, por subárea).</td></tr><tr><td>Tree map</td><td>Blocos proporcionais ao valor; bom para muitos dados hierárquicos de uma vez.</td></tr></table>"},
+   {t:"tip",l:"Cuidado com a pizza",h:"<p>Pizza só funciona com <strong>poucas fatias</strong> (até 5-6). Com muitas categorias, as fatias ficam pequenas e impossíveis de comparar — prefira barras.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Pergunte: a composição muda <strong>no tempo</strong> ou é uma <strong>fotografia</strong>? E importa a porcentagem, o valor absoluto, ou os dois? Isso define o gráfico.</p>"}
+  ],
+  cards:[["O que é composição em visualização?","Como um valor total se divide em partes (a fatia de cada categoria)."],
+         ["Relativo vs. absoluto?","Relativo = porcentagem; absoluto = valor real."],
+         ["Quando o gráfico de pizza é adequado?","Para poucas categorias que somam 100%."],
+         ["Para que serve o gráfico de cascata (waterfall)?","Mostrar acumulação/subtração até chegar a um total (ex.: da receita ao lucro)."]] },
+
+{ id:"viz-distrib", num:"06", cat:"Gráficos", title:"Distribuição e relação", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Distribuição",h:"<p>Mostra como os dados numéricos se <strong>espalham</strong>, do menor ao maior. Revela o \"formato\" dos dados: onde a maioria se concentra, a média e os valores fora do comum.</p>"},
+   {t:"tip",l:"Termos",h:"<p><strong>Tendência central:</strong> valor em torno do qual os dados se agrupam. <strong>Outlier:</strong> valor muito fora do padrão. <strong>Range:</strong> distância entre o menor e o maior valor.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Histograma de barras</td><td>Uma variável, poucos pontos de dados.</td></tr><tr><td>Histograma de linha</td><td>Uma variável, muitos pontos (linha suaviza o \"contorno da montanha\").</td></tr><tr><td>Dispersão (scatter)</td><td>Distribuição considerando duas variáveis ao mesmo tempo.</td></tr></table>"},
+   {t:"concept",l:"Relação",h:"<p>Mostra como duas ou mais variáveis se <strong>conectam ou influenciam</strong>. <strong>Correlação:</strong> padrão de dependência. <strong>Clusters:</strong> grupos que se formam por semelhança.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Dispersão simples</td><td>Relação entre duas variáveis (ex.: altura x peso).</td></tr><tr><td>Dispersão com bolha</td><td>Três variáveis: posição X, posição Y e o tamanho da bolha.</td></tr></table>"},
+   {t:"recap",l:"Na prática",h:"<p><strong>Distribuição</strong> = formato e frequência (quantos? onde estão?). <strong>Relação</strong> = conexão entre variáveis (como um afeta o outro?).</p>"}
+  ],
+  cards:[["Para que serve um histograma?","Mostrar a distribuição/frequência de uma variável."],
+         ["O que mostra um gráfico de dispersão?","A relação entre duas variáveis."],
+         ["O que é um outlier?","Um valor muito fora do padrão do restante dos dados."]] },
+
+{ id:"viz-cores", num:"07", cat:"Design", title:"Cores e posicionamento", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Atenção e sobrecarga",h:"<p>Quanto <strong>mais gráficos</strong> numa tela, <strong>menos tempo</strong> as pessoas dedicam a cada um. Gráficos maiores prendem a atenção. Muitos elementos causam <strong>sobrecarga cognitiva</strong>.</p>"},
+   {t:"attr",l:"Convenção dos 7 elementos",h:"<p>Use no máximo cerca de <strong>7 grandes elementos por dashboard</strong>, para não sobrecarregar a memória de trabalho de quem lê.</p>"},
+   {t:"concept",l:"Teoria das cores",h:"<p><strong>Primárias:</strong> amarelo, vermelho, azul. <strong>Secundárias:</strong> laranja, roxo, verde (misturas de duas primárias). <strong>Terciárias:</strong> tons da mistura das anteriores. <strong>Complementares</strong> ficam em lados opostos do círculo e geram o maior contraste.</p>"},
+   {t:"map",l:"Círculo cromático",h:SVG_COLORWHEEL()},
+   {t:"table",h:"<table class='cmd'><tr><th>Uso da cor</th><th>Como aplicar</th></tr><tr><td>Avaliação qualitativa</td><td>Mostrar categorias/qualidade (\"melhor\", \"pior\"): cor primária + sua complementar (contraste).</td></tr><tr><td>Avaliação quantitativa</td><td>Mostrar números (0 a 100): gradiente (transição suave); só indica magnitude, sem julgamento.</td></tr></table>"},
+   {t:"tip",l:"Posicionamento — a regra de ouro",h:"<p>O <strong>canto superior esquerdo</strong> é o melhor lugar para a informação mais importante, porque lemos de cima para baixo e da esquerda para a direita. Não espalhe estatísticas em locais aleatórios.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Menos é mais: poucos elementos grandes, cor com propósito (categoria = matiz; magnitude = gradiente) e o essencial no topo à esquerda.</p>"}
+  ],
+  cards:[["Quantos grandes elementos por dashboard?","No máximo cerca de 7, para evitar sobrecarga cognitiva."],
+         ["Cor para categorias vs. para magnitude?","Categorias: matizes diferentes. Magnitude/números: gradiente da mesma cor."],
+         ["Onde colocar a informação mais importante?","No canto superior esquerdo (início da leitura)."]] },
+
+{ id:"viz-story", num:"08", cat:"Análise", title:"Storytelling e EDA", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Storytelling com dados",h:"<p>Todo gráfico deve servir a uma mensagem. Valide sempre três pontos: a <strong>História</strong> (a narrativa dos dados), o <strong>Público</strong> (quem vai ler) e a <strong>Pergunta</strong> (o que o gráfico responde). Se não ajuda a responder a pergunta, é desnecessário.</p>"},
+   {t:"concept",l:"EDA — Análise Exploratória de Dados",h:"<p><strong>EDA</strong> (Exploratory Data Analysis) é a <strong>investigação inicial</strong> dos dados: resumir características, identificar padrões, detectar outliers e entender relações. É o <strong>primeiro passo</strong>, antes de aplicar qualquer modelo.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Ferramentas da EDA</th><th>Exemplos</th></tr><tr><td>Estatística descritiva</td><td>Média, mediana, moda, variância, desvio padrão, quartis.</td></tr><tr><td>Gráficos</td><td>Histograma, dispersão, boxplot.</td></tr></table>"},
+   {t:"tip",l:"Tipos de variáveis",h:"<p><strong>Categórica:</strong> rótulos sem ordem (gênero, cor). <strong>Quantitativa contínua:</strong> medições com casas decimais (altura, peso). <strong>Quantitativa discreta:</strong> contagens inteiras (nº de filhos, de carros).</p>"},
+   {t:"tip",l:"Ferramentas e prática",h:"<p>Python (pandas, matplotlib, seaborn), R, Power BI e Tableau. Para praticar com dados reais, use o <strong>Kaggle</strong> (datasets públicos e notebooks).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Antes de modelar, faça EDA: conheça o formato, os outliers e as relações. E ao apresentar, lembre da história, do público e da pergunta.</p>"}
+  ],
+  cards:[["Quais os 3 pilares do storytelling com dados?","História, Público e Pergunta."],
+         ["O que é EDA?","Análise Exploratória de Dados: investigação inicial para resumir, achar padrões e outliers antes de modelar."],
+         ["Variável contínua vs. discreta?","Contínua = medições com casas decimais (altura); discreta = contagens inteiras (nº de filhos)."]] }
+];
+
+const VIZ_QUIZ = [
+ {q:"Por que a visualização de dados é eficaz?",o:["Porque ocupa menos espaço","Porque o cérebro processa imagens mais rápido que texto/tabelas","Porque elimina a necessidade de dados","Porque é mais bonita"],c:1,e:"O cérebro humano interpreta imagens muito mais rápido do que listas de números."},
+ {q:"Atributos pré-atentivos são percebidos:",o:["Após análise consciente","Instantaneamente, antes da atenção consciente","Somente com treino","Apenas em 3D"],c:1,e:"São processados em milissegundos, antes da atenção consciente (forma, cor, posição, movimento)."},
+ {q:"Qual codificação visual permite a comparação mais precisa?",o:["Volume 3D","Matiz de cor","Comprimento alinhado (barras na mesma base)","Área de círculos"],c:2,e:"Barras alinhadas na mesma base são o mais fácil para o olho comparar com precisão."},
+ {q:"Mostrar 'as partes que compõem um todo' é uma análise de:",o:["Comparação","Distribuição","Composição","Relação"],c:2,e:"Composição trata de como o total se divide em partes."},
+ {q:"Ver 'como uma variável afeta a outra' é uma análise de:",o:["Relação","Composição","Distribuição","Comparação"],c:0,e:"Relação investiga a conexão/influência entre variáveis (ex.: dispersão)."},
+ {q:"Para comparar poucas categorias (uma variável), o gráfico indicado é:",o:["Pizza 3D","Barras (horizontais ou verticais)","Área circular","Tree map"],c:1,e:"Barras simples deixam claro qual categoria é maior, com leitura precisa."},
+ {q:"Dados cíclicos (estações, horas) ao longo do tempo pedem:",o:["Gráfico de pizza","Gráfico de área circular","Barras empilhadas","Cascata"],c:1,e:"O gráfico de área circular representa o ciclo como um relógio."},
+ {q:"O gráfico de pizza é adequado quando há:",o:["Muitas categorias","Poucas categorias que somam 100%","Dados ao longo de 10 anos","Três variáveis"],c:1,e:"Pizza funciona só com poucas fatias que compõem o todo (100%)."},
+ {q:"O gráfico de cascata (waterfall) serve para:",o:["Comparar duas variáveis","Mostrar acumulação/subtração até um total","Ver distribuição","Mostrar correlação"],c:1,e:"Mostra como um valor inicial aumenta/diminui em etapas até o valor final (ex.: receita ao lucro)."},
+ {q:"Composição relativa foca em:",o:["Valor real","Porcentagem","Tempo","Posição"],c:1,e:"Relativo = porcentagem (a fatia). Absoluto = o valor real."},
+ {q:"O histograma serve para ver:",o:["A relação entre duas variáveis","A distribuição/frequência de uma variável","As partes de um todo","A correlação"],c:1,e:"Histograma mostra como os valores de uma variável se distribuem em faixas (bins)."},
+ {q:"O gráfico de dispersão mostra principalmente:",o:["Composição","A relação entre duas variáveis","A média","Hierarquia"],c:1,e:"Cada ponto cruza duas variáveis (X e Y), revelando a relação entre elas."},
+ {q:"A informação mais importante de um dashboard deve ficar:",o:["No centro","No canto inferior direito","No canto superior esquerdo","Espalhada"],c:2,e:"Lemos de cima para baixo e da esquerda para a direita; o topo à esquerda é visto primeiro."},
+ {q:"EDA (Exploratory Data Analysis) é:",o:["O modelo final de previsão","A investigação inicial dos dados (resumir, achar padrões e outliers)","Um tipo de gráfico","Uma linguagem"],c:1,e:"EDA é o primeiro passo: entender os dados antes de modelar."},
+ {q:"Os três pilares do storytelling com dados são:",o:["Cor, forma e tamanho","História, Público e Pergunta","Média, mediana e moda","Eixo X, Y e Z"],c:1,e:"Sempre valide a história que conta, para quem conta e qual pergunta responde."},
+ {q:"Cores complementares (lados opostos do círculo cromático) servem para:",o:["Reduzir o contraste","Gerar o maior contraste e destacar","Indicar magnitude","Esconder dados"],c:1,e:"Complementares geram forte contraste, úteis para destacar um elemento qualitativo."},
+ {q:"Para mostrar 'qual canal teve mais chamados', o tipo de análise é:",o:["Composição","Comparação","Relação","Distribuição"],c:1,e:"Comparar quantidades entre categorias é comparação (barras)."},
+ {q:"Cores secundárias são:",o:["Amarelo, vermelho, azul","Laranja, roxo, verde","Preto e branco","Tons de cinza"],c:1,e:"Secundárias nascem da mistura de duas primárias: laranja, roxo e verde."}
+];
+
+const EST_THEMES = [
+{ id:"est-central", num:"01", cat:"Resumo dos dados", title:"Medidas de centralidade", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são",h:"<p>Resumem um conjunto de dados num <strong>único número</strong> representativo (um valor \"típico\" ou central). Servem de referência para comparar grupos.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Medida</th><th>O que é</th></tr><tr><td>Média</td><td>Soma dos valores dividida pela quantidade. Sensível a valores extremos.</td></tr><tr><td>Mediana</td><td>Valor central com os dados ordenados (divide em duas metades). É robusta a extremos.</td></tr><tr><td>Moda</td><td>Valor que mais se repete. Serve até para dados não numéricos (categorias).</td></tr></table>"},
+   {t:"tip",l:"Exemplo passo a passo",h:"<p>Dados ordenados: 1, 2, 2, 3, 3, 3, 4, 4, 6, 7 (10 valores).<br><strong>Média:</strong> soma = 35; 35 ÷ 10 = <strong>3,5</strong>.<br><strong>Mediana:</strong> média dos dois centrais (5º e 6º) = (3 + 3) ÷ 2 = <strong>3</strong>.<br><strong>Moda:</strong> o número 3 aparece três vezes = <strong>3</strong>.</p>"},
+   {t:"tip",l:"Por que a mediana é robusta",h:"<p>Dados {1,2,2,3,3,3,4,4,6,7}: média 3,5, mediana 3. Trocando o 4 por <strong>40</strong>: a média salta para 7,1, mas a <strong>mediana continua 3</strong>. Por isso, com valores discrepantes, a mediana representa melhor a realidade.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Use a <strong>média</strong> em dados bem distribuídos; use a <strong>mediana</strong> quando houver outliers que distorcem a média.</p>"}
+  ],
+  cards:[["Média é sensível a quê?","A valores extremos (outliers), que a puxam para cima ou para baixo."],
+         ["O que é a mediana?","O valor central com os dados ordenados; divide o conjunto em duas metades."],
+         ["Quando preferir a mediana à média?","Quando há valores muito discrepantes (outliers)."],
+         ["A moda serve para dados não numéricos?","Sim. A moda é o valor mais frequente e funciona até para categorias (ex.: cor mais vendida)."]] },
+
+{ id:"est-dispersao", num:"02", cat:"Resumo dos dados", title:"Desvio padrão e variância", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Desvio padrão",h:"<p>Mede o quanto os dados estão <strong>espalhados em relação à média</strong>. Quanto <strong>menor</strong>, mais homogêneos (e previsíveis) são os dados.</p>"},
+   {t:"tip",l:"Exemplo",h:"<p>Notas (5, 5, 5): média 5, desvio <strong>zero</strong> (todos iguais). Notas (0, 5, 10): mesma média 5, mas desvio padrão <strong>alto</strong> (dados muito diferentes).</p>"},
+   {t:"concept",l:"Variância",h:"<p>É a média dos <strong>quadrados</strong> das distâncias de cada ponto à média. O desvio padrão é a <strong>raiz quadrada</strong> da variância (volta à unidade original).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Só a média não basta: dois grupos podem ter a mesma média e dispersões muito diferentes. O desvio padrão revela a confiabilidade dos dados.</p>"}
+  ],
+  cards:[["O que mede o desvio padrão?","O quanto os dados estão espalhados em relação à média."],
+         ["Desvio padrão pequeno indica o quê?","Dados homogêneos e mais previsíveis."],
+         ["Relação entre variância e desvio padrão?","O desvio padrão é a raiz quadrada da variância."]] },
+
+{ id:"est-normal", num:"03", cat:"Distribuições", title:"Distribuição normal e box plot", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Distribuição normal (curva de sino)",h:"<p>Também chamada de distribuição de <strong>Gauss</strong>: a maioria dos valores se agrupa no centro (em torno da média) e fica mais rara nas extremidades. Muitos fenômenos seguem esse padrão (altura, erros de medição).</p>"},
+   {t:"map",l:"A curva de sino",h:SVG_NORMAL()},
+   {t:"tip",l:"Testes de normalidade",h:"<p><strong>Shapiro-Wilk</strong> (amostras pequenas) e <strong>Shapiro-Francia</strong> (grandes) verificam se os dados realmente seguem o formato de sino.</p>"},
+   {t:"concept",l:"Box plot (diagrama de caixa)",h:"<p>Resume os dados em cinco números: mínimo, 1º quartil (Q1), <strong>mediana</strong>, 3º quartil (Q3) e máximo. A caixa contém os 50% centrais; pontos fora dela são <strong>outliers</strong>.</p>"},
+   {t:"map",l:"Anatomia do box plot",h:SVG_BOXPLOT()},
+   {t:"tip",l:"Curtose e assimetria",h:"<p><strong>Curtose</strong> = achatamento: leptocúrtica (pico alto, dados concentrados) vs. platicúrtica (achatada, dados espalhados). <strong>Assimetria (skew):</strong> cauda para a esquerda (negativa, média &lt; mediana) ou para a direita (positiva, média &gt; mediana).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>O box plot é ótimo para comparar grupos e enxergar dispersão e outliers de relance; a curva normal é a base de muitos testes estatísticos.</p>"}
+  ],
+  cards:[["Qual o formato da distribuição normal?","De sino: maioria no centro, extremos raros."],
+         ["O que o box plot mostra?","Mediana, quartis (Q1, Q3), mínimo, máximo e os outliers."],
+         ["Assimetria positiva: média e mediana?","Cauda à direita; a média tende a ser maior que a mediana."]] },
+
+{ id:"est-amostra", num:"04", cat:"Amostragem", title:"População e amostra", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é amostragem",h:"<p>Técnicas para selecionar uma <strong>amostra</strong> (parte) de uma <strong>população</strong> (o todo) e tirar conclusões sobre o todo. Existe porque medir todos costuma ser inviável (custo, tempo, acesso).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Probabilística (aleatória)</th><th>Como funciona</th></tr><tr><td>Aleatória simples</td><td>Sorteio: todos têm a mesma chance.</td></tr><tr><td>Estratificada</td><td>Divide em estratos homogêneos e sorteia dentro de cada um.</td></tr><tr><td>Sistemática</td><td>Sorteia um início e segue um intervalo fixo (ex.: de 13 em 13).</td></tr><tr><td>Conglomerado</td><td>Divide em grupos heterogêneos e sorteia grupos inteiros.</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Não probabilística</th><th>Como funciona</th></tr><tr><td>Conveniência</td><td>Escolhe os mais acessíveis (rápida e barata, mas pouco representativa).</td></tr><tr><td>Quotas</td><td>Por julgamento, até preencher uma quantidade definida de cada perfil.</td></tr></table>"},
+   {t:"attr",l:"Representatividade",h:"<p>Uma boa amostra precisa: <strong>pertencer</strong> à população-alvo, ser <strong>isenta de tendência</strong> (não viciada), ter <strong>aleatoriedade</strong> e <strong>tamanho</strong> suficiente.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Probabilística quando precisa de rigor e generalização; não probabilística quando agilidade e custo importam mais que a precisão.</p>"}
+  ],
+  cards:[["População vs. amostra?","População = o todo; amostra = uma parte selecionada do todo."],
+         ["Estratificada vs. conglomerado?","Estratificada: grupos homogêneos, sorteia dentro de cada. Conglomerado: grupos heterogêneos, sorteia grupos inteiros."],
+         ["O que é uma amostra tendenciosa?","Uma amostra viciada, que não representa a população (ex.: entrevistar só torcedores na porta do estádio)."]] },
+
+{ id:"est-correlacao", num:"05", cat:"Relações", title:"Correlação de Pearson", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Mede a <strong>força e a direção</strong> da relação <strong>linear</strong> entre duas variáveis quantitativas. O coeficiente <strong>r</strong> varia de <strong>-1 a +1</strong>.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Valor de r</th><th>Interpretação</th></tr><tr><td>+1</td><td>Positiva perfeita (sobem juntas).</td></tr><tr><td>-1</td><td>Negativa perfeita (uma sobe, a outra desce).</td></tr><tr><td>perto de ±1</td><td>Relação forte.</td></tr><tr><td>perto de 0</td><td>Relação fraca ou nenhuma.</td></tr></table>"},
+   {t:"map",l:"As três correlações em dispersão",h:SVG_CORR()},
+   {t:"attr",l:"Limitações",h:"<p>Só mede relação <strong>linear</strong> (relações curvas ela não enxerga); é <strong>sensível a outliers</strong>; exige variáveis contínuas.</p>"},
+   {t:"tip",l:"Correlação não é causalidade",h:"<p>Duas variáveis subirem juntas <strong>não prova</strong> que uma causa a outra. Exemplo clássico: buscas por \"memes de gato\" se correlacionam com recalls de airbag — pura coincidência.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Use Pearson para medir associação linear, mas sempre com olhar crítico: confirme com gráfico de dispersão e nunca confunda correlação com causa.</p>"}
+  ],
+  cards:[["A correlação de Pearson varia de quanto a quanto?","De -1 a +1."],
+         ["r próximo de +1 significa?","Relação linear positiva forte (as variáveis sobem juntas)."],
+         ["\"Correlação não implica...\"?","Causalidade. Subir junto não prova causa e efeito."]] },
+
+{ id:"est-hipotese", num:"06", cat:"Inferência", title:"Teste de hipótese e teste t", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Teste de hipótese",h:"<p>Método para tomar decisões sobre uma <strong>população</strong> a partir de uma <strong>amostra</strong>. Ajuda a separar uma diferença <strong>real</strong> de uma diferença por <strong>acaso</strong>.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Hipótese</th><th>O que afirma</th></tr><tr><td>H0 (nula)</td><td>Não há diferença/efeito (o \"padrão\"). É inocente até prova em contrário.</td></tr><tr><td>H1 (alternativa)</td><td>Há uma diferença/efeito real (o que se quer provar).</td></tr></table>"},
+   {t:"concept",l:"Nível de significância (α) e valor-p",h:"<p><strong>α</strong> é o risco aceito de errar ao rejeitar H0 (padrão <strong>0,05</strong> = 5%). Se o <strong>valor-p &lt; α</strong>, rejeitamos H0 (resultado significativo).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Erro</th><th>O que é</th></tr><tr><td>Tipo I (falso positivo)</td><td>Rejeitar H0 quando ela é verdadeira. Probabilidade = α.</td></tr><tr><td>Tipo II (falso negativo)</td><td>Não rejeitar H0 quando H1 é verdadeira.</td></tr></table>"},
+   {t:"tip",l:"Teste t de Student",h:"<p>Compara as <strong>médias de dois grupos</strong> para ver se a diferença é significativa. É útil para <strong>amostras pequenas</strong> (criado por William Gosset, na cervejaria Guinness).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Defina H0 e H1 e o α <strong>antes</strong> de olhar os dados; calcule o valor-p; se for menor que α, há evidência de diferença real. Significância estatística não é o mesmo que importância prática.</p>"}
+  ],
+  cards:[["O que é a hipótese nula (H0)?","A afirmação de que não há diferença/efeito; mantida até os dados a contrariarem."],
+         ["O que é o nível de significância α?","O risco aceito de erro tipo I (falso positivo); padrão 0,05."],
+         ["Erro tipo I vs. tipo II?","Tipo I = falso positivo (rejeitar H0 verdadeira). Tipo II = falso negativo (não rejeitar H0 falsa)."],
+         ["Para que serve o teste t de Student?","Comparar as médias de dois grupos, útil em amostras pequenas."]] }
+];
+
+const EST_QUIZ = [
+ {q:"Qual medida é mais robusta a valores extremos?",o:["Média","Mediana","Soma","Amplitude"],c:1,e:"A mediana não se altera com outliers; a média é puxada por eles."},
+ {q:"O desvio padrão mede:",o:["O valor central","O quanto os dados se espalham em torno da média","A quantidade de dados","O maior valor"],c:1,e:"É a medida de dispersão em relação à média."},
+ {q:"A distribuição normal tem formato de:",o:["Linha reta","Sino","Escada","Círculo"],c:1,e:"Curva de sino: maioria no centro, extremos raros."},
+ {q:"No box plot, pontos fora da caixa e dos limites são:",o:["A média","Outliers","Quartis","A moda"],c:1,e:"São os valores atípicos (outliers)."},
+ {q:"O coeficiente de correlação de Pearson varia de:",o:["0 a 100","-1 a +1","0 a 1","-100 a 100"],c:1,e:"De -1 (negativa perfeita) a +1 (positiva perfeita); 0 = nenhuma."},
+ {q:"\"Correlação não implica...\"",o:["Causalidade","Distribuição","Amostragem","Mediana"],c:0,e:"Variáveis correlacionadas podem não ter relação de causa e efeito."},
+ {q:"O erro Tipo I é:",o:["Falso negativo","Falso positivo (rejeitar H0 verdadeira)","Erro de digitação","Acerto"],c:1,e:"Tipo I = rejeitar a hipótese nula quando ela é verdadeira (falso positivo)."},
+ {q:"O nível de significância (α) mais comum em estudos é:",o:["0,5","0,05","0,5%","1,0"],c:1,e:"0,05 (5%) é o padrão; testes clínicos usam 0,01."},
+ {q:"Numa distribuição normal simétrica, média, mediana e moda:",o:["São muito diferentes","Coincidem no centro","Não existem","São sempre zero"],c:1,e:"Na curva de sino simétrica, as três medidas caem no mesmo ponto central."},
+ {q:"A amostragem estratificada divide a população em:",o:["Grupos heterogêneos e sorteia grupos inteiros","Estratos homogêneos e sorteia dentro de cada um","Ordem alfabética","Nada"],c:1,e:"Estratos são internamente parecidos; sorteia-se uma parte de cada estrato."}
+];
+
+const BI_THEMES = [
+{ id:"bi-intro", num:"01", cat:"Fundamentos", title:"Visão geral do Power BI", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Plataforma de <strong>Business Intelligence</strong> da Microsoft que transforma fontes de dados não relacionadas em informações visuais e interativas. É como uma \"super planilha\" que se conecta a vários lugares e gera gráficos automáticos.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Componente</th><th>Para quê</th></tr><tr><td>Power BI Desktop</td><td>Criar relatórios e conexões (no seu computador).</td></tr><tr><td>Power BI Service</td><td>Publicar e compartilhar online (app.powerbi.com).</td></tr><tr><td>Gateway</td><td>Ponte para atualizar dados locais (on-premise) na nuvem.</td></tr><tr><td>Mobile</td><td>Visualizar relatórios no celular.</td></tr></table>"},
+   {t:"map",l:"Como as peças se conectam",h:SVG_BIFLOW()},
+   {t:"table",h:"<table class='cmd'><tr><th>Licença</th><th>Resumo</th></tr><tr><td>Free</td><td>Grátis, 1 GB de armazenamento.</td></tr><tr><td>Pro</td><td>USD 9,99/usuário/mês, 10 GB, compartilhamento seguro.</td></tr></table>"},
+   {t:"tip",l:"Concorrentes",h:"<p><strong>Tableau</strong> (tecnologia VizQL, arrastar e soltar) e <strong>Looker</strong> (linguagem LookML, do Google). No Quadrante Mágico do Gartner, a Microsoft (Power BI) aparece como <strong>Líder</strong>.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Fluxo básico: criar no <strong>Desktop</strong> &rarr; publicar no <strong>Service</strong> &rarr; (se preciso) atualizar dados locais via <strong>Gateway</strong>.</p>"}
+  ],
+  cards:[["Para que serve o Power BI Desktop?","Criar os relatórios e as conexões com os dados, no computador."],
+         ["O que é o Power BI Service?","O serviço na nuvem onde os relatórios são publicados e compartilhados."],
+         ["Power BI Free vs. Pro?","Free é grátis (1 GB); Pro custa por usuário/mês, dá 10 GB e compartilhamento seguro."]] },
+
+{ id:"bi-powerquery", num:"02", cat:"Tratamento", title:"Power Query: importar e tratar", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>O <strong>Power Query Editor</strong> é onde os dados são <strong>limpos e moldados</strong> antes da análise (com a linguagem M). É a \"cozinha\": os dados chegam sujos e você prepara antes de cozinhar os gráficos.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Fontes</th><th>Exemplos</th></tr><tr><td>Arquivos</td><td>Excel, CSV, PDF, JSON, pasta.</td></tr><tr><td>Bancos</td><td>SQL Server, MySQL, Oracle, Access.</td></tr><tr><td>Nuvem</td><td>Azure, serviços online, conjuntos do Power BI.</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Transformação</th><th>O que faz</th></tr><tr><td>Usar 1ª linha como cabeçalho</td><td>Transforma a primeira linha em títulos das colunas.</td></tr><tr><td>Dividir coluna</td><td>Separa por delimitador (ex.: \"código-nome\").</td></tr><tr><td>Mesclar colunas</td><td>Une colunas (ex.: cidade + estado).</td></tr><tr><td>Transformar colunas em linhas (unpivot)</td><td>Normaliza dados espalhados em muitas colunas.</td></tr><tr><td>Combinar arquivos</td><td>Junta vários arquivos de uma pasta com a mesma estrutura.</td></tr></table>"},
+   {t:"tip",l:"Exemplo — dividir coluna",h:"<p>Uma coluna com \"10501109-Marisa Lima\" pode ser separada em duas pelo delimitador <strong>-</strong>: vira o \"código\" (10501109) e o \"nome\" (Marisa Lima). Caminho: Página Inicial &rarr; Dividir Coluna &rarr; Por Delimitador.</p>"},
+   {t:"tip",l:"Etapas aplicadas e Transformar vs. Adicionar",h:"<p>Cada mudança vira um <strong>passo</strong> no histórico (dá para voltar e editar). <strong>Transformar</strong> altera a coluna atual; <strong>Adicionar Coluna</strong> cria uma nova, preservando a original.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Sempre limpe os dados no Power Query antes de criar visuais. Dados bem tratados = relatório confiável e rápido. Ao final, \"Fechar e Aplicar\".</p>"}
+  ],
+  cards:[["Para que serve o Power Query?","Limpar e transformar os dados (linguagem M) antes da análise."],
+         ["O que é unpivot (colunas em linhas)?","Normalizar dados que estão espalhados em várias colunas, juntando-os numa só."],
+         ["Transformar vs. Adicionar Coluna?","Transformar muda a coluna atual; Adicionar cria uma nova preservando a original."]] },
+
+{ id:"bi-modelagem", num:"03", cat:"Modelagem", title:"Fato, dimensão e relacionamentos", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Fato e dimensão",h:"<p><strong>Tabela fato:</strong> registra os eventos/transações com valores numéricos (ex.: vendas, pedidos). <strong>Tabela dimensão:</strong> o cadastro descritivo que dá contexto (quem, onde, quando — ex.: vendedores, produtos).</p>"},
+   {t:"map",l:"Modelo estrela (star schema)",h:SVG_STAR()},
+   {t:"table",h:"<table class='cmd'><tr><th>Chave</th><th>Onde aparece</th></tr><tr><td>Primária (PK)</td><td>Única na tabela dimensão (ex.: cód. do vendedor).</td></tr><tr><td>Estrangeira (FK)</td><td>O mesmo código repetido na tabela fato (o vendedor faz várias vendas).</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Relacionamento</th><th>Propriedade</th></tr><tr><td>Cardinalidade</td><td>1:1, 1:N (o mais comum) ou N:M.</td></tr><tr><td>Direção do filtro</td><td>Unidirecional ou ambas.</td></tr><tr><td>Status</td><td>Ativo (usado por padrão) ou inativo.</td></tr></table>"},
+   {t:"tip",l:"Dica de filtro",h:"<p>A seta do relacionamento deve apontar da <strong>dimensão para a fato</strong>. Isso garante que filtrar por um atributo (ex.: cliente) afete corretamente as vendas.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Modelo bem feito (fato no centro, dimensões ao redor) é o que faz os filtros e cálculos funcionarem. Sem relacionamento, os dados ficam isolados.</p>"}
+  ],
+  cards:[["Tabela fato vs. dimensão?","Fato: eventos/transações com números (vendas). Dimensão: cadastro descritivo (vendedores, produtos)."],
+         ["PK e FK na modelagem?","PK é única na dimensão; FK é o mesmo código repetido na fato."],
+         ["Para onde a seta do relacionamento deve apontar?","Da dimensão para a fato, para os filtros funcionarem."]] },
+
+{ id:"bi-dax", num:"04", cat:"Cálculos", title:"DAX: medidas e colunas calculadas", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é DAX",h:"<p><strong>DAX</strong> (Data Analysis Expressions) é a linguagem de fórmulas do Power BI (parecida com o Excel, mas mais potente). Você referencia <strong>colunas pelo nome</strong>, não células.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th></th><th>Coluna calculada</th><th>Medida</th></tr><tr><td>Contexto</td><td>De linha (calcula linha a linha)</td><td>De filtro (agrega)</td></tr><tr><td>Armazenamento</td><td>Ocupa espaço (fica salva)</td><td>Calculada na hora</td></tr><tr><td>Filtros</td><td>Fixa, não reage</td><td>Reage aos filtros</td></tr><tr><td>Uso comum</td><td>Filtros e eixos</td><td>Valores e KPIs</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Coluna calculada (linha a linha):</span>\n<span class='fn'>Vl. Total</span> = Vendas[Qtde] * Vendas[Vl.Unitario]\n\n<span class='cm'>-- Medidas (agregam):</span>\n<span class='fn'>Soma Vendas</span> = <span class='kw'>SUM</span>(Vendas[Vl. Total])\n<span class='fn'>% Vendas x Metas</span> = [Soma Vendas] / [Soma Metas] - 1"},
+   {t:"tip",l:"Lendo a medida de %",h:"<p><code>[Soma Vendas] / [Soma Metas] - 1</code>. Se vendeu <strong>120</strong> e a meta era <strong>100</strong>: 120/100 − 1 = <strong>+0,20 (+20%)</strong>, bateu a meta. Se vendeu 80: 80/100 − 1 = <strong>−0,20 (−20%)</strong>, ficou abaixo. Formate como porcentagem para exibir certo.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Prefira <strong>medidas explícitas</strong> (criadas por você) às implícitas: são reutilizáveis. Organize todas numa tabela só, chamada \"Medidas\".</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Regra prática: precisa de um <strong>número que reage aos filtros</strong> (KPI)? Use <strong>medida</strong>. Precisa de algo fixo para <strong>filtrar/eixar</strong>? Use <strong>coluna calculada</strong>.</p>"}
+  ],
+  cards:[["O que é DAX?","A linguagem de fórmulas do Power BI, para criar cálculos sobre o modelo de dados."],
+         ["Coluna calculada vs. medida?","Coluna: calcula linha a linha e ocupa espaço (fixa). Medida: agrega, é calculada na hora e reage aos filtros."],
+         ["Quando usar uma medida?","Para valores e KPIs que mudam conforme os filtros do relatório."],
+         ["Como ler [Soma Vendas]/[Soma Metas]-1?","É a diferença percentual: positivo bateu a meta, negativo ficou abaixo dela."]] },
+
+{ id:"bi-visuais", num:"05", cat:"Relatórios", title:"Visualizações e filtros", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Criando um visual (3 passos)",h:"<p>No modo Relatório: 1) escolha o <strong>tipo de gráfico</strong> no painel de Visualizações; 2) arraste os <strong>campos</strong> (ex.: Unidade para Legenda, Valor para Valores); 3) ajuste a aparência com o <strong>pincel</strong> (Formatar).</p>"},
+   {t:"tip",l:"Cuidado ao criar",h:"<p>Se um gráfico estiver selecionado e você clicar em outro ícone, o Power BI <strong>muda o tipo</strong> daquele gráfico. Para criar um novo, clique antes numa <strong>área vazia</strong>.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Filtro</th><th>Alcance</th></tr><tr><td>Visual</td><td>Só o gráfico específico.</td></tr><tr><td>Página</td><td>Todos os visuais de uma página.</td></tr><tr><td>Relatório</td><td>Todas as páginas do arquivo.</td></tr><tr><td>Drillthrough</td><td>\"Mergulha\" no detalhe de um item em outra página.</td></tr></table>"},
+   {t:"attr",l:"Atenção",h:"<p>Os filtros são <strong>cumulativos</strong> (se somam). Combinações mal planejadas podem deixar um gráfico <strong>vazio</strong> (ex.: filtrar SP na página e RJ no visual).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Escolha o visual conforme a pergunta, formate para clareza e use o nível de filtro certo (visual, página ou relatório).</p>"}
+  ],
+  cards:[["Os 3 passos para criar um visual?","Escolher o tipo, arrastar os campos, formatar (pincel)."],
+         ["Como criar um novo gráfico sem alterar outro?","Clicar numa área vazia antes de escolher o ícone do gráfico."],
+         ["Diferença entre filtro de página e de relatório?","Página afeta só uma aba; relatório afeta todas as páginas do arquivo."]] },
+
+{ id:"bi-publicacao", num:"06", cat:"Compartilhar", title:"Publicação e compartilhamento", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Publicar",h:"<p>Do <strong>Desktop</strong> você clica em <strong>Publicar</strong> e escolhe um <strong>workspace</strong> no Service (nuvem). É como subir um vídeo para uma plataforma: o Desktop é o editor, o Service é onde todos assistem.</p>"},
+   {t:"attr",l:"Conta",h:"<p>E-mails <strong>pessoais</strong> (Gmail, Outlook, Hotmail) <strong>não</strong> são aceitos. Só e-mails <strong>corporativos ou institucionais</strong>.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Forma</th><th>Característica</th></tr><tr><td>Compartilhamento privado</td><td>Botão Compartilhar. Exige licença Pro dos dois lados. Seguro: só quem tem permissão acessa.</td></tr><tr><td>Publicar na Web</td><td>Gera link público. QUALQUER pessoa com o link acessa. Nunca use para dados sensíveis (LGPD).</td></tr></table>"},
+   {t:"recap",l:"Na prática",h:"<p>Para dados internos/sigilosos, use o compartilhamento <strong>privado</strong> (Pro). \"Publicar na Web\" só para conteúdo realmente público.</p>"}
+  ],
+  cards:[["De onde se publica um relatório?","Do Power BI Desktop (botão Publicar) para um workspace no Service."],
+         ["Que tipo de e-mail o Power BI exige?","Corporativo ou institucional; e-mails pessoais não são aceitos."],
+         ["O que é \"Publicar na Web\"?","Gera um link público acessível por qualquer pessoa — perigoso para dados sensíveis."]] }
+];
+
+const BI_QUIZ = [
+ {q:"O Power BI Desktop serve para:",o:["Publicar na nuvem","Criar os relatórios e conexões","Apenas ver no celular","Armazenar e-mails"],c:1,e:"O Desktop é onde se constrói o relatório; a publicação é feita no Service."},
+ {q:"O Power Query é usado para:",o:["Criar gráficos","Limpar e transformar os dados (linguagem M)","Compartilhar relatórios","Escrever e-mails"],c:1,e:"É a etapa de tratamento dos dados antes da visualização."},
+ {q:"A tabela fato contém:",o:["Cadastros descritivos","As transações/eventos com valores numéricos","Apenas textos","As cores do relatório"],c:1,e:"Fato = eventos (vendas/pedidos) com métricas; dimensão = cadastros descritivos."},
+ {q:"No DAX, a coluna calculada:",o:["Reage aos filtros e não ocupa espaço","Calcula linha a linha e ocupa espaço (fixa)","É sempre um KPI","Substitui o Power Query"],c:1,e:"Coluna calculada usa contexto de linha e fica salva; a medida agrega e reage aos filtros."},
+ {q:"Para criar um novo gráfico sem alterar um existente, você deve:",o:["Excluir todos os filtros","Clicar numa área vazia antes de escolher o ícone","Salvar o arquivo","Mudar de página"],c:1,e:"Com um visual selecionado, clicar num ícone muda o tipo dele; clique no vazio para criar novo."},
+ {q:"\"Publicar na Web\" significa:",o:["Compartilhar de forma segura","Gerar um link público acessível por qualquer pessoa","Salvar no computador","Criar uma medida"],c:1,e:"Qualquer um com o link acessa; não use para dados sensíveis (LGPD)."},
+ {q:"Qual e-mail é aceito para conta do Power BI?",o:["Gmail pessoal","Outlook pessoal","Corporativo/institucional","Qualquer um"],c:2,e:"E-mails pessoais não são aceitos; apenas corporativos ou institucionais."},
+ {q:"No modelo estrela (star schema), a tabela central é a:",o:["Dimensão","Fato","Medida","View"],c:1,e:"A tabela fato fica no centro, ligada às várias tabelas de dimensão ao redor."},
+ {q:"Uma medida DAX (ex.: SUM) é calculada:",o:["Uma vez e salva na tabela","Na hora, reagindo aos filtros do relatório","No Power Query","Só no Excel"],c:1,e:"Medidas são calculadas em tempo de execução e respeitam o contexto de filtro."},
+ {q:"O Gateway no Power BI serve para:",o:["Criar gráficos","Ser a ponte que atualiza dados locais na nuvem","Escrever DAX","Trocar a licença"],c:1,e:"O Gateway conecta dados on-premise (locais) ao Service para atualização."}
+];
+
+const IA_THEMES = [
+{ id:"ia-ml", num:"01", cat:"Fundamentos", title:"Machine Learning e IA", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Machine Learning (ML)",h:"<p>Subárea da IA em que os sistemas <strong>aprendem com dados</strong> e melhoram com a experiência, <strong>sem serem explicitamente programados</strong> para cada caso. Algoritmos identificam padrões e fazem previsões.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo de aprendizado</th><th>Como funciona</th></tr><tr><td>Supervisionado</td><td>Dados rotulados (com as respostas certas). Como um aluno com professor.</td></tr><tr><td>Não supervisionado</td><td>Dados sem rótulos; o modelo acha padrões e agrupa sozinho.</td></tr><tr><td>Por reforço</td><td>Aprende por recompensa/penalidade. Como treinar um pet ou jogar um jogo.</td></tr></table>"},
+   {t:"map",l:"Os três tipos de aprendizado",h:SVG_ML()},
+   {t:"tip",l:"Exemplos concretos de cada tipo",h:"<p><strong>Supervisionado:</strong> prever o preço de uma casa (regressão) ou classificar um e-mail como spam.<br><strong>Não supervisionado:</strong> segmentar clientes por comportamento de compra (agrupamento).<br><strong>Por reforço:</strong> uma IA que aprende a jogar xadrez ou um robô que aprende a andar.</p>"},
+   {t:"concept",l:"Inteligência Artificial (IA)",h:"<p>O conceito mais amplo (a \"mãe\" do ML): sistemas que <strong>imitam a inteligência humana</strong> para realizar tarefas, de algoritmos simples a redes neurais complexas.</p>"},
+   {t:"tip",l:"IA ⊃ ML ⊃ Deep Learning",h:"<p>Pense em círculos, um dentro do outro: <strong>IA</strong> é o maior (qualquer sistema que imita inteligência). Dentro dela, <strong>ML</strong> (aprende com dados). Dentro do ML, <strong>Deep Learning</strong> (ML com redes neurais profundas, por trás de imagens e LLMs).</p>"},
+   {t:"map",l:"Os conjuntos encaixados",h:SVG_NEST()},
+   {t:"table",h:"<table class='cmd'><tr><th>Aplicações de ML</th></tr><tr><td>Reconhecimento de imagens (diagnóstico, segurança).</td></tr><tr><td>NLP — processamento de linguagem (tradutores, chatbots).</td></tr><tr><td>Sistemas de recomendação (Netflix, Amazon).</td></tr><tr><td>Veículos autônomos.</td></tr></table>"},
+   {t:"recap",l:"Na prática",h:"<p>IA é o guarda-chuva; ML é a parte que aprende com dados. O tipo de problema define o aprendizado: tem respostas certas? Supervisionado. Só dados crus? Não supervisionado.</p>"}
+  ],
+  cards:[["O que é Machine Learning?","Sistemas que aprendem com dados e melhoram com a experiência, sem serem explicitamente programados."],
+         ["Os 3 tipos de aprendizado de máquina?","Supervisionado (rotulado), não supervisionado (sem rótulos) e por reforço (recompensa/penalidade)."],
+         ["IA vs. ML?","IA é o conceito amplo (imitar inteligência humana); ML é a subárea que aprende com dados."],
+         ["O que é Deep Learning?","ML com redes neurais profundas; é o que está por trás de reconhecimento de imagens e dos LLMs."]] },
+
+{ id:"ia-llm", num:"02", cat:"Linguagem", title:"LLMs — modelos de linguagem", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é um LLM",h:"<p><strong>LLM</strong> (Large Language Model) é um modelo de NLP treinado em <strong>vastos volumes de texto</strong> com aprendizado profundo, para entender e gerar linguagem humana. Usa redes neurais <strong>transformadoras</strong> para prever a próxima palavra de uma sequência.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Aplicações</th><th>Limitações</th></tr><tr><td>Chatbots e assistentes virtuais.</td><td>Alucinação: inventar fatos com convicção.</td></tr><tr><td>Resumo de documentos.</td><td>Viés herdado dos dados de treino.</td></tr><tr><td>Análise de sentimentos.</td><td>Precisam de verificação humana.</td></tr></table>"},
+   {t:"tip",l:"Transformers",h:"<p>É a arquitetura que permite ao modelo <strong>focar nas partes mais importantes</strong> de uma frase para entender o contexto (o \"T\" do GPT).</p>"},
+   {t:"recap",l:"Na prática",h:"<p>LLMs são ótimos com texto, mas podem \"alucinar\" e carregar vieses. Use, mas <strong>sempre confira</strong> fatos e números.</p>"}
+  ],
+  cards:[["O que faz um LLM?","Entende e gera linguagem humana, prevendo a próxima palavra com base em muito texto."],
+         ["O que é \"alucinação\" em LLMs?","Inventar fatos incorretos com aparência de verdade."],
+         ["O que são transformers?","A arquitetura de IA que foca nas partes importantes da frase para captar o contexto."]] },
+
+{ id:"ia-gen", num:"03", cat:"Geração", title:"IA Generativa", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Algoritmos que <strong>criam novos dados</strong> (imagens, textos, música). Diferente da IA tradicional (que só <strong>analisa</strong> o que existe), a generativa <strong>cria</strong> amostras parecidas com os dados de entrada. A tradicional é o crítico de arte; a generativa é o artista.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Como funciona</th><th>Detalhe</th></tr><tr><td>GANs</td><td>Duas redes competem: uma cria, a outra avalia se é real ou falso — forçando precisão.</td></tr><tr><td>Transformers (GPT)</td><td>Excelentes em entender sequência e contexto (texto).</td></tr><tr><td>Treinamento &rarr; Geração</td><td>Aprende com muitos dados; depois gera novas instâncias semelhantes.</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Aplicações para dados</th></tr><tr><td>Dados sintéticos (expandir bases escassas ou proteger privacidade).</td></tr><tr><td>Automação de relatórios com narrativa gerada.</td></tr><tr><td>Cenários hipotéticos (\"e se o dólar subir 20%?\").</td></tr></table>"},
+   {t:"attr",l:"Ética e limites",h:"<p>Cuidado com <strong>qualidade</strong> (artefatos/erros), <strong>viés</strong> (amplia preconceitos dos dados) e <strong>privacidade</strong>. Nunca confie 100%: revisão humana é obrigatória.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>A IA generativa cria conteúdo e dados sintéticos úteis para análise, mas exige checagem crítica de qualidade, viés e privacidade.</p>"}
+  ],
+  cards:[["IA generativa, diferente da tradicional, faz o quê?","Cria novos dados (imagens, textos), em vez de apenas analisar os existentes."],
+         ["O que são GANs?","Duas redes que competem (uma cria, a outra avalia), melhorando a qualidade do que é gerado."],
+         ["Principais riscos da IA generativa?","Erros (artefatos), viés dos dados e privacidade — exige revisão humana."]] }
+];
+
+const IA_QUIZ = [
+ {q:"Machine Learning é:",o:["Programar regras manualmente","Sistemas que aprendem com dados sem serem explicitamente programados","Um tipo de planilha","Um banco de dados"],c:1,e:"O modelo aprende padrões a partir dos dados, sem regras escritas para cada caso."},
+ {q:"O aprendizado supervisionado usa:",o:["Dados sem rótulos","Dados rotulados (com as respostas certas)","Apenas recompensas","Nenhum dado"],c:1,e:"Recebe exemplos com a resposta correta, como um aluno com professor."},
+ {q:"O aprendizado por reforço aprende por:",o:["Rótulos","Recompensas e penalidades","Cópia","Sorteio"],c:1,e:"Recebe recompensa ao acertar e penalidade ao errar, buscando maximizar a recompensa."},
+ {q:"Um LLM basicamente:",o:["Cria imagens 3D","Entende e gera linguagem, prevendo a próxima palavra","Faz cálculos de planilha","Conecta bancos de dados"],c:1,e:"É treinado em muito texto para compreender e gerar linguagem humana."},
+ {q:"\"Alucinação\" em IA é:",o:["Um erro de internet","Inventar fatos com convicção","Um tipo de gráfico","Uma licença"],c:1,e:"Quando o modelo gera informações incorretas como se fossem verdadeiras."},
+ {q:"A IA generativa, diferente da tradicional:",o:["Só classifica dados","Cria novos dados (texto, imagem)","Apaga dados","Só faz backup"],c:1,e:"A generativa produz conteúdo novo semelhante aos dados de treino."}
+];
+
+const SUBJECTS = {
+  sql:        { name:"SQL", code:"SQL", themes:SQL_THEMES, quiz:SQL_QUIZ, themeEx:SQL_THEMEEX, practice:true, ready:true },
+  viz:        { name:"Visualização de Dados", code:"VIZ", themes:VIZ_THEMES, quiz:VIZ_QUIZ, themeEx:{}, practice:false, ready:true },
+  estatistica:{ name:"Estatística", code:"EST", themes:EST_THEMES, quiz:EST_QUIZ, themeEx:{}, practice:false, ready:true },
+  powerbi:    { name:"Power BI", code:"BI", themes:BI_THEMES, quiz:BI_QUIZ, themeEx:{}, practice:false, ready:true },
+  ia:         { name:"Inteligência Artificial", code:"IA", themes:IA_THEMES, quiz:IA_QUIZ, themeEx:{}, practice:false, ready:true },
+  python:     { name:"Python", code:"PY", themes:[], quiz:[], themeEx:{}, practice:false, ready:false }
 };
-let mode='study', current=THEMES[0].id, filter='';
+let curSubject='sql';
+let THEMES=SUBJECTS.sql.themes, QUIZ=SUBJECTS.sql.quiz, THEME_EX=SUBJECTS.sql.themeEx;
+
+const store = {
+  get studied(){ try{return JSON.parse(localStorage.getItem('studied_'+curSubject)||'[]')}catch(e){return[]} },
+  set studied(v){ localStorage.setItem('studied_'+curSubject, JSON.stringify(v)) },
+  get best(){ return +(localStorage.getItem('quizbest_'+curSubject)||0) },
+  set best(v){ localStorage.setItem('quizbest_'+curSubject, v) },
+  get theme(){ return localStorage.getItem('app_theme')||'light' },
+  set theme(v){ localStorage.setItem('app_theme', v) }
+};
+let mode='study', current=THEMES.length?THEMES[0].id:null, filter='';
+
+function loadSubject(id){
+  curSubject=id; const s=SUBJECTS[id];
+  THEMES=s.themes; QUIZ=s.quiz; THEME_EX=s.themeEx;
+  current = THEMES.length? THEMES[0].id : null;
+  mode='study'; filter='';
+  const logo=document.querySelector('.logo'); if(logo) logo.textContent=s.code;
+  const sub=document.querySelector('.brand p'); if(sub) sub.textContent = s.ready? 'App de estudos · offline' : 'matéria em breve';
+  const modes=document.querySelector('.modes'); if(modes) modes.style.display = s.ready?'flex':'none';
+  const pb=document.querySelector('.modes button[data-mode="practice"]'); if(pb) pb.style.display = s.practice?'':'none';
+  const srch=document.querySelector('.search'); if(srch) srch.style.visibility = s.ready?'visible':'hidden';
+  const se=document.getElementById('subjectSel'); if(se) se.value=id;
+  fillThemeSel();
+  setModeUI(); render();
+}
 
 const $=s=>document.querySelector(s);
 const content=$('#content'), sidebar=$('#sidebar');
@@ -585,6 +1319,8 @@ function renderSidebar(){
   sidebar.innerHTML=html;
 }
 
+function fillThemeSel(){ const sel=document.getElementById('themeSel'); if(!sel)return; if(!THEMES.length){sel.innerHTML='';return;} sel.innerHTML=THEMES.map(t=>'<option value="'+t.id+'">'+t.num+'. '+t.title+'</option>').join(''); if(current)sel.value=current; }
+
 function blockHTML(b){
   if(b.t==='h3') return `<h3 class="sub">${b.h}</h3>`;
   if(b.t==='plain') return `<div style="margin:10px 0">${b.h}</div>`;
@@ -595,14 +1331,16 @@ function blockHTML(b){
 }
 
 function renderStudy(){
+  fillThemeSel();
   const t=THEMES.find(x=>x.id===current);
   const idx=THEMES.indexOf(t), prev=THEMES[idx-1], next=THEMES[idx+1], done=isDone(t.id);
   content.innerHTML=`<div class="theme-wrap">
     <div class="crumb">${t.cat}</div>
     <div class="theme-head"><h2><span class="tnum">${t.num}</span>${t.title}</h2><span class="when">estudado em ${t.date}</span></div>
     ${t.blocks.map(blockHTML).join('')}
+    ${(THEME_EX[t.id]&&THEME_EX[t.id].length)?('<h3 class="sub">Exercícios deste tema</h3>'+renderExList(THEME_EX[t.id])):''}
     <div class="theme-foot">
-      <button class="btn ${done?'done':'primary'}" onclick="markDone('${t.id}')">${done?'✓ Estudado':'Marcar como estudado'}</button>
+      <button class="btn ${done?'done':'primary'}" id="doneBtn" onclick="markDone('${t.id}')">${done?'✓ Estudado':'Marcar como estudado'}</button>
       <div class="navbtns">
         ${prev?`<button class="btn" onclick="go('${prev.id}')">← ${prev.num}</button>`:''}
         ${next?`<button class="btn" onclick="go('${next.id}')">${next.num} →</button>`:''}
@@ -610,7 +1348,7 @@ function renderStudy(){
     </div></div>`;
   content.scrollTop=0;
 }
-function markDone(id){ toggleDone(id); renderStudy(); renderSidebar(); }
+function markDone(id){ toggleDone(id); const b=document.getElementById('doneBtn'); const d=isDone(id); if(b){ b.className='btn '+(d?'done':'primary'); b.textContent=d?'✓ Estudado':'Marcar como estudado'; } renderSidebar(); }
 function go(id){ current=id; mode='study'; setModeUI(); renderSidebar(); renderStudy(); }
 function copyCode(btn){
   const pre=btn.closest('.code').querySelector('pre');
@@ -689,6 +1427,12 @@ function search(q){
 function setMode(m){ mode=m; setModeUI(); render(); }
 function setModeUI(){ document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode)); }
 function render(){
+  const s=SUBJECTS[curSubject];
+  if(!s.ready || !THEMES.length){
+    sidebar.style.display='none';
+    content.innerHTML='<div class="theme-wrap"><div class="theme-head"><h2><span class="tnum">'+s.code+'</span>'+s.name+'</h2></div><div class="block tip"><span class="label">Matéria em breve</span><p>Esta matéria ainda não tem conteúdo. Envie o material de estudo e ela será montada aqui, no mesmo app, com os mesmos recursos: temas com mapas mentais, flashcards, quiz e, quando fizer sentido, o modo Praticar.</p></div></div>';
+    return;
+  }
   const showSide = mode==='study';
   sidebar.style.display = showSide?'block':'none';
   if(mode==='study'){ renderSidebar(); renderStudy(); }
@@ -697,6 +1441,8 @@ function render(){
   else if(mode==='practice'){ renderPractice(); }
 }
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+document.getElementById('subjectSel').onchange=e=>loadSubject(e.target.value);
+(function(){var ts=document.getElementById('themeSel'); if(ts) ts.onchange=function(e){ if(e.target.value) go(e.target.value); };})();
 $('#search').addEventListener('input',e=>search(e.target.value));
 $('#themeBtn').onclick=()=>{ const nt=store.theme==='dark'?'light':'dark'; store.theme=nt; document.documentElement.dataset.theme=nt; };
 
@@ -709,7 +1455,7 @@ document.addEventListener('keydown',e=>{
 });
 
 document.documentElement.dataset.theme=store.theme;
-render();
+loadSubject('sql');
 initDB();
 </script>
 </body>

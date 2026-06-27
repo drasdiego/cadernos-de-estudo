@@ -1,47 +1,40 @@
-# Caderno de Estudos — SQL
+# Cadernos de Estudo
 
-Caderno de estudos de SQL em dois formatos: um **PDF** para anotar no GoodNotes (iPad) e um **app interativo offline** com navegação por temas, flashcards, quiz e um modo de prática com banco de dados SQLite rodando dentro do próprio app.
+App de estudos com as matérias SQL, Visualização de Dados, Estatística, Power BI e Inteligência Artificial. Cada matéria é organizada por temas, com flashcards e quiz. O SQL ainda tem um modo de prática com um banco SQLite que roda dentro do próprio app.
 
-O conteúdo é organizado **por temas** (não por ordem de aula). Cada tema mostra, de forma discreta, a data em que foi estudado.
-
-## Estrutura
+## O que tem aqui
 
 ```
-estudos/
-├── Caderno_SQL.html        Fonte do caderno (gera o PDF)
-├── Caderno_SQL.pdf         PDF pronto para o GoodNotes
-├── CadernoSQL_App/
-│   ├── index.html          App interativo (página única)
-│   └── sql-asm.js          Motor SQLite (sql.js) para o modo Praticar
-└── Caderno SQL.app/        Bundle clicável no macOS (abre o app)
+CadernoSQL_App/
+  index.html        o app (página única, funciona offline)
+  sql-asm.js        motor SQLite usado no modo Praticar
+  manifest.json     dados para instalar como app no celular
+  icon.png          ícone do app
+Cadernos_offline.html   o app inteiro num arquivo só, para abrir em qualquer celular
+Caderno_SQL.html        fonte do caderno de SQL
+Caderno_SQL.pdf         caderno de SQL para anotar no GoodNotes
+Caderno SQL.app         atalho para abrir o app no macOS
 ```
 
-## Como abrir o app
+## Como usar
 
-No Mac, dê dois cliques em `Caderno SQL.app`. Na primeira vez, o macOS pode pedir para clicar com o botão direito e escolher **Abrir** (app não assinado). Como alternativa, abra `CadernoSQL_App/index.html` direto no navegador.
+No computador, abra `CadernoSQL_App/index.html` no navegador.
 
-O app funciona **100% offline**. Modos disponíveis:
+No celular, salve o `Cadernos_offline.html` no aparelho e abra no Safari (iPhone) ou Chrome (Android). Dá para adicionar à tela inicial como um app. O passo a passo está em `COMO_ABRIR_NO_CELULAR.md`.
 
-- **Estudar** — conteúdo por temas, com mapas mentais e exemplos.
-- **Flashcards** — perguntas e respostas para revisão.
-- **Quiz** — questões de múltipla escolha com correção.
-- **Praticar** — escreva consultas SQL reais contra tabelas de exemplo; o app executa e valida o resultado.
+Para anotar no iPad, abra o `Caderno_SQL.pdf` no GoodNotes.
 
-O progresso de estudo fica salvo localmente no navegador.
+No app, o seletor no topo troca de matéria. O progresso de cada matéria fica salvo no navegador do aparelho.
 
-## Como regenerar o PDF
+## Regenerar o PDF de SQL
 
-O PDF é gerado a partir de `Caderno_SQL.html` com o WeasyPrint:
+O PDF vem do `Caderno_SQL.html`, gerado com o WeasyPrint:
 
 ```bash
 pip install weasyprint
 python3 -c "from weasyprint import HTML; HTML('Caderno_SQL.html').write_pdf('Caderno_SQL.pdf')"
 ```
 
-## Matérias
+## Crédito
 
-Cada matéria é um caderno próprio. A primeira é SQL. Visualização de Dados entra como um caderno separado, abrindo no mesmo app.
-
-## Créditos
-
-- Motor SQL: [sql.js](https://github.com/sql-js/sql.js) (SQLite compilado para JavaScript).
+Motor SQL: [sql.js](https://github.com/sql-js/sql.js), o SQLite compilado para JavaScript.
