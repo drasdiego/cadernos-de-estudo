@@ -1413,6 +1413,76 @@ const PY_THEMES = [
          ["Por que evitar except Exception genérico?","Porque ele captura qualquer erro, escondendo bugs reais. Capture o tipo específico esperado."],
          ["O que faz raise?","Levanta uma exceção de propósito, para sinalizar um problema (ex.: raise ValueError('...'))."],
          ["Qual exceção ocorre em int('abc')?","ValueError: o tipo é certo (texto), mas o valor não dá para converter."]] }
+,
+{ id:"py-arquivos", num:"08", cat:"Entrada e saída", title:"Arquivos e o comando with", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (tipos), 05 (funções) e 07 (exceções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Ler e escrever arquivos é pedir ao sistema operacional para abrir um arquivo, trabalhar com o conteúdo e depois fechar.</p><p>O comando <b>with</b> abre o arquivo e garante que ele será fechado sozinho ao final, mesmo se ocorrer um erro no meio.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Arquivo aberto e não fechado consome recursos e pode corromper dados. Em Dados, quase todo trabalho começa lendo um arquivo (CSV, TXT, JSON) e termina gravando um resultado.</p><p>O <b>with</b> remove a parte mais fácil de esquecer: o fechamento.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que abrir um arquivo. A forma recomendada na documentação oficial é abrir com <b>with</b>, ler ou escrever dentro do bloco, e deixar o fechamento por conta dele.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A função <b>open(caminho, modo)</b> devolve um objeto de arquivo. O <b>modo</b> diz a intenção: <code>r</code> ler, <code>w</code> escrever (apaga o que existia), <code>a</code> acrescentar ao final.</p><p>Acrescente <code>encoding='utf-8'</code> para acentos funcionarem em qualquer sistema.</p>"},
+   {t:"code",h:"<span class='cm'># Escrever um arquivo de texto</span>\nwith open('notas.txt', 'w', encoding='utf-8') as f:\n    f.write('linha 1\\n')\n    f.write('linha 2\\n')\n\n<span class='cm'># Ler de volta, linha por linha</span>\nwith open('notas.txt', 'r', encoding='utf-8') as f:\n    for linha in f:\n        print(linha.strip())"},
+   {t:"table",h:"<table class='cmd'><tr><th>Modo</th><th>O que faz</th></tr><tr><td>r</td><td>Lê. Dá erro se o arquivo não existe.</td></tr><tr><td>w</td><td>Escreve do zero. Apaga o conteúdo anterior.</td></tr><tr><td>a</td><td>Acrescenta no final. Mantém o que já existia.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Abrir no modo <code>w</code> achando que vai só ler: apaga o arquivo inteiro.</p><p>Esquecer <code>encoding='utf-8'</code> e ver acentos quebrados.</p><p>Abrir sem <b>with</b> e esquecer de chamar <code>f.close()</code>.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use sempre <b>with</b>. Use <code>encoding='utf-8'</code> de forma explícita. Para vários arquivos de dados reais, prefira bibliotecas próprias (como pandas, no tema 10) em vez de tratar texto na mão.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Crie um arquivo com três linhas e leia de volta mostrando cada uma.</p><p><b>2.</b> Abra um arquivo no modo <code>a</code> e acrescente uma linha sem apagar as anteriores.</p><p><b>3.</b> Leia um arquivo que pode não existir, tratando o erro com try/except para mostrar uma mensagem amigável.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'># 1</span>\nwith open('x.txt','w',encoding='utf-8') as f:\n    f.write('a\\nb\\nc\\n')\nwith open('x.txt','r',encoding='utf-8') as f:\n    for l in f: print(l.strip())\n\n<span class='cm'># 2</span>\nwith open('x.txt','a',encoding='utf-8') as f:\n    f.write('d\\n')\n\n<span class='cm'># 3</span>\ntry:\n    with open('nao_existe.txt','r',encoding='utf-8') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('Arquivo não encontrado.')"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>open abre, with fecha sozinho. Modo r lê, w apaga e escreve, a acrescenta. encoding='utf-8' para acentos. Erro de arquivo é FileNotFoundError.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Pergunta clássica: por que usar with? Resposta: garante o fechamento do arquivo mesmo com erro, evitando vazamento de recursos.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Arquivos<ul><li>open(caminho, modo, encoding)</li><li>with → fecha sozinho</li><li>Modos<ul><li>r ler</li><li>w escrever do zero</li><li>a acrescentar</li></ul></li><li>Erro: FileNotFoundError</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> grave em um arquivo o resultado de um cálculo feito por uma função do tema 05, depois leia e imprima.</p><p><b>Conexão:</b> ler arquivos é a porta de entrada para Dados. No tema 10, o pandas faz isso de forma direta com read_csv, e no SQL você fará o equivalente lendo tabelas.</p>"}
+  ],
+  cards:[
+    ["Qual a vantagem do with?","Fecha o arquivo automaticamente, mesmo se houver erro."],
+    ["O modo 'w' faz o quê com o conteúdo antigo?","Apaga tudo e escreve do zero."],
+    ["Como evitar acentos quebrados?","Use encoding='utf-8' no open."],
+    ["Qual erro ocorre ao ler um arquivo inexistente?","FileNotFoundError."]] },
+{ id:"py-oop", num:"09", cat:"Organização", title:"Orientação a objetos (classes)", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (tipos), 03 (estruturas) e 05 (funções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Orientação a objetos (OOP, do inglês Object-Oriented Programming, programação orientada a objetos) é uma forma de organizar código juntando dados e as ações sobre esses dados em uma mesma estrutura, chamada <b>classe</b>.</p><p>A <b>classe</b> é a planta. O <b>objeto</b> é a casa construída a partir da planta.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Conforme o programa cresce, espalhar variáveis soltas vira bagunça. Agrupar dados e comportamento em classes deixa o código mais previsível, fácil de manter e de reaproveitar.</p><p>Muitas bibliotecas que você vai usar (incluindo pandas) são feitas de objetos.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando há um conceito do mundo real com características (dados) e ações (funções) que andam juntas: um Cliente, uma Conta, um Relatório. Para scripts pequenos e diretos, funções soltas já bastam.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Defina a classe com <b>class</b>. O método especial <b>__init__</b> roda na criação do objeto e guarda os dados em <b>self</b> (o próprio objeto). Os demais métodos são funções que agem sobre esse self.</p>"},
+   {t:"code",h:"<span class='cm'># Uma classe simples: Conta</span>\nclass Conta:\n    def __init__(self, dono, saldo=0):\n        self.dono = dono\n        self.saldo = saldo\n\n    def depositar(self, valor):\n        self.saldo = self.saldo + valor\n\n    def extrato(self):\n        return f'{self.dono}: R$ {self.saldo}'\n\nc = Conta('Diego', 100)\nc.depositar(50)\nprint(c.extrato())  <span class='cm'># Diego: R$ 150</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Termo</th><th>O que significa</th></tr><tr><td>class</td><td>A planta que define o tipo.</td></tr><tr><td>objeto</td><td>Uma instância criada a partir da classe.</td></tr><tr><td>__init__</td><td>Roda ao criar o objeto, guarda os dados iniciais.</td></tr><tr><td>self</td><td>Referência ao próprio objeto dentro da classe.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esquecer o <b>self</b> como primeiro parâmetro dos métodos.</p><p>Acessar um atributo sem ter criado ele no __init__.</p><p>Confundir a classe (a planta) com o objeto (a instância concreta).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Nomes de classe em CamelCase (Conta, ContaCorrente). Uma classe deve ter uma responsabilidade clara. Não crie classe para tudo: se uma função resolve, use a função.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Crie uma classe Produto com nome e preço, e um método que aplica desconto.</p><p><b>2.</b> Adicione um método que devolve o preço formatado como texto.</p><p><b>3.</b> Crie dois objetos Produto diferentes e mostre que cada um guarda seus próprios dados.</p>"},
+   {t:"code",l:"Soluções",h:"class Produto:\n    def __init__(self, nome, preco):\n        self.nome = nome\n        self.preco = preco\n    def aplicar_desconto(self, pct):\n        self.preco = self.preco * (1 - pct/100)\n    def etiqueta(self):\n        return f'{self.nome}: R$ {self.preco:.2f}'\n\na = Produto('Caneta', 5.0)\nb = Produto('Caderno', 20.0)\na.aplicar_desconto(10)\nprint(a.etiqueta())  <span class='cm'># Caneta: R$ 4.50</span>\nprint(b.etiqueta())  <span class='cm'># Caderno: R$ 20.00</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>class define o tipo, objeto é a instância. __init__ guarda dados em self. Métodos são funções que recebem self. CamelCase nos nomes de classe.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Qual a diferença entre classe e objeto? Classe é a planta, objeto é a construção concreta. Para que serve self? Referenciar o próprio objeto e seus dados dentro dos métodos.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>OOP<ul><li>class → a planta</li><li>objeto → instância concreta</li><li>__init__ → guarda dados em self</li><li>métodos → ações sobre self</li><li>nome em CamelCase</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> modele uma classe Aluno com nome e uma lista de notas, com métodos para adicionar nota e calcular a média.</p><p><b>Conexão:</b> no tema 10, um DataFrame do pandas é um objeto; chamar df.head() é chamar um método dele. Entender objeto e método torna o pandas natural.</p>"}
+  ],
+  cards:[
+    ["O que é uma classe?","A planta que define um tipo, juntando dados e ações."],
+    ["O que é um objeto?","Uma instância concreta criada a partir de uma classe."],
+    ["Para que serve __init__?","Roda na criação do objeto e guarda os dados iniciais em self."],
+    ["O que é self?","A referência ao próprio objeto dentro dos métodos da classe."]] },
+{ id:"py-pandas", num:"10", cat:"Ponte para Dados", title:"Introdução ao pandas", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 03 (estruturas), 06 (módulos e import) e 09 (objetos e métodos).</p>"},
+   {t:"concept",l:"O que é",h:"<p>pandas é uma biblioteca externa para trabalhar com dados em tabela. Sua estrutura principal é o <b>DataFrame</b>: uma tabela com linhas e colunas, parecida com uma planilha ou com uma tabela de banco de dados.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>É a ferramenta central do trabalho com Dados em Python. Ler arquivos, filtrar, agrupar e resumir, que no SQL você faz com comandos, no pandas você faz com métodos de um objeto DataFrame.</p><p>Para a sua transição para Dados, pandas é a ponte direta entre Python e a prática diária.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que os dados couberem em uma tabela e você precisar limpar, transformar ou resumir. Para bases muito grandes que vivem em banco, o SQL faz o trabalho pesado; o pandas costuma entrar depois, na análise.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Importa-se com o apelido padrão <b>pd</b>. Lê-se um arquivo com <b>read_csv</b>, que devolve um DataFrame. A partir dele, métodos respondem perguntas: <code>head</code> mostra as primeiras linhas, colchetes filtram, <code>groupby</code> agrupa.</p>"},
+   {t:"code",h:"import pandas as pd\n\n<span class='cm'># Lê um CSV e vira um DataFrame (tabela)</span>\ndf = pd.read_csv('vendas.csv')\n\n<span class='cm'># Primeiras linhas</span>\nprint(df.head())\n\n<span class='cm'># Filtra: vendas acima de 100</span>\naltas = df[df['valor'] > 100]\n\n<span class='cm'># Agrupa por cliente e soma o valor</span>\nresumo = df.groupby('cliente')['valor'].sum()"},
+   {t:"table",h:"<table class='cmd'><tr><th>Ação (pandas)</th><th>Equivalente em SQL</th></tr><tr><td>df[df['x'] &gt; 100]</td><td>WHERE x &gt; 100</td></tr><tr><td>df.groupby('c')['v'].sum()</td><td>GROUP BY c com SUM(v)</td></tr><tr><td>df.sort_values('v')</td><td>ORDER BY v</td></tr><tr><td>df.head(5)</td><td>LIMIT 5</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esquecer de instalar a biblioteca (pip install pandas) antes de importar.</p><p>Errar o nome da coluna entre aspas (diferencia maiúscula de minúscula).</p><p>Achar que filtrar cria uma cópia automática segura: para alterar com segurança, trabalhe sobre o resultado do filtro.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use o apelido padrão <code>pd</code>. Olhe sempre df.head() e df.info() antes de analisar. Pense em paralelo com SQL: a mesma lógica de filtrar, agrupar e ordenar vale nos dois mundos.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Importe o pandas e crie um DataFrame a partir de um dicionário com colunas nome e nota.</p><p><b>2.</b> Filtre apenas as linhas com nota maior ou igual a 7.</p><p><b>3.</b> Agrupe por uma coluna de turma e calcule a média das notas.</p>"},
+   {t:"code",l:"Soluções",h:"import pandas as pd\n\n<span class='cm'># 1</span>\ndf = pd.DataFrame({'nome':['Ana','Bia','Caio'],\n                   'turma':['A','A','B'],\n                   'nota':[8, 6, 9]})\n\n<span class='cm'># 2</span>\naprovados = df[df['nota'] >= 7]\n\n<span class='cm'># 3</span>\nmedia_turma = df.groupby('turma')['nota'].mean()\nprint(media_turma)"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>pandas trabalha com DataFrame (tabela). Importa como pd. read_csv lê arquivo. Filtrar, agrupar e ordenar no pandas espelham WHERE, GROUP BY e ORDER BY do SQL.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que é um DataFrame? Uma tabela com linhas e colunas. Como filtrar linhas? Com uma condição entre colchetes. Saber traduzir SQL para pandas mostra maturidade em Dados.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>pandas<ul><li>import pandas as pd</li><li>DataFrame → tabela</li><li>read_csv → ler arquivo</li><li>Operações<ul><li>filtrar (como WHERE)</li><li>groupby (como GROUP BY)</li><li>sort_values (como ORDER BY)</li></ul></li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> leia um CSV de vendas, filtre um período, agrupe por produto e salve o resumo em um novo arquivo com to_csv.</p><p><b>Conexão:</b> este tema fecha a ponte Python → Dados. A partir daqui, o caderno de SQL aprofunda o mesmo raciocínio no banco, e o de Power BI leva o resultado para o visual.</p>"}
+  ],
+  cards:[
+    ["O que é um DataFrame?","Uma tabela com linhas e colunas, base do trabalho no pandas."],
+    ["Como se importa o pandas?","import pandas as pd."],
+    ["Qual método lê um CSV?","pd.read_csv('arquivo.csv')."],
+    ["groupby equivale a qual comando SQL?","GROUP BY."]] }
 ];
 
 const PY_QUIZ = [
@@ -1433,6 +1503,13 @@ const PY_QUIZ = [
  {q:"Para tratar um erro em tempo de execução, usa-se:",o:["if / else","try / except","for","def"],c:1,e:"try tenta o código e except captura a exceção."},
  {q:"Qual bloco roda sempre, com erro ou não?",o:["try","except","else","finally"],c:3,e:"finally roda em qualquer caso (ótimo para liberar recursos)."},
  {q:"int('abc') levanta qual exceção?",o:["TypeError","KeyError","ValueError","IndexError"],c:2,e:"ValueError: o tipo é texto, mas o valor não dá para converter em número."}
+,
+ {q:"Qual a principal vantagem de usar with ao abrir arquivos?",o:["Deixa a leitura mais rápida","Fecha o arquivo automaticamente, mesmo com erro","Permite ler vários arquivos","Converte para UTF-8 sozinho"],c:1,e:"with garante o fechamento do arquivo ao final do bloco."},
+ {q:"Abrir um arquivo no modo 'w' faz o quê com o conteúdo anterior?",o:["Mantém e acrescenta no fim","Apaga tudo e escreve do zero","Dá erro se já existir","Só lê"],c:1,e:"O modo w escreve do zero e apaga o conteúdo antigo. Para acrescentar, use 'a'."},
+ {q:"Em uma classe, para que serve o método __init__?",o:["Fechar o objeto","Rodar na criação e guardar os dados iniciais em self","Imprimir o objeto","Importar a classe"],c:1,e:"__init__ é executado ao criar o objeto e inicializa seus atributos."},
+ {q:"Qual a diferença entre classe e objeto?",o:["São a mesma coisa","Classe é a planta; objeto é a instância concreta","Objeto é a planta; classe é a instância","Classe é mais lenta"],c:1,e:"A classe define o tipo; o objeto é uma construção concreta a partir dela."},
+ {q:"No pandas, o que é um DataFrame?",o:["Um arquivo CSV","Uma tabela com linhas e colunas","Uma função","Um tipo de erro"],c:1,e:"O DataFrame é a estrutura principal do pandas, parecida com uma planilha."},
+ {q:"df.groupby('cliente')['valor'].sum() equivale a qual ideia em SQL?",o:["WHERE","ORDER BY","GROUP BY com SUM","LIMIT"],c:2,e:"groupby com soma espelha o GROUP BY com SUM do SQL."}
 ];
 
 const SUBJECTS = {
