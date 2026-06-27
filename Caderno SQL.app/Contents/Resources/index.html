@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadernos de Estudo</title>
-<meta name="app-version" content="20260627-3">
+<meta name="app-version" content="20260627-4">
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -198,14 +198,7 @@
     <div class="logo">SQL</div>
     <div><h1>Cadernos de Estudo</h1><p>App de estudos · offline</p></div>
   </div>
-  <select id="subjectSel" class="subject-sel" title="Escolher matéria">
-    <option value="sql">SQL</option>
-    <option value="viz">Visualização de Dados</option>
-    <option value="estatistica">Estatística</option>
-    <option value="powerbi">Power BI</option>
-    <option value="ia">Inteligência Artificial</option>
-    <option value="python">Python</option>
-  </select>
+  <select id="subjectSel" class="subject-sel" title="Escolher matéria"></select>
   <select id="themeSel" class="subject-sel theme-sel" title="Ir para o tema"></select>
   <div class="modes">
     <button data-mode="study" class="on">Estudar</button>
@@ -2422,6 +2415,7 @@ function renderSidebar(){
   sidebar.innerHTML=html;
 }
 
+function fillSubjectSel(){ const sel=document.getElementById('subjectSel'); if(!sel)return; sel.innerHTML=Object.entries(SUBJECTS).map(([id,s])=>'<option value="'+id+'">'+s.name+'</option>').join(''); sel.value=curSubject; }
 function fillThemeSel(){ const sel=document.getElementById('themeSel'); if(!sel)return; if(!THEMES.length){sel.innerHTML='';return;} sel.innerHTML=THEMES.map(t=>'<option value="'+t.id+'">'+t.num+'. '+t.title+'</option>').join(''); if(current)sel.value=current; }
 
 function blockHTML(b){
@@ -2547,7 +2541,8 @@ document.addEventListener('keydown',e=>{
 });
 
 document.documentElement.dataset.theme=store.theme;
-loadSubject('sql');
+fillSubjectSel();
+loadSubject('intro');
 initDB();
 </script>
 </body>
