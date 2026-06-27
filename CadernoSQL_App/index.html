@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadernos de Estudo</title>
-<meta name="app-version" content="20260627-6">
+<meta name="app-version" content="20260627-7">
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -225,7 +225,8 @@ const SQL_THEMES = [
    {t:"h3",h:"Tabelas: a estrutura básica"},
    {t:"plain",h:"<p>Os dados ficam em <strong>tabelas</strong>, organizadas em linhas e colunas:</p><ul><li><strong>Linha (registro):</strong> uma ocorrência completa, ex.: um cliente.</li><li><strong>Coluna (campo/atributo):</strong> uma característica, ex.: nome ou CPF.</li></ul>"},
    {t:"tip",l:"Analogia",h:"<p>Pense numa planilha do Excel: cada <strong>aba</strong> é uma tabela, cada <strong>linha</strong> é um cadastro e cada <strong>coluna</strong> uma informação. Um banco faz isso preparado para muitos dados e acessos simultâneos, com regras de integridade.</p>"},
-   {t:"recap",l:"Na prática",h:"<p><strong>Em outras palavras:</strong> é onde a informação mora, organizada. <strong>O que significa:</strong> toda consulta SQL age sobre essas linhas e colunas.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>Em outras palavras:</strong> é onde a informação mora, organizada. <strong>O que significa:</strong> toda consulta SQL age sobre essas linhas e colunas.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Banco de dados<ul><li>Guarda dados organizados</li><li>Tabela: linhas (registros) e colunas (campos)</li><li>SGBD gerencia o acesso</li><li>Base do SQL</li></ul></li></ul>"}
   ],
   cards:[["O que é um banco de dados?","Coleção organizada de dados armazenados eletronicamente, que permite gerenciar, buscar e manipular informações de forma eficiente."],
          ["Linha vs. coluna numa tabela","Linha = um registro (ocorrência completa). Coluna = um campo/atributo (uma característica do dado)."]] },
@@ -235,7 +236,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Conceito",h:"<p><strong>SQL</strong> (Structured Query Language) é a Linguagem Estruturada de Consulta. É o idioma para conversar com o banco: criar tabelas, inserir, alterar e consultar dados.</p>"},
    {t:"plain",h:"<ul><li>Criada no <strong>início dos anos 70</strong>, pela <strong>IBM</strong>.</li><li><strong>Altíssimo nível:</strong> próxima do inglês. <code>SELECT</code>, <code>INSERT</code>, <code>DELETE</code> já dizem o que fazem.</li><li><strong>Declarativa:</strong> você descreve o resultado que quer, não o passo a passo.</li><li>Surgiram novos <strong>dialetos</strong>, evoluindo o SQL.</li></ul>"},
    {t:"tip",l:"Declarativo vs. imperativo",h:"<p><strong>Declarativo (SQL):</strong> \"quero os clientes de SP\". O banco resolve como buscar.<br><strong>Imperativo (ex.: for em Python):</strong> você escreve cada passo. <strong>Por isso</strong> SQL é tão enxuto: você foca no \"o quê\".</p>"},
-   {t:"tip",l:"O que é dialeto",h:"<p>Versão do SQL adaptada por um fabricante: <strong>MySQL, PostgreSQL, SQL Server (T-SQL), Oracle (PL/SQL)</strong>. O núcleo é o mesmo; mudam detalhes de sintaxe.</p>"}
+   {t:"tip",l:"O que é dialeto",h:"<p>Versão do SQL adaptada por um fabricante: <strong>MySQL, PostgreSQL, SQL Server (T-SQL), Oracle (PL/SQL)</strong>. O núcleo é o mesmo; mudam detalhes de sintaxe.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>SQL<ul><li>Linguagem para falar com o banco</li><li>Consultar, inserir, atualizar, apagar</li><li>Padrão entre os bancos</li></ul></li></ul>"}
   ],
   cards:[["Quem criou o SQL e quando?","A IBM, no início dos anos 70."],
          ["O que significa SQL ser \"declarativo\"?","Você descreve o resultado desejado, não o passo a passo. O motor do banco decide como executar."],
@@ -247,7 +249,8 @@ const SQL_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th style='width:30%'>Órgão</th><th>O que é</th><th style='width:14%'>Ano</th></tr><tr><td>ANSI</td><td>American National Standards Institute (padrões dos EUA).</td><td>1986</td></tr><tr><td>ISO</td><td>International Organization for Standardization (padrões internacionais).</td><td>1987</td></tr></table>"},
    {t:"concept",l:"Conceito",h:"<p>O SQL é usado em praticamente <strong>todos os SGBDs</strong> do mercado.</p>"},
    {t:"tip",l:"O que é SGBD",h:"<p><strong>SGBD</strong> = Sistema de Gerenciamento de Banco de Dados (DBMS). É o software que administra o banco: guarda dados, garante segurança e executa seus comandos. Ex.: MySQL, PostgreSQL, Oracle, SQL Server.</p>"},
-   {t:"attr",l:"Atenção",h:"<p>Mesmo padronizado, <strong>cada fabricante tem características próprias</strong>. Um comando pode rodar no MySQL e exigir ajuste no SQL Server. Sempre confira a documentação.</p>"}
+   {t:"attr",l:"Atenção",h:"<p>Mesmo padronizado, <strong>cada fabricante tem características próprias</strong>. Um comando pode rodar no MySQL e exigir ajuste no SQL Server. Sempre confira a documentação.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Padronização<ul><li>Nomes claros, sem acento ou espaço</li><li>Minúsculas e snake_case</li><li>Consistência facilita manutenção</li></ul></li></ul>"}
   ],
   cards:[["Quais órgãos padronizaram o SQL e quando?","ANSI em 1986 e ISO em 1987."],
          ["O que é um SGBD?","Sistema de Gerenciamento de Banco de Dados: o software que administra o banco e executa o SQL (MySQL, PostgreSQL, Oracle, SQL Server)."]] },
@@ -257,7 +260,8 @@ const SQL_THEMES = [
    {t:"plain",h:"<p>O SQL é formado por <strong>cinco conjuntos de comandos</strong>, cada um com uma finalidade. Essa divisão organiza toda a matéria.</p>"},
    {t:"map",l:"Mapa mental — o guarda-chuva SQL",h:SVG_SUB()},
    {t:"table",h:"<table class='cmd'><tr><th>Sigla</th><th>Nome</th><th>Para quê serve</th></tr><tr><td>DDL</td><td>Data Definition Language</td><td>Definir a estrutura (criar/alterar/excluir tabelas).</td></tr><tr><td>DML</td><td>Data Manipulation Language</td><td>Manipular dados (inserir, alterar, deletar registros).</td></tr><tr><td>DQL</td><td>Data Query Language</td><td>Consultar dados (SELECT).</td></tr><tr><td>DCL</td><td>Data Control Language</td><td>Controlar acessos e permissões.</td></tr><tr><td>DTL</td><td>Data Transaction Language</td><td>Gerenciar transações (confirmar/desfazer).</td></tr></table>"},
-   {t:"recap",l:"Na prática",h:"<p>Ao ver um comando novo, pergunte: <strong>\"de qual sublinguagem ele faz parte?\"</strong>. Isso já revela o propósito.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Ao ver um comando novo, pergunte: <strong>\"de qual sublinguagem ele faz parte?\"</strong>. Isso já revela o propósito.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>As 5 sublinguagens<ul><li>DDL: define a estrutura</li><li>DML: manipula os dados</li><li>DQL: consulta (SELECT)</li><li>DCL: controla o acesso</li><li>DTL: transações</li></ul></li></ul>"}
   ],
   cards:[["Quais são as 5 sublinguagens do SQL?","DDL (definição), DML (manipulação), DQL (consulta), DCL (controle), DTL (transação)."],
          ["Para que serve a DDL?","Definir a estrutura do banco: criar, alterar e excluir tabelas."],
@@ -274,7 +278,8 @@ const SQL_THEMES = [
    {t:"code",h:"<span class='cm'>-- Incluir nova coluna:</span>\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>ADD</span> <span class='fn'>email</span> <span class='ty'>VARCHAR</span>(20);\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>ADD</span> <span class='fn'>fax</span> <span class='ty'>VARCHAR</span>(18) <span class='kw'>AFTER</span> <span class='fn'>uf</span>;\n\n<span class='cm'>-- Eliminar coluna:</span>\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>DROP</span> <span class='fn'>fax</span>;\n\n<span class='cm'>-- Alterar tipo de dado:</span>\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>MODIFY</span> <span class='fn'>email</span> <span class='ty'>VARCHAR</span>(40);"},
    {t:"h3",h:"DROP TABLE — excluir tabela"},
    {t:"code",h:"<span class='kw'>DROP TABLE</span> [nome da tabela];"},
-   {t:"attr",l:"Atenção — DROP é destrutivo",h:"<p><strong>DROP TABLE</strong> apaga a tabela inteira com os dados, sem lixeira. <strong>ALTER...DROP coluna</strong> apaga só a coluna. Confirme o ambiente antes de rodar.</p>"}
+   {t:"attr",l:"Atenção — DROP é destrutivo",h:"<p><strong>DROP TABLE</strong> apaga a tabela inteira com os dados, sem lixeira. <strong>ALTER...DROP coluna</strong> apaga só a coluna. Confirme o ambiente antes de rodar.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DDL<ul><li>CREATE: criar</li><li>ALTER: alterar</li><li>DROP: apagar a estrutura</li><li>Define tabelas e colunas</li></ul></li></ul>"}
   ],
   cards:[["Quais são os 3 comandos da DDL?","CREATE (cria), ALTER (altera), DROP (exclui)."],
          ["Como adicionar uma coluna a uma tabela existente?","ALTER TABLE nome ADD coluna TIPO; ex.: ALTER TABLE CLIENTE ADD email VARCHAR(20);"],
@@ -291,7 +296,8 @@ const SQL_THEMES = [
    {t:"h3",h:"DELETE"},
    {t:"code",h:"<span class='kw'>DELETE FROM</span> <span class='fn'>table_name</span> <span class='kw'>WHERE</span> condition;"},
    {t:"attr",l:"Atenção — o perigo de esquecer o WHERE",h:"<p>Em UPDATE e DELETE, o <strong>WHERE</strong> define quais linhas são afetadas. <strong>Sem WHERE, atinge TODAS as linhas.</strong> Um <code>DELETE FROM CLIENTE;</code> apaga todos os clientes.</p>"},
-   {t:"recap",l:"Na prática",h:"<p><strong>Hábito de segurança:</strong> antes de um UPDATE/DELETE, rode um <code>SELECT</code> com o mesmo <code>WHERE</code> para ver o que será afetado.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>Hábito de segurança:</strong> antes de um UPDATE/DELETE, rode um <code>SELECT</code> com o mesmo <code>WHERE</code> para ver o que será afetado.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DML<ul><li>INSERT: inserir linhas</li><li>UPDATE: alterar dados</li><li>DELETE: apagar linhas</li></ul></li></ul>"}
   ],
   cards:[["Quais são os 3 comandos da DML?","INSERT (insere), UPDATE (altera), DELETE (deleta)."],
          ["Qual o risco de UPDATE/DELETE sem WHERE?","Afeta TODAS as linhas da tabela. DELETE FROM CLIENTE; apaga todos os registros."],
@@ -304,7 +310,8 @@ const SQL_THEMES = [
    {t:"h3",h:"SELECT"},
    {t:"code",h:"<span class='kw'>SELECT</span> *\n<span class='kw'>FROM</span> <span class='fn'>TABELA</span>\n<span class='kw'>WHERE</span> <span class='fn'>nome</span> = <span class='st'>'Allan'</span>;"},
    {t:"tip",l:"Lendo a consulta",h:"<p><code>SELECT *</code> = todas as colunas. <code>FROM TABELA</code> = da tabela. <code>WHERE nome='Allan'</code> = só as linhas onde nome é Allan.<br><strong>Ordem real de leitura do banco:</strong> FROM → WHERE → SELECT.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Na transição para Dados, o <code>SELECT</code> será sua ferramenta mais frequente. Domine bem <code>WHERE</code>, <code>ORDER BY</code> e <code>GROUP BY</code>.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Na transição para Dados, o <code>SELECT</code> será sua ferramenta mais frequente. Domine bem <code>WHERE</code>, <code>ORDER BY</code> e <code>GROUP BY</code>.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DQL<ul><li>SELECT: consultar</li><li>FROM, WHERE, ORDER BY</li><li>O coração das consultas</li></ul></li></ul>"}
   ],
   cards:[["Qual comando central da DQL?","SELECT — usado para consultar (retornar) dados."],
          ["Em que ordem o banco lê um SELECT simples?","Primeiro FROM, depois WHERE, por último SELECT."]] },
@@ -314,7 +321,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Conceito",h:"<p>A <strong>DCL</strong> controla <strong>quem pode fazer o quê</strong> no banco. É a parte de <strong>permissões e segurança</strong>.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>Ação</th></tr><tr><td>GRANT</td><td>Concede acesso a dados e operações.</td></tr><tr><td>REVOKE</td><td>Revoga acesso a dados e operações.</td></tr></table>"},
    {t:"tip",l:"Analogia — chaves de acesso",h:"<p><strong>GRANT</strong> = entregar a chave de uma sala. <strong>REVOKE</strong> = recolher a chave. O DCL define quem entra em quais \"salas\" (tabelas) e o que faz lá.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Em serviços financeiros, DCL garante que cada pessoa veja só o que tem permissão. É pilar de <strong>segurança e governança</strong> de dados.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Em serviços financeiros, DCL garante que cada pessoa veja só o que tem permissão. É pilar de <strong>segurança e governança</strong> de dados.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DCL<ul><li>GRANT: conceder permissão</li><li>REVOKE: revogar permissão</li><li>Controla quem acessa</li></ul></li></ul>"}
   ],
   cards:[["O que faz GRANT e REVOKE?","GRANT concede acesso/permissão; REVOKE retira o acesso."],
          ["Para que serve a DCL?","Controlar permissões e segurança de acesso: quem pode fazer o quê no banco."]] },
@@ -324,7 +332,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Conceito",h:"<p>A <strong>DTL</strong> gerencia <strong>transações</strong>: um conjunto de operações tratado como <strong>unidade única</strong> — ou tudo é confirmado, ou nada é aplicado.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>Ação</th></tr><tr><td>START TRANSACTION</td><td>Inicia a transação.</td></tr><tr><td>COMMIT</td><td>Concretiza (confirma).</td></tr><tr><td>ROLLBACK</td><td>Anula (desfaz).</td></tr></table>"},
    {t:"tip",l:"Analogia — transferência bancária",h:"<p>Debitar de uma conta e creditar em outra precisam acontecer juntos. <strong>COMMIT</strong> confirma os dois passos. <strong>ROLLBACK</strong>, se algo falhou, desfaz tudo. Ninguém perde dinheiro.</p>"},
-   {t:"recap",l:"Na prática",h:"<p><strong>Em outras palavras:</strong> transação garante o \"tudo ou nada\". <strong>Por que importa:</strong> dá confiabilidade a sistemas financeiros, evitando estados pela metade.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>Em outras palavras:</strong> transação garante o \"tudo ou nada\". <strong>Por que importa:</strong> dá confiabilidade a sistemas financeiros, evitando estados pela metade.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DTL<ul><li>START TRANSACTION: inicia</li><li>COMMIT: confirma</li><li>ROLLBACK: desfaz</li><li>Tudo ou nada</li></ul></li></ul>"}
   ],
   cards:[["O que é uma transação?","Conjunto de operações tratado como unidade única: ou tudo confirma, ou nada é aplicado."],
          ["COMMIT vs. ROLLBACK?","COMMIT confirma/concretiza a transação; ROLLBACK desfaz e volta ao estado inicial."]] },
@@ -334,7 +343,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Conceito",h:"<p><strong>Atributos</strong> são regras/propriedades aplicadas a uma coluna ao criá-la. Controlam o que ela aceita ou como se comporta.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Atributo</th><th>O que faz</th></tr><tr><td>NULL / NOT NULL</td><td>Permite ou não valores nulos. NULL é diferente de vazio: nulo = ausência de valor.</td></tr><tr><td>SIGNED / UNSIGNED</td><td>Permite ou não negativos. UNSIGNED = só positivos (idade, quantidade).</td></tr><tr><td>AUTO_INCREMENT</td><td>Gera sequências automáticas (contadores).</td></tr><tr><td>ZEROFILL</td><td>Completa o número com zeros à esquerda (7 → 007).</td></tr></table>"},
    {t:"tip",l:"NULL não é zero nem espaço",h:"<p><strong>NULL</strong> = \"não há informação\". Diferente de <strong>0</strong> (número) e de <strong>''</strong> (texto vazio). Cliente sem telefone tem telefone <code>NULL</code>, não \"0\".</p>"},
-   {t:"recap",l:"Na prática",h:"<p><strong>AUTO_INCREMENT</strong> liga ao próximo tema: é a forma mais comum de gerar uma chave primária automática (surrogada).</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>AUTO_INCREMENT</strong> liga ao próximo tema: é a forma mais comum de gerar uma chave primária automática (surrogada).</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Atributos de colunas<ul><li>NOT NULL: obriga valor</li><li>DEFAULT: valor padrão</li><li>AUTO_INCREMENT: numera sozinho</li><li>UNIQUE: sem repetir</li></ul></li></ul>"}
   ],
   cards:[["Diferença entre NULL e vazio?","NULL é ausência de valor (desconhecido). Diferente de 0 (número) e '' (texto vazio)."],
          ["O que faz AUTO_INCREMENT?","Gera valores em sequência automaticamente — cada novo registro recebe o próximo número."]] },
@@ -349,7 +359,8 @@ const SQL_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Restrição</th><th>Característica</th></tr><tr><td>PRIMARY KEY</td><td>Identificador principal da linha. Só uma por tabela. Única e obrigatoriamente NOT NULL.</td></tr><tr><td>UNIQUE</td><td>Garante unicidade, mas pode haver várias por tabela (ex.: e-mail, CPF).</td></tr></table>"},
    {t:"attr",l:"Regra — relação com NOT NULL",h:"<p>Colunas PRIMARY KEY ou UNIQUE geralmente também são <strong>NOT NULL</strong>. O atributo NOT NULL impede valores nulos e é obrigatório em colunas PRIMARY KEY.</p>"},
    {t:"concept",l:"Chave Surrogada (Surrogate Key)",h:"<p>Chave <strong>artificial</strong>, geralmente numérica, criada só para ser chave primária. Substitui uma <strong>chave natural</strong> complexa ou não ideal.</p>"},
-   {t:"tip",l:"Surrogada vs. natural",h:"<p><strong>Natural:</strong> um dado real que identifica a linha (ex.: CPF). <strong>Surrogada:</strong> número sem significado de negócio (ex.: <code>codigo</code> com AUTO_INCREMENT). <strong>Por que surrogada:</strong> simples, estável e rápida; resiste a mudanças de regra de negócio.</p>"}
+   {t:"tip",l:"Surrogada vs. natural",h:"<p><strong>Natural:</strong> um dado real que identifica a linha (ex.: CPF). <strong>Surrogada:</strong> número sem significado de negócio (ex.: <code>codigo</code> com AUTO_INCREMENT). <strong>Por que surrogada:</strong> simples, estável e rápida; resiste a mudanças de regra de negócio.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Chaves<ul><li>PK: identifica a linha</li><li>FK: liga tabelas</li><li>UNIQUE: sem repetição</li><li>Surrogada: chave artificial (id)</li></ul></li></ul>"}
   ],
   cards:[["O que é uma chave primária (PK)?","Atributo que identifica unicamente cada registro; uma por tabela e sempre NOT NULL. Ex.: ID do cliente."],
          ["O que é uma chave estrangeira (FK)?","Campo que vincula uma tabela à PK de outra, mantendo a integridade referencial. Ex.: id_cliente em Pedidos aponta para Clientes."],
@@ -363,7 +374,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Conceito",h:"<p>Relacionamento é a <strong>ligação</strong> entre tabelas por chaves: a <strong>PK</strong> de uma aparece em outra como <strong>FK</strong>. A cardinalidade diz <strong>quantas</strong> linhas de um lado se ligam ao outro.</p>"},
    {t:"tip",l:"O que é Foreign Key (FK)",h:"<p>A <strong>chave estrangeira</strong> aponta para a PK de outra tabela. Conecta, por exemplo, uma Compra ao Cliente que a fez, garantindo <strong>integridade referencial</strong> (não existe compra de cliente inexistente).</p>"},
    {t:"map",l:"Diagrama — os três tipos de cardinalidade",h:SVG_REL()},
-   {t:"recap",l:"Na prática",h:"<p><strong>1:1</strong> → cada um, um só (Pessoa↔CPF). <strong>1:N</strong> → um para muitos (Cliente→Compras). <strong>N:M</strong> → muitos para muitos (Compras↔Produtos).<br><strong>Atenção:</strong> N:M não é implementado direto; cria-se uma <strong>tabela intermediária</strong> que vira dois relacionamentos 1:N.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>1:1</strong> → cada um, um só (Pessoa↔CPF). <strong>1:N</strong> → um para muitos (Cliente→Compras). <strong>N:M</strong> → muitos para muitos (Compras↔Produtos).<br><strong>Atenção:</strong> N:M não é implementado direto; cria-se uma <strong>tabela intermediária</strong> que vira dois relacionamentos 1:N.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Relacionamentos<ul><li>1:1 (um para um)</li><li>1:N (um para muitos)</li><li>N:N (muitos para muitos)</li><li>Ligados por chave estrangeira</li></ul></li></ul>"}
   ],
   cards:[["O que são PK e FK num relacionamento?","PK (chave primária) identifica a linha; FK (chave estrangeira) é a coluna que aponta para a PK de outra tabela, conectando-as."],
          ["1:1, 1:N e N:M — exemplos?","1:1 Pessoa↔CPF; 1:N Cliente→Compras; N:M Compras↔Produtos."],
@@ -376,7 +388,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Modelo Relacional",h:"<p>Tabelas inter-relacionadas por PK e FK. Ideal para <strong>operações transacionais</strong> (inserir, atualizar, excluir, consultar) com <strong>integridade referencial</strong>. É o modelo da maioria dos sistemas do dia a dia.</p>"},
    {t:"concept",l:"Modelo Dimensional",h:"<p>Usado em <strong>data warehouses</strong> e <strong>BI</strong>. Organiza dados em <strong>fatos</strong> (quantitativos, ex.: vendas) e <strong>dimensões</strong> (contexto: tempo, produto, local).</p>"},
    {t:"concept",l:"Star Schema (Esquema Estrela)",h:"<p>Tipo de modelo dimensional: uma <strong>tabela de fatos central</strong> ligada a várias <strong>dimensões</strong>, formando uma estrela. Simples e eficiente para análises rápidas e agregações.</p>"},
-   {t:"recap",l:"Na prática — sua transição para Dados",h:"<p><strong>Relacional</strong> = mundo da operação (registrar). <strong>Dimensional/Star Schema</strong> = mundo da análise (entender). Na migração para Dados e BI, você caminha do relacional para o dimensional.</p>"}
+   {t:"recap",l:"Na prática — sua transição para Dados",h:"<p><strong>Relacional</strong> = mundo da operação (registrar). <strong>Dimensional/Star Schema</strong> = mundo da análise (entender). Na migração para Dados e BI, você caminha do relacional para o dimensional.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Modelos de dados<ul><li>Conceitual: a ideia</li><li>Lógico: tabelas e relações</li><li>Físico: o banco real</li></ul></li></ul>"}
   ],
   cards:[["Modelo relacional serve melhor para quê?","Operações transacionais (inserir/atualizar/consultar) com integridade referencial. É o do dia a dia."],
          ["O que é modelo dimensional?","Modelo de data warehouse/BI que separa fatos (dados quantitativos) de dimensões (contexto: tempo, produto, local)."],
@@ -398,7 +411,8 @@ const SQL_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Operador</th><th>O que faz</th></tr><tr><td>BETWEEN</td><td>Valor dentro de um intervalo (inclui as pontas). Ex.: IDADE BETWEEN 20 AND 23.</td></tr><tr><td>IN</td><td>Valor que coincide com algum item de uma lista. Ex.: UF IN ('SP','RJ','MG').</td></tr><tr><td>LIKE</td><td>Busca padrões em texto. % = vários caracteres; _ = um caractere.</td></tr><tr><td>IS NULL / IS NOT NULL</td><td>Campo vazio (sem informação) ou preenchido.</td></tr><tr><td>DISTINCT</td><td>Remove duplicatas; retorna só valores exclusivos.</td></tr></table>"},
    {t:"code",h:"<span class='cm'>-- Nomes que começam com M:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>NOME</span> <span class='kw'>LIKE</span> <span class='st'>'M%'</span>;\n<span class='cm'>-- Miguel e Marta</span>\n\n<span class='cm'>-- Idade entre 20 e 23 (inclui as pontas):</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> <span class='kw'>BETWEEN</span> 20 <span class='kw'>AND</span> 23;\n<span class='cm'>-- Eliana (20) e João (22)</span>"},
    {t:"attr",l:"Atenção — LIKE e wildcards",h:"<p><code>%</code> representa zero ou muitos caracteres; <code>_</code> representa exatamente um. <code>'M%'</code> = começa com M. <code>'%a'</code> = termina com a. <code>'_a%'</code> = a segunda letra é a.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>O <code>WHERE</code> é o coração da consulta no dia a dia de dados. Combine operadores de comparação com <code>AND/OR/NOT</code> e refine com <code>LIKE</code>, <code>BETWEEN</code>, <code>IN</code> e <code>IS NULL</code>. <strong>Próxima ação:</strong> teste cada exemplo mentalmente na tabela PESSOAS.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>O <code>WHERE</code> é o coração da consulta no dia a dia de dados. Combine operadores de comparação com <code>AND/OR/NOT</code> e refine com <code>LIKE</code>, <code>BETWEEN</code>, <code>IN</code> e <code>IS NULL</code>. <strong>Próxima ação:</strong> teste cada exemplo mentalmente na tabela PESSOAS.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>WHERE<ul><li>Filtra linhas</li><li>=, &gt;, &lt;, LIKE</li><li>IN, BETWEEN</li><li>Combina com AND / OR</li></ul></li></ul>"}
   ],
   cards:[["Para que serve a cláusula WHERE?","Filtrar linhas: o banco testa a condição linha por linha; se verdadeira, mostra a linha; se falsa, ignora."],
          ["Diferença entre AND e OR?","AND exige que todas as condições sejam verdadeiras. OR basta uma ser verdadeira."],
@@ -415,7 +429,8 @@ const SQL_THEMES = [
    {t:"concept",l:"GROUP BY — agrupar",h:"<p>Agrupa as linhas por uma coluna para aplicar a agregação <strong>a cada grupo separadamente</strong>. Sem GROUP BY, a agregação trata a tabela inteira como um só grupo.</p>"},
    {t:"code",h:"<span class='cm'>-- Quantas pessoas têm cada quantidade de filhos:</span>\n<span class='kw'>SELECT</span> <span class='fn'>FILHOS</span>, <span class='kw'>COUNT</span>(*) <span class='kw'>AS</span> <span class='fn'>qtd</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>GROUP BY</span> <span class='fn'>FILHOS</span>;\n<span class='cm'>-- 0->1, 1->1, 2->2, 3->1</span>"},
    {t:"attr",l:"Atenção — COUNT e NULL",h:"<p><code>COUNT(*)</code> conta todas as linhas. <code>COUNT(coluna)</code> conta só as linhas em que a coluna <strong>não é NULL</strong>. Útil para saber quantos registros têm aquele dado preenchido.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Agregação + GROUP BY é a base de qualquer relatório: \"total por categoria\", \"média por mês\", \"contagem por status\". <strong>Próxima ação:</strong> pense numa pergunta do seu trabalho que comece com \"quantos\" ou \"qual a média de\".</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Agregação + GROUP BY é a base de qualquer relatório: \"total por categoria\", \"média por mês\", \"contagem por status\". <strong>Próxima ação:</strong> pense numa pergunta do seu trabalho que comece com \"quantos\" ou \"qual a média de\".</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Agregação<ul><li>SUM, AVG, COUNT, MIN, MAX</li><li>GROUP BY: agrupa</li><li>HAVING: filtra grupos</li></ul></li></ul>"}
   ],
   cards:[["O que fazem as funções de agregação?","Calculam um único resultado a partir de muitas linhas: COUNT, SUM, AVG, MIN, MAX."],
          ["COUNT(*) vs COUNT(coluna)?","COUNT(*) conta todas as linhas; COUNT(coluna) conta só as que não são NULL."],
@@ -430,7 +445,8 @@ const SQL_THEMES = [
    {t:"attr",l:"Atenção — divisão por zero",h:"<p>Dividir por zero <strong>gera erro</strong>. Use o <code>WHERE</code> para descartar esses casos antes do cálculo.</p>"},
    {t:"code",h:"<span class='cm'>-- Evita divisão por zero filtrando FILHOS > 0:</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span> / <span class='fn'>FILHOS</span> <span class='kw'>AS</span> <span class='fn'>idade_por_filho</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>FILHOS</span> &gt; 0;\n<span class='cm'>-- Eliana (0 filhos) é desconsiderada</span>"},
    {t:"tip",l:"Ordem de execução (precedência)",h:"<p>Para o cálculo sair certo, o SQL segue esta hierarquia:</p><p>1. Parênteses <code>( )</code><br>2. Expoentes<br>3. Multiplicação <code>*</code> e divisão <code>/</code><br>4. Adição <code>+</code> e subtração <code>-</code></p><p>Use parênteses para deixar a intenção explícita.</p>"},
-   {t:"recap",l:"Na prática",h:"<p><code>ORDER BY</code> organiza a leitura; as operações aritméticas geram métricas direto na consulta. <strong>Próxima ação:</strong> filtre com WHERE antes de dividir, para nunca cair em divisão por zero.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><code>ORDER BY</code> organiza a leitura; as operações aritméticas geram métricas direto na consulta. <strong>Próxima ação:</strong> filtre com WHERE antes de dividir, para nunca cair em divisão por zero.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>ORDER BY<ul><li>Ordena ASC ou DESC</li><li>Por uma ou várias colunas</li><li>Operações aritméticas no SELECT</li></ul></li></ul>"}
   ],
   cards:[["Qual a ordem padrão do ORDER BY?","ASC (crescente). Para decrescente, use DESC."],
          ["ORDER BY pode usar a posição da coluna?","Sim. ORDER BY 2 ordena pela segunda coluna do SELECT."],
@@ -449,7 +465,8 @@ const SQL_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Tamanho</th><th>Guarda</th></tr><tr><td>DATE</td><td>3 bytes</td><td>Só a data (ano, mês, dia).</td></tr><tr><td>TIME</td><td>3 bytes</td><td>Só a hora.</td></tr><tr><td>DATETIME</td><td>8 bytes</td><td>Data e hora juntas.</td></tr><tr><td>TIMESTAMP</td><td>4 bytes</td><td>Um ponto específico no tempo.</td></tr></table>"},
    {t:"tip",l:"CHAR vs VARCHAR",h:"<p><strong>CHAR</strong> é fixo: sempre ocupa o tamanho definido (bom para dados de tamanho constante, como UF ou sexo). <strong>VARCHAR</strong> é variável: ocupa só o necessário, mais 1 byte (bom para nome, e-mail).</p>"},
    {t:"attr",l:"Liga com atributos — UNSIGNED",h:"<p>O atributo <code>UNSIGNED</code> remove os negativos e dobra o limite positivo. Ex.: SMALLINT vai de -32.768 a 32.767, mas UNSIGNED vai de 0 a 65.535. Use quando o valor nunca é negativo (idade, quantidade).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Escolher o tipo certo <strong>economiza espaço</strong> e <strong>evita erros</strong> (guardar data como texto atrapalha ordenação e cálculo). <strong>Próxima ação:</strong> ao criar uma tabela, pergunte para cada coluna: número, texto ou data? E qual o menor tipo que comporta os valores?</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Escolher o tipo certo <strong>economiza espaço</strong> e <strong>evita erros</strong> (guardar data como texto atrapalha ordenação e cálculo). <strong>Próxima ação:</strong> ao criar uma tabela, pergunte para cada coluna: número, texto ou data? E qual o menor tipo que comporta os valores?</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Tipos de dados<ul><li>Texto: VARCHAR, TEXT</li><li>Número: INT, DECIMAL</li><li>Data: DATE, DATETIME</li><li>Lógico: BOOLEAN</li></ul></li></ul>"}
   ],
   cards:[["O que é um datatype?","Categoria que define o tipo de informação de uma coluna (formato, tamanho e natureza do dado)."],
          ["Quantos bytes ocupa um INT?","4 bytes (faixa aproximada de -2,1 bilhões a +2,1 bilhões)."],
@@ -463,7 +480,8 @@ const SQL_THEMES = [
    {t:"code",h:"<span class='cm'>-- Nome em maiúsculas e o tamanho:</span>\n<span class='kw'>SELECT</span> <span class='kw'>UPPER</span>(<span class='fn'>NOME</span>) <span class='kw'>AS</span> <span class='fn'>maiusculo</span>, <span class='kw'>LENGTH</span>(<span class='fn'>NOME</span>) <span class='kw'>AS</span> <span class='fn'>tamanho</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;"},
    {t:"code",h:"<span class='cm'>-- Juntando texto com || :</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span> || <span class='st'>' tem '</span> || <span class='fn'>IDADE</span> || <span class='st'>' anos'</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>ID</span>=1;\n<span class='cm'>-- Eliana tem 20 anos</span>"},
    {t:"tip",l:"Nomes variam por SGBD",h:"<p><code>CONCAT</code> vs <code>||</code>, <code>LEN</code> vs <code>LENGTH</code>, <code>SUBSTRING</code> vs <code>SUBSTR</code>. O conceito é o mesmo; confira a documentação do seu banco. No app (SQLite) use <code>||</code> e <code>LENGTH</code>.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Limpeza e padronização de texto são constantes em Dados. <strong>Próxima ação:</strong> no modo Praticar, teste <code>UPPER</code>, <code>LENGTH</code> e <code>||</code> na tabela PESSOAS.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Limpeza e padronização de texto são constantes em Dados. <strong>Próxima ação:</strong> no modo Praticar, teste <code>UPPER</code>, <code>LENGTH</code> e <code>||</code> na tabela PESSOAS.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Funções de string<ul><li>CONCAT: juntar</li><li>UPPER / LOWER: caixa</li><li>SUBSTRING: pedaço</li><li>TRIM, LENGTH, REPLACE</li></ul></li></ul>"}
   ],
   cards:[["O que faz LENGTH?","Conta a quantidade de caracteres de um texto."],
          ["Como concatenar textos no SQLite?","Com o operador || . Ex.: NOME || ' anos'."],
@@ -479,7 +497,8 @@ const SQL_THEMES = [
    {t:"concept",l:"Funções de data",h:"<p>Manipulam datas e horas: extrair partes, somar intervalos, calcular diferenças.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>CURRENT_DATE</td><td>Data atual.</td></tr><tr><td>DATEADD</td><td>Soma um intervalo a uma data (dias, meses, anos).</td></tr><tr><td>DATEDIFF</td><td>Diferença entre duas datas.</td></tr><tr><td>DATE_PART / EXTRACT</td><td>Extrai uma parte (dia, mês, ano) de uma data.</td></tr><tr><td>DATE_TRUNC</td><td>Zera as partes menores (ex.: trunca por mês).</td></tr><tr><td>TO_TIMESTAMP</td><td>Converte texto em data/hora.</td></tr></table>"},
    {t:"tip",l:"Datas no app (SQLite)",h:"<p>No SQLite (e no modo Praticar) datas se manipulam com <code>date()</code> e <code>strftime()</code>. Ex.: <code>strftime('%Y', data)</code> extrai o ano. <code>DATEADD/DATEDIFF</code> são do SQL Server; <code>EXTRACT/DATE_PART</code> são do PostgreSQL.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Funções de data são essenciais para relatórios por período (vendas por mês, idade da conta). <strong>Próxima ação:</strong> teste <code>ROUND</code> e <code>strftime('%Y', ...)</code> no Praticar.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Funções de data são essenciais para relatórios por período (vendas por mês, idade da conta). <strong>Próxima ação:</strong> teste <code>ROUND</code> e <code>strftime('%Y', ...)</code> no Praticar.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Numéricas e de data<ul><li>ROUND, CEIL, FLOOR</li><li>NOW: data e hora</li><li>DATEDIFF: dias entre datas</li><li>YEAR, MONTH, DAY</li></ul></li></ul>"}
   ],
   cards:[["ROUND vs TRUNC?","ROUND arredonda para o mais próximo; TRUNC corta os decimais sem arredondar."],
          ["Quanto é POWER(2,3)?","8 (2 elevado a 3)."],
@@ -496,7 +515,8 @@ const SQL_THEMES = [
    {t:"concept",l:"COALESCE — primeiro valor não-nulo",h:"<p>Percorre uma lista e retorna o <strong>primeiro valor que não for NULL</strong>. <strong>Analogia:</strong> ligar para o cliente: tenta o comercial; se vazio, o celular; se vazio, o fixo. <code>COALESCE(comercial, celular, fixo)</code>.</p>"},
    {t:"concept",l:"NULLIF — NULL se forem iguais",h:"<p>Compara dois valores: se forem <strong>iguais</strong>, retorna <strong>NULL</strong>; se diferentes, retorna o primeiro. Útil para evitar divisão por zero (<code>NULLIF(divisor, 0)</code>) ou destacar diferenças (meta x realizado).</p>"},
    {t:"code",h:"<span class='kw'>SELECT</span> <span class='kw'>COALESCE</span>(<span class='kw'>NULL</span>, <span class='kw'>NULL</span>, <span class='st'>'fixo'</span>);  <span class='cm'>-- fixo</span>\n<span class='kw'>SELECT</span> <span class='kw'>NULLIF</span>(50, 50);  <span class='cm'>-- NULL (iguais)</span>"},
-   {t:"recap",l:"Na prática",h:"<p><code>CASE</code> classifica; <code>COALESCE</code> garante um valor mesmo com campos vazios; <code>NULLIF</code> protege cálculos. São o que deixa a consulta \"inteligente\" e segura contra nulos. <strong>Próxima ação:</strong> monte um CASE de faixa etária no Praticar.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><code>CASE</code> classifica; <code>COALESCE</code> garante um valor mesmo com campos vazios; <code>NULLIF</code> protege cálculos. São o que deixa a consulta \"inteligente\" e segura contra nulos. <strong>Próxima ação:</strong> monte um CASE de faixa etária no Praticar.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Conversão e condicionais<ul><li>CASE: se / então</li><li>COALESCE: primeiro não-nulo</li><li>CAST: converter tipo</li></ul></li></ul>"}
   ],
   cards:[["Qual a sintaxe do CASE?","CASE WHEN condição THEN resultado ELSE padrão END."],
          ["O que faz COALESCE?","Retorna o primeiro valor não-nulo de uma lista."],
@@ -512,7 +532,8 @@ const SQL_THEMES = [
    {t:"code",h:"<span class='cm'>-- Pessoa e produto de cada compra (INNER JOIN):</span>\n<span class='kw'>SELECT</span> <span class='fn'>P</span>.<span class='fn'>NOME</span>, <span class='fn'>PR</span>.<span class='fn'>NOME</span>\n<span class='kw'>FROM</span> <span class='fn'>COMPRAS</span> <span class='fn'>C</span>\n<span class='kw'>JOIN</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>  <span class='kw'>ON</span> <span class='fn'>P</span>.<span class='fn'>ID</span> = <span class='fn'>C</span>.<span class='fn'>ID_PESSOA</span>\n<span class='kw'>JOIN</span> <span class='fn'>PRODUTOS</span> <span class='fn'>PR</span> <span class='kw'>ON</span> <span class='fn'>PR</span>.<span class='fn'>ID</span> = <span class='fn'>C</span>.<span class='fn'>ID_PRODUTO</span>;"},
    {t:"code",h:"<span class='cm'>-- Todas as pessoas, mesmo quem não comprou (LEFT JOIN):</span>\n<span class='kw'>SELECT</span> <span class='fn'>P</span>.<span class='fn'>NOME</span>, <span class='fn'>C</span>.<span class='fn'>ID_PRODUTO</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>\n<span class='kw'>LEFT JOIN</span> <span class='fn'>COMPRAS</span> <span class='fn'>C</span> <span class='kw'>ON</span> <span class='fn'>C</span>.<span class='fn'>ID_PESSOA</span> = <span class='fn'>P</span>.<span class='fn'>ID</span>;\n<span class='cm'>-- quem não comprou aparece com ID_PRODUTO = NULL</span>"},
    {t:"tip",l:"Achar o que NÃO tem par",h:"<p>Um <code>LEFT JOIN</code> seguido de <code>WHERE coluna_da_direita IS NULL</code> traz só o que existe <strong>apenas na esquerda</strong>. Ex.: produtos que nunca foram comprados.</p>"},
-   {t:"recap",l:"Na prática",h:"<p><strong>INNER</strong> = interseção; <strong>LEFT/RIGHT</strong> = um lado inteiro + o que casa; <strong>FULL</strong> = tudo. Para relatórios reais (cliente + pedidos + produtos) o JOIN é diário. <strong>Próxima ação:</strong> no Praticar, junte PESSOAS, COMPRAS e PRODUTOS.</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>INNER</strong> = interseção; <strong>LEFT/RIGHT</strong> = um lado inteiro + o que casa; <strong>FULL</strong> = tudo. Para relatórios reais (cliente + pedidos + produtos) o JOIN é diário. <strong>Próxima ação:</strong> no Praticar, junte PESSOAS, COMPRAS e PRODUTOS.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>JOINs<ul><li>INNER: só correspondentes</li><li>LEFT / RIGHT: mantém um lado</li><li>FULL: os dois lados</li><li>Ligam por chave</li></ul></li></ul>"}
   ],
   cards:[["O que faz um JOIN?","Combina linhas de duas ou mais tabelas com base em colunas em comum (chaves)."],
          ["INNER JOIN retorna o quê?","Apenas as linhas que casam nas duas tabelas (a interseção)."],
@@ -528,7 +549,8 @@ const SQL_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>O que faz</th></tr><tr><td>UNION ALL</td><td>Junta tudo sem conferir. Mantém duplicatas. Mais rápido.</td></tr><tr><td>UNION</td><td>Junta e remove as duplicatas. Resultado limpo, mas exige mais esforço do banco.</td></tr></table>"},
    {t:"code",h:"<span class='cm'>-- Empilha todos os IDs (com repetições):</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>\n<span class='kw'>UNION ALL</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;\n\n<span class='cm'>-- Só os valores únicos (sem repetir):</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>\n<span class='kw'>UNION</span>\n<span class='kw'>SELECT</span> <span class='fn'>ID</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;"},
    {t:"tip",l:"Exemplo visual",h:"<p>Lista 1: Verde, Amarelo, Vermelho. Lista 2: Vermelho, Azul, Amarelo.<br><strong>UNION ALL</strong> = 6 itens (Verde, Amarelo, Vermelho, Vermelho, Azul, Amarelo).<br><strong>UNION</strong> = 4 itens únicos (Verde, Amarelo, Vermelho, Azul).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Use <strong>UNION ALL</strong> quando quiser tudo (e é mais rápido); use <strong>UNION</strong> quando precisa de uma lista sem repetições. <strong>Próxima ação:</strong> rode os dois no Praticar e compare a quantidade de linhas.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Use <strong>UNION ALL</strong> quando quiser tudo (e é mais rápido); use <strong>UNION</strong> quando precisa de uma lista sem repetições. <strong>Próxima ação:</strong> rode os dois no Praticar e compare a quantidade de linhas.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>UNION<ul><li>Empilha resultados</li><li>UNION: sem repetidos</li><li>UNION ALL: com repetidos</li><li>Mesmas colunas</li></ul></li></ul>"}
   ],
   cards:[["O que faz UNION?","Empilha (combina) as linhas de duas ou mais consultas num único resultado."],
          ["UNION vs UNION ALL?","UNION remove as duplicatas; UNION ALL mantém todas (e é mais rápido)."],
@@ -542,7 +564,8 @@ const SQL_THEMES = [
    {t:"code",h:"<span class='cm'>-- Como filtro: só quem fez alguma compra</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>ID</span> <span class='kw'>IN</span> (<span class='kw'>SELECT</span> <span class='fn'>ID_PESSOA</span> <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span>);"},
    {t:"code",h:"<span class='cm'>-- Como coluna: total de compras de cada pessoa</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>,\n  (<span class='kw'>SELECT</span> <span class='kw'>COUNT</span>(*) <span class='kw'>FROM</span> <span class='fn'>COMPRAS</span> <span class='kw'>WHERE</span> <span class='fn'>ID_PESSOA</span>=<span class='fn'>P</span>.<span class='fn'>ID</span>) <span class='kw'>AS</span> <span class='fn'>total</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='fn'>P</span>;"},
    {t:"attr",l:"Atenção — desempenho",h:"<p>Não há limite para aninhar subconsultas, mas <strong>muitas camadas deixam a consulta lenta</strong> (o banco tem muito trabalho extra). Use com parcimônia.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Subconsultas respondem perguntas em duas etapas: \"quem comprou?\" e depois \"traga os nomes desses\". <strong>Próxima ação:</strong> no Praticar, liste quem está acima da média de idade com uma subconsulta.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Subconsultas respondem perguntas em duas etapas: \"quem comprou?\" e depois \"traga os nomes desses\". <strong>Próxima ação:</strong> no Praticar, liste quem está acima da média de idade com uma subconsulta.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Subqueries<ul><li>Consulta dentro de consulta</li><li>No WHERE, FROM ou SELECT</li><li>Resolve em etapas</li></ul></li></ul>"}
   ],
   cards:[["O que é uma subquery?","Uma consulta dentro de outra (um SELECT dentro de outro SELECT)."],
          ["Quais os dois usos de subquery?","Como coluna (valor calculado por linha) e como filtro (WHERE ... IN (subconsulta))."],
@@ -555,7 +578,8 @@ const SQL_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Característica</th><th>Detalhe</th></tr><tr><td>Dinâmica</td><td>Reflete os dados atuais: se a tabela muda, a view mostra a mudança.</td></tr><tr><td>Permanente</td><td>Continua existindo mesmo após reiniciar o servidor.</td></tr><tr><td>Leve</td><td>Não ocupa espaço extra: é só a instrução salva.</td></tr></table>"},
    {t:"code",h:"<span class='cm'>-- Criar:</span>\n<span class='kw'>CREATE VIEW</span> <span class='fn'>vw_adultos</span> <span class='kw'>AS</span>\n  <span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span> <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> &gt;= 18;\n\n<span class='cm'>-- Consultar como se fosse tabela:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>vw_adultos</span>;"},
    {t:"tip",l:"Comandos",h:"<p><code>CREATE VIEW nome AS [SELECT]</code> cria; <code>ALTER VIEW</code> altera a consulta; <code>DROP VIEW</code> apaga a view. <strong>DROP VIEW não apaga os dados</strong> das tabelas originais, só a visão.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Views deixam consultas complexas reutilizáveis e seguras (ótimo para esconder colunas sensíveis). <strong>Próxima ação:</strong> no Praticar, crie uma view com as pessoas de um estado.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Views deixam consultas complexas reutilizáveis e seguras (ótimo para esconder colunas sensíveis). <strong>Próxima ação:</strong> no Praticar, crie uma view com as pessoas de um estado.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Views<ul><li>Consulta salva como tabela virtual</li><li>Simplifica e reutiliza</li><li>Dinâmica: reflete os dados atuais</li></ul></li></ul>"}
   ],
   cards:[["O que é uma view?","Uma tabela virtual: um SELECT salvo com nome, que não armazena dados próprios."],
          ["Por que usar views?","Reuso (salvar consulta difícil), segurança (esconder colunas) e simplificação."],
@@ -989,7 +1013,8 @@ const VIZ_THEMES = [
    {t:"concept",l:"Conceito",h:"<p><strong>Visualização de dados</strong> é a prática de transformar informações e números em <strong>imagens</strong> (gráficos, mapas) para facilitar o entendimento. O cérebro humano processa imagens <strong>muito mais rápido</strong> do que textos ou tabelas numéricas.</p>"},
    {t:"tip",l:"Um pouco de história",h:"<p>No século 14, <strong>Nicole Oresme</strong> criou um dos primeiros gráficos de barras da história (obra \"The Latitude of Forms\") para mostrar a velocidade de um objeto acelerando ao longo do tempo. Ou seja: usar formas para entender fenômenos é coisa de séculos.</p>"},
    {t:"concept",l:"O que é um gráfico",h:"<p>É a <strong>representação geométrica</strong> de um conjunto de dados: usar figuras (linhas, círculos, barras) para mostrar quantidades. Serve para a <strong>análise e interpretação rápida</strong>, sem precisar fazer contas manuais.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Visualização é a ponte entre o dado bruto e a decisão. <strong>Próxima ação:</strong> ao olhar um número, pergunte \"que imagem deixaria isso óbvio para quem vai ler?\".</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Visualização é a ponte entre o dado bruto e a decisão. <strong>Próxima ação:</strong> ao olhar um número, pergunte \"que imagem deixaria isso óbvio para quem vai ler?\".</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Visualização de dados<ul><li>Mostrar números como gráfico</li><li>Comunica rápido</li><li>Escolha pela pergunta</li></ul></li></ul>"}
   ],
   cards:[["Por que a visualização de dados funciona?","Porque o cérebro processa imagens muito mais rápido do que textos ou tabelas numéricas."],
          ["O que é um gráfico, tecnicamente?","A representação geométrica de um conjunto de dados, para análise e interpretação rápida."]] },
@@ -1000,7 +1025,8 @@ const VIZ_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Forma</th><th>Como destaca</th></tr><tr><td>Comprimento</td><td>Tamanhos diferentes comparam quantidades (barra maior = valor maior).</td></tr><tr><td>Espessura</td><td>Linhas mais grossas ou finas.</td></tr><tr><td>Orientação</td><td>Mudar o ângulo (uma diagonal entre verticais) chama atenção para anomalias.</td></tr><tr><td>Tamanho</td><td>Círculos maiores/menores indicam volume.</td></tr><tr><td>Forma / Curvatura</td><td>Um quadrado entre círculos; uma curva entre retas.</td></tr><tr><td>Encapsulamento</td><td>Uma borda em volta destaca que o dado pertence a um grupo.</td></tr><tr><td>Desfoque</td><td>Algo borrado parece menos importante / em segundo plano.</td></tr></table>"},
    {t:"table",h:"<table class='cmd'><tr><th>Cor</th><th>Como destaca</th></tr><tr><td>Matiz (hue)</td><td>Cores diferentes separam categorias (Maçã = vermelho, Limão = verde).</td></tr><tr><td>Intensidade</td><td>Tons mais claros ou escuros da mesma cor; escuro costuma indicar valor maior.</td></tr></table>"},
    {t:"table",h:"<table class='cmd'><tr><th>Posição / Movimento</th><th>Como destaca</th></tr><tr><td>Posição 2D</td><td>Um ponto fora da linha indica um outlier (fora da curva).</td></tr><tr><td>Agrupamento espacial</td><td>Elementos próximos formam aglomerados (clusters) relacionados.</td></tr><tr><td>Direção do movimento</td><td>Se todos vão para um lado e um vai para o oposto, este se destaca na hora.</td></tr></table>"},
-   {t:"recap",l:"Na prática",h:"<p>Use um atributo pré-atentivo para destacar <strong>o que importa</strong> (uma cor diferente no item crítico, uma barra mais alta). Quem olha percebe na hora.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Use um atributo pré-atentivo para destacar <strong>o que importa</strong> (uma cor diferente no item crítico, uma barra mais alta). Quem olha percebe na hora.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Atributos pré-atentivos<ul><li>O olho capta na hora</li><li>Cor, tamanho, posição</li><li>Forma e orientação</li><li>Use para destacar</li></ul></li></ul>"}
   ],
   cards:[["O que são atributos pré-atentivos?","Informações que o cérebro processa instantaneamente, antes da atenção consciente."],
          ["Quais são os 4 grupos pré-atentivos?","Forma, cor, posição e movimento."],
@@ -1015,7 +1041,8 @@ const VIZ_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Pergunta que responde</th></tr><tr><td>Comparação</td><td>Diferenças entre itens ou ao longo do tempo (qual vendeu mais?).</td></tr><tr><td>Relação</td><td>Como uma variável afeta a outra (mais propaganda = mais vendas?).</td></tr><tr><td>Distribuição</td><td>Com que frequência os dados aparecem (qual faixa etária predomina?).</td></tr><tr><td>Composição</td><td>As partes que formam o todo (quanto do gasto foi aluguel?).</td></tr></table>"},
    {t:"map",l:"Mapa de escolha — qual gráfico usar?",h:SVG_VIZ_ANALYSIS()},
    {t:"map",l:"Galeria — os principais gráficos",h:SVG_GALLERY()},
-   {t:"recap",l:"Na prática",h:"<p>Antes de escolher o gráfico, defina a pergunta: comparação, relação, distribuição ou composição? Isso já elimina metade das opções. <strong>Exemplo no seu contexto:</strong> \"qual canal de atendimento teve mais chamados?\" é comparação (barras); \"o tempo de espera afeta a nota de satisfação?\" é relação (dispersão).</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Antes de escolher o gráfico, defina a pergunta: comparação, relação, distribuição ou composição? Isso já elimina metade das opções. <strong>Exemplo no seu contexto:</strong> \"qual canal de atendimento teve mais chamados?\" é comparação (barras); \"o tempo de espera afeta a nota de satisfação?\" é relação (dispersão).</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Escala de precisão<ul><li>Posição: mais precisa</li><li>Comprimento: boa</li><li>Cor e área: menos precisa</li></ul></li></ul>"}
   ],
   cards:[["Qual codificação é a mais precisa para comparar valores?","Comprimento alinhado (barras começando na mesma base)."],
          ["Quais os 4 tipos de análise em visualização?","Comparação, relação, distribuição e composição."],
@@ -1031,7 +1058,8 @@ const VIZ_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Situação</th><th>Gráfico indicado</th></tr><tr><td>Duas variáveis por item</td><td>Colunas de largura variável (altura = um dado, largura = outro).</td></tr><tr><td>Uma variável, muitas categorias</td><td>Tabela com gráficos embutidos (evita poluição visual).</td></tr><tr><td>Uma variável, poucas categorias</td><td>Barras horizontais ou verticais.</td></tr></table>"},
    {t:"h3",h:"Caminho 2 — Comparação ao longo do tempo"},
    {t:"table",h:"<table class='cmd'><tr><th>Situação</th><th>Gráfico indicado</th></tr><tr><td>Muitos períodos, dados cíclicos (estações, horas)</td><td>Gráfico de área circular (como um relógio).</td></tr><tr><td>Muitos períodos, não-cíclicos (preço ao longo de 10 anos)</td><td>Gráfico de linha.</td></tr><tr><td>Poucos períodos, poucas categorias (jan vs. fev)</td><td>Barras verticais.</td></tr><tr><td>Poucos períodos, muitas categorias</td><td>Gráfico de linhas (para ver se seguem a mesma tendência).</td></tr></table>"},
-   {t:"recap",l:"Na prática",h:"<p>Primeiro decida: comparar <strong>entre itens</strong> ou <strong>ao longo do tempo</strong>? E quantas categorias/períodos? Isso aponta direto para o gráfico certo. Para poucas categorias, barra simples resolve.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Primeiro decida: comparar <strong>entre itens</strong> ou <strong>ao longo do tempo</strong>? E quantas categorias/períodos? Isso aponta direto para o gráfico certo. Para poucas categorias, barra simples resolve.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Comparação<ul><li>Barras ou colunas</li><li>Comparar categorias</li><li>Começar no zero</li></ul></li></ul>"}
   ],
   cards:[["Para que servem gráficos de comparação?","Colocar dados lado a lado para ver diferenças de tamanho/intensidade (maior/menor, atual vs. antigo)."],
          ["Poucas categorias, uma variável: qual gráfico?","Barras horizontais ou verticais."],
@@ -1046,7 +1074,8 @@ const VIZ_THEMES = [
    {t:"h3",h:"Estático (um único momento)"},
    {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Pizza</td><td>Divisão simples, poucas categorias que somam 100%.</td></tr><tr><td>Cascata (waterfall)</td><td>Acumulação/subtração até um total (receita &rarr; impostos &rarr; custos &rarr; lucro).</td></tr><tr><td>Barras 100% com subcomponentes</td><td>Analisar os componentes dos componentes (gasto por área e, dentro, por subárea).</td></tr><tr><td>Tree map</td><td>Blocos proporcionais ao valor; bom para muitos dados hierárquicos de uma vez.</td></tr></table>"},
    {t:"tip",l:"Cuidado com a pizza",h:"<p>Pizza só funciona com <strong>poucas fatias</strong> (até 5-6). Com muitas categorias, as fatias ficam pequenas e impossíveis de comparar — prefira barras.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Pergunte: a composição muda <strong>no tempo</strong> ou é uma <strong>fotografia</strong>? E importa a porcentagem, o valor absoluto, ou os dois? Isso define o gráfico.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Pergunte: a composição muda <strong>no tempo</strong> ou é uma <strong>fotografia</strong>? E importa a porcentagem, o valor absoluto, ou os dois? Isso define o gráfico.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Composição<ul><li>Partes de um todo</li><li>Barras empilhadas</li><li>Evitar pizza com muitas fatias</li></ul></li></ul>"}
   ],
   cards:[["O que é composição em visualização?","Como um valor total se divide em partes (a fatia de cada categoria)."],
          ["Relativo vs. absoluto?","Relativo = porcentagem; absoluto = valor real."],
@@ -1060,7 +1089,8 @@ const VIZ_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Histograma de barras</td><td>Uma variável, poucos pontos de dados.</td></tr><tr><td>Histograma de linha</td><td>Uma variável, muitos pontos (linha suaviza o \"contorno da montanha\").</td></tr><tr><td>Dispersão (scatter)</td><td>Distribuição considerando duas variáveis ao mesmo tempo.</td></tr></table>"},
    {t:"concept",l:"Relação",h:"<p>Mostra como duas ou mais variáveis se <strong>conectam ou influenciam</strong>. <strong>Correlação:</strong> padrão de dependência. <strong>Clusters:</strong> grupos que se formam por semelhança.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Gráfico</th><th>Quando usar</th></tr><tr><td>Dispersão simples</td><td>Relação entre duas variáveis (ex.: altura x peso).</td></tr><tr><td>Dispersão com bolha</td><td>Três variáveis: posição X, posição Y e o tamanho da bolha.</td></tr></table>"},
-   {t:"recap",l:"Na prática",h:"<p><strong>Distribuição</strong> = formato e frequência (quantos? onde estão?). <strong>Relação</strong> = conexão entre variáveis (como um afeta o outro?).</p>"}
+   {t:"recap",l:"Na prática",h:"<p><strong>Distribuição</strong> = formato e frequência (quantos? onde estão?). <strong>Relação</strong> = conexão entre variáveis (como um afeta o outro?).</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Distribuição e relação<ul><li>Histograma: distribuição</li><li>Box plot: quartis e outliers</li><li>Dispersão: relação entre dois números</li></ul></li></ul>"}
   ],
   cards:[["Para que serve um histograma?","Mostrar a distribuição/frequência de uma variável."],
          ["O que mostra um gráfico de dispersão?","A relação entre duas variáveis."],
@@ -1074,7 +1104,8 @@ const VIZ_THEMES = [
    {t:"map",l:"Círculo cromático",h:SVG_COLORWHEEL()},
    {t:"table",h:"<table class='cmd'><tr><th>Uso da cor</th><th>Como aplicar</th></tr><tr><td>Avaliação qualitativa</td><td>Mostrar categorias/qualidade (\"melhor\", \"pior\"): cor primária + sua complementar (contraste).</td></tr><tr><td>Avaliação quantitativa</td><td>Mostrar números (0 a 100): gradiente (transição suave); só indica magnitude, sem julgamento.</td></tr></table>"},
    {t:"tip",l:"Posicionamento — a regra de ouro",h:"<p>O <strong>canto superior esquerdo</strong> é o melhor lugar para a informação mais importante, porque lemos de cima para baixo e da esquerda para a direita. Não espalhe estatísticas em locais aleatórios.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Menos é mais: poucos elementos grandes, cor com propósito (categoria = matiz; magnitude = gradiente) e o essencial no topo à esquerda.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Menos é mais: poucos elementos grandes, cor com propósito (categoria = matiz; magnitude = gradiente) e o essencial no topo à esquerda.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Cores e posicionamento<ul><li>Cor com propósito</li><li>Poucas cores</li><li>Contraste e alinhamento</li></ul></li></ul>"}
   ],
   cards:[["Quantos grandes elementos por dashboard?","No máximo cerca de 7, para evitar sobrecarga cognitiva."],
          ["Cor para categorias vs. para magnitude?","Categorias: matizes diferentes. Magnitude/números: gradiente da mesma cor."],
@@ -1087,7 +1118,8 @@ const VIZ_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Ferramentas da EDA</th><th>Exemplos</th></tr><tr><td>Estatística descritiva</td><td>Média, mediana, moda, variância, desvio padrão, quartis.</td></tr><tr><td>Gráficos</td><td>Histograma, dispersão, boxplot.</td></tr></table>"},
    {t:"tip",l:"Tipos de variáveis",h:"<p><strong>Categórica:</strong> rótulos sem ordem (gênero, cor). <strong>Quantitativa contínua:</strong> medições com casas decimais (altura, peso). <strong>Quantitativa discreta:</strong> contagens inteiras (nº de filhos, de carros).</p>"},
    {t:"tip",l:"Ferramentas e prática",h:"<p>Python (pandas, matplotlib, seaborn), R, Power BI e Tableau. Para praticar com dados reais, use o <strong>Kaggle</strong> (datasets públicos e notebooks).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Antes de modelar, faça EDA: conheça o formato, os outliers e as relações. E ao apresentar, lembre da história, do público e da pergunta.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Antes de modelar, faça EDA: conheça o formato, os outliers e as relações. E ao apresentar, lembre da história, do público e da pergunta.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Storytelling e EDA<ul><li>EDA: explorar os dados</li><li>Storytelling: contar com dados</li><li>Uma mensagem por gráfico</li></ul></li></ul>"}
   ],
   cards:[["Quais os 3 pilares do storytelling com dados?","História, Público e Pergunta."],
          ["O que é EDA?","Análise Exploratória de Dados: investigação inicial para resumir, achar padrões e outliers antes de modelar."],
@@ -1173,7 +1205,8 @@ const EST_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Medida</th><th>O que é</th></tr><tr><td>Média</td><td>Soma dos valores dividida pela quantidade. Sensível a valores extremos.</td></tr><tr><td>Mediana</td><td>Valor central com os dados ordenados (divide em duas metades). É robusta a extremos.</td></tr><tr><td>Moda</td><td>Valor que mais se repete. Serve até para dados não numéricos (categorias).</td></tr></table>"},
    {t:"tip",l:"Exemplo passo a passo",h:"<p>Dados ordenados: 1, 2, 2, 3, 3, 3, 4, 4, 6, 7 (10 valores).<br><strong>Média:</strong> soma = 35; 35 ÷ 10 = <strong>3,5</strong>.<br><strong>Mediana:</strong> média dos dois centrais (5º e 6º) = (3 + 3) ÷ 2 = <strong>3</strong>.<br><strong>Moda:</strong> o número 3 aparece três vezes = <strong>3</strong>.</p>"},
    {t:"tip",l:"Por que a mediana é robusta",h:"<p>Dados {1,2,2,3,3,3,4,4,6,7}: média 3,5, mediana 3. Trocando o 4 por <strong>40</strong>: a média salta para 7,1, mas a <strong>mediana continua 3</strong>. Por isso, com valores discrepantes, a mediana representa melhor a realidade.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Use a <strong>média</strong> em dados bem distribuídos; use a <strong>mediana</strong> quando houver outliers que distorcem a média.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Use a <strong>média</strong> em dados bem distribuídos; use a <strong>mediana</strong> quando houver outliers que distorcem a média.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Centralidade<ul><li>Média: o equilíbrio</li><li>Mediana: o do meio</li><li>Moda: o mais frequente</li></ul></li></ul>"}
   ],
   cards:[["Média é sensível a quê?","A valores extremos (outliers), que a puxam para cima ou para baixo."],
          ["O que é a mediana?","O valor central com os dados ordenados; divide o conjunto em duas metades."],
@@ -1185,7 +1218,8 @@ const EST_THEMES = [
    {t:"concept",l:"Desvio padrão",h:"<p>Mede o quanto os dados estão <strong>espalhados em relação à média</strong>. Quanto <strong>menor</strong>, mais homogêneos (e previsíveis) são os dados.</p>"},
    {t:"tip",l:"Exemplo",h:"<p>Notas (5, 5, 5): média 5, desvio <strong>zero</strong> (todos iguais). Notas (0, 5, 10): mesma média 5, mas desvio padrão <strong>alto</strong> (dados muito diferentes).</p>"},
    {t:"concept",l:"Variância",h:"<p>É a média dos <strong>quadrados</strong> das distâncias de cada ponto à média. O desvio padrão é a <strong>raiz quadrada</strong> da variância (volta à unidade original).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Só a média não basta: dois grupos podem ter a mesma média e dispersões muito diferentes. O desvio padrão revela a confiabilidade dos dados.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Só a média não basta: dois grupos podem ter a mesma média e dispersões muito diferentes. O desvio padrão revela a confiabilidade dos dados.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Dispersão<ul><li>O quanto os dados variam</li><li>Variância: variação ao quadrado</li><li>Desvio padrão: mesma unidade</li></ul></li></ul>"}
   ],
   cards:[["O que mede o desvio padrão?","O quanto os dados estão espalhados em relação à média."],
          ["Desvio padrão pequeno indica o quê?","Dados homogêneos e mais previsíveis."],
@@ -1199,7 +1233,8 @@ const EST_THEMES = [
    {t:"concept",l:"Box plot (diagrama de caixa)",h:"<p>Resume os dados em cinco números: mínimo, 1º quartil (Q1), <strong>mediana</strong>, 3º quartil (Q3) e máximo. A caixa contém os 50% centrais; pontos fora dela são <strong>outliers</strong>.</p>"},
    {t:"map",l:"Anatomia do box plot",h:SVG_BOXPLOT()},
    {t:"tip",l:"Curtose e assimetria",h:"<p><strong>Curtose</strong> = achatamento: leptocúrtica (pico alto, dados concentrados) vs. platicúrtica (achatada, dados espalhados). <strong>Assimetria (skew):</strong> cauda para a esquerda (negativa, média &lt; mediana) ou para a direita (positiva, média &gt; mediana).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>O box plot é ótimo para comparar grupos e enxergar dispersão e outliers de relance; a curva normal é a base de muitos testes estatísticos.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>O box plot é ótimo para comparar grupos e enxergar dispersão e outliers de relance; a curva normal é a base de muitos testes estatísticos.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Normal e box plot<ul><li>Curva em sino</li><li>Maioria perto da média</li><li>Box plot: quartis e outliers</li></ul></li></ul>"}
   ],
   cards:[["Qual o formato da distribuição normal?","De sino: maioria no centro, extremos raros."],
          ["O que o box plot mostra?","Mediana, quartis (Q1, Q3), mínimo, máximo e os outliers."],
@@ -1211,7 +1246,8 @@ const EST_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Probabilística (aleatória)</th><th>Como funciona</th></tr><tr><td>Aleatória simples</td><td>Sorteio: todos têm a mesma chance.</td></tr><tr><td>Estratificada</td><td>Divide em estratos homogêneos e sorteia dentro de cada um.</td></tr><tr><td>Sistemática</td><td>Sorteia um início e segue um intervalo fixo (ex.: de 13 em 13).</td></tr><tr><td>Conglomerado</td><td>Divide em grupos heterogêneos e sorteia grupos inteiros.</td></tr></table>"},
    {t:"table",h:"<table class='cmd'><tr><th>Não probabilística</th><th>Como funciona</th></tr><tr><td>Conveniência</td><td>Escolhe os mais acessíveis (rápida e barata, mas pouco representativa).</td></tr><tr><td>Quotas</td><td>Por julgamento, até preencher uma quantidade definida de cada perfil.</td></tr></table>"},
    {t:"attr",l:"Representatividade",h:"<p>Uma boa amostra precisa: <strong>pertencer</strong> à população-alvo, ser <strong>isenta de tendência</strong> (não viciada), ter <strong>aleatoriedade</strong> e <strong>tamanho</strong> suficiente.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Probabilística quando precisa de rigor e generalização; não probabilística quando agilidade e custo importam mais que a precisão.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Probabilística quando precisa de rigor e generalização; não probabilística quando agilidade e custo importam mais que a precisão.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>População e amostra<ul><li>População: o todo</li><li>Amostra: uma parte</li><li>Amostra aleatória representa</li></ul></li></ul>"}
   ],
   cards:[["População vs. amostra?","População = o todo; amostra = uma parte selecionada do todo."],
          ["Estratificada vs. conglomerado?","Estratificada: grupos homogêneos, sorteia dentro de cada. Conglomerado: grupos heterogêneos, sorteia grupos inteiros."],
@@ -1224,7 +1260,8 @@ const EST_THEMES = [
    {t:"map",l:"As três correlações em dispersão",h:SVG_CORR()},
    {t:"attr",l:"Limitações",h:"<p>Só mede relação <strong>linear</strong> (relações curvas ela não enxerga); é <strong>sensível a outliers</strong>; exige variáveis contínuas.</p>"},
    {t:"tip",l:"Correlação não é causalidade",h:"<p>Duas variáveis subirem juntas <strong>não prova</strong> que uma causa a outra. Exemplo clássico: buscas por \"memes de gato\" se correlacionam com recalls de airbag — pura coincidência.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Use Pearson para medir associação linear, mas sempre com olhar crítico: confirme com gráfico de dispersão e nunca confunda correlação com causa.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Use Pearson para medir associação linear, mas sempre com olhar crítico: confirme com gráfico de dispersão e nunca confunda correlação com causa.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Correlação de Pearson<ul><li>Mede relação linear</li><li>Vai de -1 a 1</li><li>Correlação não é causa</li></ul></li></ul>"}
   ],
   cards:[["A correlação de Pearson varia de quanto a quanto?","De -1 a +1."],
          ["r próximo de +1 significa?","Relação linear positiva forte (as variáveis sobem juntas)."],
@@ -1237,7 +1274,8 @@ const EST_THEMES = [
    {t:"concept",l:"Nível de significância (α) e valor-p",h:"<p><strong>α</strong> é o risco aceito de errar ao rejeitar H0 (padrão <strong>0,05</strong> = 5%). Se o <strong>valor-p &lt; α</strong>, rejeitamos H0 (resultado significativo).</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Erro</th><th>O que é</th></tr><tr><td>Tipo I (falso positivo)</td><td>Rejeitar H0 quando ela é verdadeira. Probabilidade = α.</td></tr><tr><td>Tipo II (falso negativo)</td><td>Não rejeitar H0 quando H1 é verdadeira.</td></tr></table>"},
    {t:"tip",l:"Teste t de Student",h:"<p>Compara as <strong>médias de dois grupos</strong> para ver se a diferença é significativa. É útil para <strong>amostras pequenas</strong> (criado por William Gosset, na cervejaria Guinness).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Defina H0 e H1 e o α <strong>antes</strong> de olhar os dados; calcule o valor-p; se for menor que α, há evidência de diferença real. Significância estatística não é o mesmo que importância prática.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Defina H0 e H1 e o α <strong>antes</strong> de olhar os dados; calcule o valor-p; se for menor que α, há evidência de diferença real. Significância estatística não é o mesmo que importância prática.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Teste de hipótese<ul><li>H0 (nula) vs H1</li><li>Valor-p: chance do acaso</li><li>Teste t: compara médias</li></ul></li></ul>"}
   ],
   cards:[["O que é a hipótese nula (H0)?","A afirmação de que não há diferença/efeito; mantida até os dados a contrariarem."],
          ["O que é o nível de significância α?","O risco aceito de erro tipo I (falso positivo); padrão 0,05."],
@@ -1341,7 +1379,8 @@ const BI_THEMES = [
    {t:"map",l:"Como as peças se conectam",h:SVG_BIFLOW()},
    {t:"table",h:"<table class='cmd'><tr><th>Licença</th><th>Resumo</th></tr><tr><td>Free</td><td>Grátis, 1 GB de armazenamento.</td></tr><tr><td>Pro</td><td>USD 9,99/usuário/mês, 10 GB, compartilhamento seguro.</td></tr></table>"},
    {t:"tip",l:"Concorrentes",h:"<p><strong>Tableau</strong> (tecnologia VizQL, arrastar e soltar) e <strong>Looker</strong> (linguagem LookML, do Google). No Quadrante Mágico do Gartner, a Microsoft (Power BI) aparece como <strong>Líder</strong>.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Fluxo básico: criar no <strong>Desktop</strong> &rarr; publicar no <strong>Service</strong> &rarr; (se preciso) atualizar dados locais via <strong>Gateway</strong>.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Fluxo básico: criar no <strong>Desktop</strong> &rarr; publicar no <strong>Service</strong> &rarr; (se preciso) atualizar dados locais via <strong>Gateway</strong>.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Power BI<ul><li>Desktop cria, Service publica</li><li>Fluxo: ETL, modelo, DAX, visual</li><li>Transforma dado em painel</li></ul></li></ul>"}
   ],
   cards:[["Para que serve o Power BI Desktop?","Criar os relatórios e as conexões com os dados, no computador."],
          ["O que é o Power BI Service?","O serviço na nuvem onde os relatórios são publicados e compartilhados."],
@@ -1354,7 +1393,8 @@ const BI_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Transformação</th><th>O que faz</th></tr><tr><td>Usar 1ª linha como cabeçalho</td><td>Transforma a primeira linha em títulos das colunas.</td></tr><tr><td>Dividir coluna</td><td>Separa por delimitador (ex.: \"código-nome\").</td></tr><tr><td>Mesclar colunas</td><td>Une colunas (ex.: cidade + estado).</td></tr><tr><td>Transformar colunas em linhas (unpivot)</td><td>Normaliza dados espalhados em muitas colunas.</td></tr><tr><td>Combinar arquivos</td><td>Junta vários arquivos de uma pasta com a mesma estrutura.</td></tr></table>"},
    {t:"tip",l:"Exemplo — dividir coluna",h:"<p>Uma coluna com \"10501109-Marisa Lima\" pode ser separada em duas pelo delimitador <strong>-</strong>: vira o \"código\" (10501109) e o \"nome\" (Marisa Lima). Caminho: Página Inicial &rarr; Dividir Coluna &rarr; Por Delimitador.</p>"},
    {t:"tip",l:"Etapas aplicadas e Transformar vs. Adicionar",h:"<p>Cada mudança vira um <strong>passo</strong> no histórico (dá para voltar e editar). <strong>Transformar</strong> altera a coluna atual; <strong>Adicionar Coluna</strong> cria uma nova, preservando a original.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Sempre limpe os dados no Power Query antes de criar visuais. Dados bem tratados = relatório confiável e rápido. Ao final, \"Fechar e Aplicar\".</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Sempre limpe os dados no Power Query antes de criar visuais. Dados bem tratados = relatório confiável e rápido. Ao final, \"Fechar e Aplicar\".</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Power Query<ul><li>Importar e limpar (ETL)</li><li>Linguagem M</li><li>Etapas registradas</li></ul></li></ul>"}
   ],
   cards:[["Para que serve o Power Query?","Limpar e transformar os dados (linguagem M) antes da análise."],
          ["O que é unpivot (colunas em linhas)?","Normalizar dados que estão espalhados em várias colunas, juntando-os numa só."],
@@ -1367,7 +1407,8 @@ const BI_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Chave</th><th>Onde aparece</th></tr><tr><td>Primária (PK)</td><td>Única na tabela dimensão (ex.: cód. do vendedor).</td></tr><tr><td>Estrangeira (FK)</td><td>O mesmo código repetido na tabela fato (o vendedor faz várias vendas).</td></tr></table>"},
    {t:"table",h:"<table class='cmd'><tr><th>Relacionamento</th><th>Propriedade</th></tr><tr><td>Cardinalidade</td><td>1:1, 1:N (o mais comum) ou N:M.</td></tr><tr><td>Direção do filtro</td><td>Unidirecional ou ambas.</td></tr><tr><td>Status</td><td>Ativo (usado por padrão) ou inativo.</td></tr></table>"},
    {t:"tip",l:"Dica de filtro",h:"<p>A seta do relacionamento deve apontar da <strong>dimensão para a fato</strong>. Isso garante que filtrar por um atributo (ex.: cliente) afete corretamente as vendas.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Modelo bem feito (fato no centro, dimensões ao redor) é o que faz os filtros e cálculos funcionarem. Sem relacionamento, os dados ficam isolados.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Modelo bem feito (fato no centro, dimensões ao redor) é o que faz os filtros e cálculos funcionarem. Sem relacionamento, os dados ficam isolados.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Modelagem<ul><li>Fato: os números</li><li>Dimensão: o contexto</li><li>Relacionamentos entre tabelas</li></ul></li></ul>"}
   ],
   cards:[["Tabela fato vs. dimensão?","Fato: eventos/transações com números (vendas). Dimensão: cadastro descritivo (vendedores, produtos)."],
          ["PK e FK na modelagem?","PK é única na dimensão; FK é o mesmo código repetido na fato."],
@@ -1380,7 +1421,8 @@ const BI_THEMES = [
    {t:"code",h:"<span class='cm'>-- Coluna calculada (linha a linha):</span>\n<span class='fn'>Vl. Total</span> = Vendas[Qtde] * Vendas[Vl.Unitario]\n\n<span class='cm'>-- Medidas (agregam):</span>\n<span class='fn'>Soma Vendas</span> = <span class='kw'>SUM</span>(Vendas[Vl. Total])\n<span class='fn'>% Vendas x Metas</span> = [Soma Vendas] / [Soma Metas] - 1"},
    {t:"tip",l:"Lendo a medida de %",h:"<p><code>[Soma Vendas] / [Soma Metas] - 1</code>. Se vendeu <strong>120</strong> e a meta era <strong>100</strong>: 120/100 − 1 = <strong>+0,20 (+20%)</strong>, bateu a meta. Se vendeu 80: 80/100 − 1 = <strong>−0,20 (−20%)</strong>, ficou abaixo. Formate como porcentagem para exibir certo.</p>"},
    {t:"tip",l:"Boas práticas",h:"<p>Prefira <strong>medidas explícitas</strong> (criadas por você) às implícitas: são reutilizáveis. Organize todas numa tabela só, chamada \"Medidas\".</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Regra prática: precisa de um <strong>número que reage aos filtros</strong> (KPI)? Use <strong>medida</strong>. Precisa de algo fixo para <strong>filtrar/eixar</strong>? Use <strong>coluna calculada</strong>.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Regra prática: precisa de um <strong>número que reage aos filtros</strong> (KPI)? Use <strong>medida</strong>. Precisa de algo fixo para <strong>filtrar/eixar</strong>? Use <strong>coluna calculada</strong>.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>DAX<ul><li>Linguagem de cálculo</li><li>Medidas: reagem ao filtro</li><li>Colunas calculadas: fixas por linha</li></ul></li></ul>"}
   ],
   cards:[["O que é DAX?","A linguagem de fórmulas do Power BI, para criar cálculos sobre o modelo de dados."],
          ["Coluna calculada vs. medida?","Coluna: calcula linha a linha e ocupa espaço (fixa). Medida: agrega, é calculada na hora e reage aos filtros."],
@@ -1393,7 +1435,8 @@ const BI_THEMES = [
    {t:"tip",l:"Cuidado ao criar",h:"<p>Se um gráfico estiver selecionado e você clicar em outro ícone, o Power BI <strong>muda o tipo</strong> daquele gráfico. Para criar um novo, clique antes numa <strong>área vazia</strong>.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Filtro</th><th>Alcance</th></tr><tr><td>Visual</td><td>Só o gráfico específico.</td></tr><tr><td>Página</td><td>Todos os visuais de uma página.</td></tr><tr><td>Relatório</td><td>Todas as páginas do arquivo.</td></tr><tr><td>Drillthrough</td><td>\"Mergulha\" no detalhe de um item em outra página.</td></tr></table>"},
    {t:"attr",l:"Atenção",h:"<p>Os filtros são <strong>cumulativos</strong> (se somam). Combinações mal planejadas podem deixar um gráfico <strong>vazio</strong> (ex.: filtrar SP na página e RJ no visual).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>Escolha o visual conforme a pergunta, formate para clareza e use o nível de filtro certo (visual, página ou relatório).</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Escolha o visual conforme a pergunta, formate para clareza e use o nível de filtro certo (visual, página ou relatório).</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Visualizações<ul><li>Gráficos, cartões, tabelas</li><li>Segmentações (filtros)</li><li>Interação entre visuais</li></ul></li></ul>"}
   ],
   cards:[["Os 3 passos para criar um visual?","Escolher o tipo, arrastar os campos, formatar (pincel)."],
          ["Como criar um novo gráfico sem alterar outro?","Clicar numa área vazia antes de escolher o ícone do gráfico."],
@@ -1404,7 +1447,8 @@ const BI_THEMES = [
    {t:"concept",l:"Publicar",h:"<p>Do <strong>Desktop</strong> você clica em <strong>Publicar</strong> e escolhe um <strong>workspace</strong> no Service (nuvem). É como subir um vídeo para uma plataforma: o Desktop é o editor, o Service é onde todos assistem.</p>"},
    {t:"attr",l:"Conta",h:"<p>E-mails <strong>pessoais</strong> (Gmail, Outlook, Hotmail) <strong>não</strong> são aceitos. Só e-mails <strong>corporativos ou institucionais</strong>.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Forma</th><th>Característica</th></tr><tr><td>Compartilhamento privado</td><td>Botão Compartilhar. Exige licença Pro dos dois lados. Seguro: só quem tem permissão acessa.</td></tr><tr><td>Publicar na Web</td><td>Gera link público. QUALQUER pessoa com o link acessa. Nunca use para dados sensíveis (LGPD).</td></tr></table>"},
-   {t:"recap",l:"Na prática",h:"<p>Para dados internos/sigilosos, use o compartilhamento <strong>privado</strong> (Pro). \"Publicar na Web\" só para conteúdo realmente público.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>Para dados internos/sigilosos, use o compartilhamento <strong>privado</strong> (Pro). \"Publicar na Web\" só para conteúdo realmente público.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Publicação<ul><li>Publicar no Service</li><li>Compartilhar o painel</li><li>Agendar atualização</li></ul></li></ul>"}
   ],
   cards:[["De onde se publica um relatório?","Do Power BI Desktop (botão Publicar) para um workspace no Service."],
          ["Que tipo de e-mail o Power BI exige?","Corporativo ou institucional; e-mails pessoais não são aceitos."],
@@ -1533,7 +1577,8 @@ const IA_THEMES = [
    {t:"tip",l:"IA ⊃ ML ⊃ Deep Learning",h:"<p>Pense em círculos, um dentro do outro: <strong>IA</strong> é o maior (qualquer sistema que imita inteligência). Dentro dela, <strong>ML</strong> (aprende com dados). Dentro do ML, <strong>Deep Learning</strong> (ML com redes neurais profundas, por trás de imagens e LLMs).</p>"},
    {t:"map",l:"Os conjuntos encaixados",h:SVG_NEST()},
    {t:"table",h:"<table class='cmd'><tr><th>Aplicações de ML</th></tr><tr><td>Reconhecimento de imagens (diagnóstico, segurança).</td></tr><tr><td>NLP — processamento de linguagem (tradutores, chatbots).</td></tr><tr><td>Sistemas de recomendação (Netflix, Amazon).</td></tr><tr><td>Veículos autônomos.</td></tr></table>"},
-   {t:"recap",l:"Na prática",h:"<p>IA é o guarda-chuva; ML é a parte que aprende com dados. O tipo de problema define o aprendizado: tem respostas certas? Supervisionado. Só dados crus? Não supervisionado.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>IA é o guarda-chuva; ML é a parte que aprende com dados. O tipo de problema define o aprendizado: tem respostas certas? Supervisionado. Só dados crus? Não supervisionado.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Machine Learning e IA<ul><li>IA: campo amplo</li><li>ML: aprende com dados</li><li>Acha padrões para prever</li></ul></li></ul>"}
   ],
   cards:[["O que é Machine Learning?","Sistemas que aprendem com dados e melhoram com a experiência, sem serem explicitamente programados."],
          ["Os 3 tipos de aprendizado de máquina?","Supervisionado (rotulado), não supervisionado (sem rótulos) e por reforço (recompensa/penalidade)."],
@@ -1545,7 +1590,8 @@ const IA_THEMES = [
    {t:"concept",l:"O que é um LLM",h:"<p><strong>LLM</strong> (Large Language Model) é um modelo de NLP treinado em <strong>vastos volumes de texto</strong> com aprendizado profundo, para entender e gerar linguagem humana. Usa redes neurais <strong>transformadoras</strong> para prever a próxima palavra de uma sequência.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Aplicações</th><th>Limitações</th></tr><tr><td>Chatbots e assistentes virtuais.</td><td>Alucinação: inventar fatos com convicção.</td></tr><tr><td>Resumo de documentos.</td><td>Viés herdado dos dados de treino.</td></tr><tr><td>Análise de sentimentos.</td><td>Precisam de verificação humana.</td></tr></table>"},
    {t:"tip",l:"Transformers",h:"<p>É a arquitetura que permite ao modelo <strong>focar nas partes mais importantes</strong> de uma frase para entender o contexto (o \"T\" do GPT).</p>"},
-   {t:"recap",l:"Na prática",h:"<p>LLMs são ótimos com texto, mas podem \"alucinar\" e carregar vieses. Use, mas <strong>sempre confira</strong> fatos e números.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>LLMs são ótimos com texto, mas podem \"alucinar\" e carregar vieses. Use, mas <strong>sempre confira</strong> fatos e números.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>LLMs<ul><li>Modelos de linguagem</li><li>Preveem a próxima palavra</li><li>Treinados em muito texto</li></ul></li></ul>"}
   ],
   cards:[["O que faz um LLM?","Entende e gera linguagem humana, prevendo a próxima palavra com base em muito texto."],
          ["O que é \"alucinação\" em LLMs?","Inventar fatos incorretos com aparência de verdade."],
@@ -1557,7 +1603,8 @@ const IA_THEMES = [
    {t:"table",h:"<table class='cmd'><tr><th>Como funciona</th><th>Detalhe</th></tr><tr><td>GANs</td><td>Duas redes competem: uma cria, a outra avalia se é real ou falso — forçando precisão.</td></tr><tr><td>Transformers (GPT)</td><td>Excelentes em entender sequência e contexto (texto).</td></tr><tr><td>Treinamento &rarr; Geração</td><td>Aprende com muitos dados; depois gera novas instâncias semelhantes.</td></tr></table>"},
    {t:"table",h:"<table class='cmd'><tr><th>Aplicações para dados</th></tr><tr><td>Dados sintéticos (expandir bases escassas ou proteger privacidade).</td></tr><tr><td>Automação de relatórios com narrativa gerada.</td></tr><tr><td>Cenários hipotéticos (\"e se o dólar subir 20%?\").</td></tr></table>"},
    {t:"attr",l:"Ética e limites",h:"<p>Cuidado com <strong>qualidade</strong> (artefatos/erros), <strong>viés</strong> (amplia preconceitos dos dados) e <strong>privacidade</strong>. Nunca confie 100%: revisão humana é obrigatória.</p>"},
-   {t:"recap",l:"Na prática",h:"<p>A IA generativa cria conteúdo e dados sintéticos úteis para análise, mas exige checagem crítica de qualidade, viés e privacidade.</p>"}
+   {t:"recap",l:"Na prática",h:"<p>A IA generativa cria conteúdo e dados sintéticos úteis para análise, mas exige checagem crítica de qualidade, viés e privacidade.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>IA Generativa<ul><li>Cria texto, imagem, áudio</li><li>O prompt guia</li><li>Revisar: alucinação e viés</li></ul></li></ul>"}
   ],
   cards:[["IA generativa, diferente da tradicional, faz o quê?","Cria novos dados (imagens, textos), em vez de apenas analisar os existentes."],
          ["O que são GANs?","Duas redes que competem (uma cria, a outra avalia), melhorando a qualidade do que é gerado."],
@@ -1687,7 +1734,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>Python: alto nível, interpretada, tipagem dinâmica e forte. Biblioteca padrão grande (\"pilhas inclusas\"). Roda no REPL ou em arquivos .py. Dependências externas ficam num ambiente virtual.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> definição de tipagem dinâmica e forte; o que é a biblioteca padrão. <strong>Pergunta de recrutador:</strong> \"Por que Python é tão usado em Dados?\" Resposta: legibilidade, biblioteca padrão e o ecossistema (pandas, numpy).</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Python<ul><li>Alto nível, interpretada</li><li>Tipagem dinâmica e forte</li><li>Biblioteca padrão (pilhas inclusas)</li><li>Pacotes externos: PyPI + pip + venv</li></ul></li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> escreva um script que imprime seu nome e a raiz quadrada da sua idade. <strong>Conecta com o próximo:</strong> para guardar nome e idade, você precisa de variáveis e tipos, que é o tema 02.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> escreva um script que imprime seu nome e a raiz quadrada da sua idade. <strong>Conecta com o próximo:</strong> para guardar nome e idade, você precisa de variáveis e tipos, que é o tema 02.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Python<ul><li>Linguagem simples e legível</li><li>Biblioteca padrão rica</li><li>print e input</li></ul></li></ul>"}
   ],
   cards:[["O que quer dizer \"linguagem de alto nível\"?","Que é próxima da linguagem humana e esconde detalhes da máquina."],
          ["O que é a biblioteca padrão do Python?","Um conjunto grande de módulos que já vêm instalados, cobrindo tarefas comuns (pilhas inclusas)."],
@@ -1710,7 +1758,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>int (inteiro), float (decimal, inexato), str (texto), bool (True/False), None. O tipo é do valor. Formate com f-strings. Compare None com <code>is</code>.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> por que 0.1 + 0.2 não é 0.3; diferença entre <code>==</code> (valor) e <code>is</code> (mesmo objeto). <strong>Pergunta de recrutador:</strong> \"Como você guardaria um valor em dinheiro com segurança?\" Resposta: usar <code>decimal.Decimal</code>, não float.</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Tipos<ul><li>Números: int, float</li><li>Texto: str (imutável)</li><li>Lógico: bool</li><li>Vazio: None</li></ul></li><li>Ferramentas: type(), f-strings, is None</li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça nome e ano de nascimento com <code>input()</code> e imprima a idade. <strong>Conecta com o próximo:</strong> para guardar muitos valores juntos, você usa estruturas de dados, que é o tema 03.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça nome e ano de nascimento com <code>input()</code> e imprima a idade. <strong>Conecta com o próximo:</strong> para guardar muitos valores juntos, você usa estruturas de dados, que é o tema 03.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Tipos e variáveis<ul><li>int, float</li><li>str (texto), bool</li><li>Variável guarda um valor</li></ul></li></ul>"}
   ],
   cards:[["O que é uma variável em Python?","Um nome que aponta para um valor na memória; o tipo pertence ao valor."],
          ["Por que 0.1 + 0.2 não é igual a 0.3?","Porque float usa representação binária, que não guarda esses decimais com exatidão."],
@@ -1733,7 +1782,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>list (ordenada, muda), tuple (ordenada, não muda), dict (chave para valor), set (únicos). Busca rápida (O(1)) em dict e set. Cuidado com apelido; use .copy e .get.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> complexidade de busca em list vs dict/set; por que tupla pode ser chave e lista não. <strong>Pergunta de recrutador:</strong> \"Como você removeria duplicatas de uma lista?\" Resposta: <code>set(lista)</code>.</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Coleções<ul><li>Por ordem: list (muda), tuple (não muda)</li><li>Por chave: dict</li><li>Únicos: set</li></ul></li><li>Busca rápida: dict, set (O(1))</li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> guarde 3 contatos num dict (nome para telefone) e imprima cada um. <strong>Conecta com o próximo:</strong> para percorrer essas coleções e decidir o que fazer, você usa controle de fluxo, o tema 04.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> guarde 3 contatos num dict (nome para telefone) e imprima cada um. <strong>Conecta com o próximo:</strong> para percorrer essas coleções e decidir o que fazer, você usa controle de fluxo, o tema 04.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Coleções<ul><li>list: ordenada, muda</li><li>tuple: fixa</li><li>dict: chave para valor</li><li>set: sem repetidos</li></ul></li></ul>"}
   ],
   cards:[["Quando usar dict em vez de list?","Quando você busca por uma chave (ex.: nome para telefone) e quer busca rápida (O(1))."],
          ["Por que uma lista não pode ser chave de dict?","Porque chaves precisam ser imutáveis e hashable; a lista muda, a tupla não."],
@@ -1757,7 +1807,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>if decide; for e while repetem; indentação marca os blocos. enumerate dá índice e valor. Compreensão cria listas em uma linha.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> diferença entre compreensão de lista (cria tudo na memória) e generator (gera sob demanda); o que é for/else. <strong>Pergunta de recrutador:</strong> \"Como percorrer índice e valor ao mesmo tempo?\" Resposta: <code>enumerate</code>.</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Fluxo<ul><li>Decisão: if / elif / else</li><li>Repetição: for, while</li><li>Ajudantes: range, enumerate, zip</li></ul></li><li>Atalho: compreensão (list/dict/set)</li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> percorra uma lista de notas e imprima \"aprovado\" para nota maior ou igual a 7. <strong>Conecta com o próximo:</strong> para reaproveitar lógica, você agrupa tudo em funções, o próximo passo do caderno.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> percorra uma lista de notas e imprima \"aprovado\" para nota maior ou igual a 7. <strong>Conecta com o próximo:</strong> para reaproveitar lógica, você agrupa tudo em funções, o próximo passo do caderno.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Controle de fluxo<ul><li>if / elif / else</li><li>for e while</li><li>Compreensões de lista</li></ul></li></ul>"}
   ],
   cards:[["Como o Python marca blocos de código?","Por indentação (recuo de 4 espaços), em vez de chaves."],
          ["Para que serve enumerate?","Percorrer obtendo índice e valor ao mesmo tempo, sem usar range(len(...))."],
@@ -1780,7 +1831,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>def cria a função; parâmetros são as entradas; return devolve o resultado (sem ele, vem None). Cuidado com default mutável. Documente com docstring.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> o que são *args e **kwargs; o perigo do argumento padrão mutável; escopo de variáveis (regra LEGB: Local, Enclosing, Global, Built-in). <strong>Pergunta de recrutador:</strong> \"O que essa função retorna se não tiver return?\" Resposta: None.</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Função<ul><li>def nome(parâmetros)</li><li>return devolve (sem ele, None)</li><li>Parâmetros: posicional, nomeado, padrão, *args, **kwargs</li><li>Documentar: docstring</li></ul></li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> escreva uma função <code>boletim(notas)</code> que devolve a média e se está aprovado (média maior ou igual a 7). <strong>Conecta com o próximo:</strong> ao crescer, você separa funções em arquivos: são os módulos, o tema 06.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> escreva uma função <code>boletim(notas)</code> que devolve a média e se está aprovado (média maior ou igual a 7). <strong>Conecta com o próximo:</strong> ao crescer, você separa funções em arquivos: são os módulos, o tema 06.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Funções<ul><li>def: define</li><li>parâmetros e return</li><li>Reutilizar código</li></ul></li></ul>"}
   ],
   cards:[["O que uma função devolve se não tiver return?","None."],
          ["Por que não usar uma lista como valor padrão de parâmetro?","Porque ela é criada uma vez e fica compartilhada entre todas as chamadas, causando bugs. Use None e crie dentro."],
@@ -1802,7 +1854,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>Módulo = arquivo .py; pacote = pasta de módulos. import traz código. from x import y traz um nome. pip instala do PyPI. __name__ == \"__main__\" separa execução direta de importação.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> diferença entre módulo e pacote; o que faz <code>if __name__ == \"__main__\"</code>; diferença entre a biblioteca padrão e o PyPI. <strong>Pergunta de recrutador:</strong> \"Como você isola as dependências de um projeto?\" Resposta: ambiente virtual (venv).</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Organização<ul><li>Módulo: arquivo .py</li><li>Pacote: pasta de módulos</li><li>import / from import</li><li>Externos: PyPI + pip + venv</li><li>__name__ == \"__main__\"</li></ul></li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> crie um módulo <code>calc.py</code> com soma, subtração e média, e use no programa principal. <strong>Conecta com o próximo:</strong> programas reais lidam com falhas (arquivo que não existe, entrada inválida); isso é tratado com exceções, o tema 07.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> crie um módulo <code>calc.py</code> com soma, subtração e média, e use no programa principal. <strong>Conecta com o próximo:</strong> programas reais lidam com falhas (arquivo que não existe, entrada inválida); isso é tratado com exceções, o tema 07.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Módulos e import<ul><li>import traz código pronto</li><li>Biblioteca padrão</li><li>Pacotes externos (pip)</li></ul></li></ul>"}
   ],
   cards:[["Módulo versus pacote?","Módulo é um arquivo .py; pacote é uma pasta com vários módulos."],
          ["import math versus from math import sqrt?","O primeiro traz o módulo todo (math.sqrt); o segundo traz só o nome sqrt."],
@@ -1824,7 +1877,8 @@ const PY_THEMES = [
    {t:"recap",l:"O que preciso lembrar",h:"<p>Exceção = erro em tempo de execução. try tenta, except captura, else roda se deu certo, finally sempre roda. raise levanta o erro. Capture o tipo específico.</p>"},
    {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> o papel de try/except/else/finally; por que evitar except genérico; quando usar raise. <strong>Pergunta de recrutador:</strong> \"O que acontece no finally se houver um return no try?\" Resposta: o finally roda mesmo assim, antes de a função retornar.</p>"},
    {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Exceções<ul><li>try: tenta</li><li>except: captura (específico)</li><li>else: se deu certo</li><li>finally: sempre</li><li>raise: levanta</li></ul></li></ul>"},
-   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça dois números e mostre a divisão, tratando divisão por zero e entrada inválida. <strong>Conecta com o próximo:</strong> uma das fontes mais comuns de erro é ler arquivos; isso se faz com a instrução with, o próximo tema.</p>"}
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça dois números e mostre a divisão, tratando divisão por zero e entrada inválida. <strong>Conecta com o próximo:</strong> uma das fontes mais comuns de erro é ler arquivos; isso se faz com a instrução with, o próximo tema.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Erros e exceções<ul><li>try / except</li><li>finally: sempre roda</li><li>Tratar em vez de quebrar</li></ul></li></ul>"}
   ],
   cards:[["Para que serve o bloco finally?","Para rodar um código sempre, tenha dado erro ou não (ex.: fechar um arquivo)."],
          ["Por que evitar except Exception genérico?","Porque ele captura qualquer erro, escondendo bugs reais. Capture o tipo específico esperado."],
