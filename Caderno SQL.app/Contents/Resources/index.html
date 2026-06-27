@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caderno de SQL</title>
+<style>
+  :root{
+    --bg:#f1f5f9; --panel:#ffffff; --panel2:#f8fafc; --ink:#0f172a; --ink2:#334155; --muted:#64748b;
+    --line:#e2e8f0; --brand:#2563eb; --brand-d:#1e3a8a;
+    --c-concept:#2563eb; --c-concept-bg:#eff6ff;
+    --c-attr:#d97706; --c-attr-bg:#fffbeb; --c-attr-ink:#b45309;
+    --c-tip:#7c3aed; --c-tip-bg:#f5f3ff; --c-tip-ink:#6d28d9;
+    --c-recap:#16a34a; --c-recap-bg:#f0fdf4; --c-recap-ink:#15803d;
+    --c-map:#0d9488; --c-map-bg:#f0fdfa; --c-map-ink:#0f766e;
+    --c-code:#38bdf8; --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+    --radius:14px;
+  }
+  [data-theme="dark"]{
+    --bg:#0b1120; --panel:#111a2e; --panel2:#0f172a; --ink:#e8eefc; --ink2:#c2cde0; --muted:#8595b0;
+    --line:#23314f; --c-concept-bg:#10213f; --c-attr-bg:#2a210f; --c-tip-bg:#1d1633; --c-recap-bg:#0f2418; --c-map-bg:#0c2420;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:'Inter','Lato','Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);
+    font-size:15px;line-height:1.55;display:flex;flex-direction:column;height:100vh;overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  code{font-family:'SF Mono','JetBrains Mono',ui-monospace,monospace;background:rgba(100,116,139,.16);
+    color:inherit;padding:1px 6px;border-radius:5px;font-size:.86em}
+  strong{color:var(--ink)}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  .topbar{display:flex;align-items:center;gap:16px;padding:12px 22px;background:var(--panel);
+    border-bottom:1px solid var(--line);flex:none;z-index:10}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(150deg,#0f172a,#2563eb);
+    color:#fff;font-weight:800;font-size:15px;display:grid;place-items:center;letter-spacing:.5px;
+    box-shadow:0 4px 12px rgba(37,99,235,.35)}
+  .brand h1{font-size:15px;margin:0;font-weight:800;letter-spacing:-.2px}
+  .brand p{font-size:11.5px;margin:0;color:var(--muted)}
+  .search{flex:1;max-width:420px;position:relative}
+  .search input{width:100%;padding:9px 14px 9px 36px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--ink);font-size:14px;outline:none}
+  .search input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;
+    stroke:var(--muted);fill:none}
+  .modes{display:flex;gap:4px;background:var(--panel2);padding:4px;border-radius:11px;border:1px solid var(--line)}
+  .modes button{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted)}
+  .modes button.on{background:var(--panel);color:var(--brand);box-shadow:var(--shadow)}
+  .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);
+    display:grid;place-items:center;font-size:16px}
+
+  .stage{flex:1;display:flex;overflow:hidden}
+  .sidebar{width:288px;flex:none;background:var(--panel);border-right:1px solid var(--line);
+    overflow-y:auto;padding:16px 12px 40px}
+  .progress-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+  .progress-card .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .progress-card b{font-size:13px}
+  .progress-card .pct{font-size:20px;font-weight:800;color:var(--brand)}
+  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#0d9488);border-radius:99px;transition:width .4s}
+  .cat-label{font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);
+    padding:14px 10px 6px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;width:100%;text-align:left;
+    font-size:13.5px;color:var(--ink2);margin-bottom:2px}
+  .nav-item:hover{background:var(--panel2)}
+  .nav-item.on{background:var(--c-concept-bg);color:var(--brand);font-weight:600}
+  .nav-item .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:11px}
+  .nav-item.done .dot{background:var(--c-recap);border-color:var(--c-recap);color:#fff}
+  .nav-item .nt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .content{flex:1;overflow-y:auto;padding:30px clamp(20px,5vw,60px) 80px}
+  .theme-wrap{max-width:780px;margin:0 auto}
+  .crumb{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px}
+  .theme-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+    border-bottom:3px solid var(--brand);padding-bottom:12px;margin-bottom:6px}
+  .theme-head h2{font-size:27px;margin:0;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:12px}
+  .tnum{background:var(--brand);color:#fff;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:15px;flex:none}
+  .when{font-size:12px;color:var(--muted);font-style:italic;white-space:nowrap;padding-top:8px}
+
+  .block{border-radius:var(--radius);padding:15px 18px;margin:14px 0;border-left:5px solid;box-shadow:var(--shadow)}
+  .block .label{font-size:10.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;display:block;margin-bottom:7px}
+  .block p{margin:0 0 8px}.block p:last-child{margin-bottom:0}
+  .block ul{margin:6px 0;padding-left:20px}.block li{margin-bottom:5px}
+  .concept{background:var(--c-concept-bg);border-color:var(--c-concept)}.concept .label{color:var(--c-concept)}
+  .attr{background:var(--c-attr-bg);border-color:var(--c-attr)}.attr .label{color:var(--c-attr-ink)}
+  .tip{background:var(--c-tip-bg);border-color:var(--c-tip)}.tip .label{color:var(--c-tip-ink)}
+  .recap{background:var(--c-recap-bg);border-color:var(--c-recap)}.recap .label{color:var(--c-recap-ink)}
+  .map{background:var(--c-map-bg);border:1px solid var(--c-map);border-left:5px solid var(--c-map)}.map .label{color:var(--c-map-ink)}
+  .map svg{display:block;width:100%;height:auto;margin-top:4px}
+  h3.sub{font-size:16px;color:var(--brand-d);margin:22px 0 2px}
+  [data-theme="dark"] h3.sub{color:#93c5fd}
+
+  .code{background:#0f172a;border-radius:var(--radius);padding:8px 0 4px;margin:14px 0;border-left:5px solid var(--c-code);box-shadow:var(--shadow)}
+  .code .label{color:var(--c-code);padding:8px 18px 4px;display:flex;justify-content:space-between;align-items:center}
+  .code pre{margin:0;padding:6px 18px 12px;font-family:'SF Mono','JetBrains Mono',ui-monospace,monospace;
+    font-size:13px;line-height:1.55;color:#e2e8f0;white-space:pre-wrap;overflow-x:auto}
+  .copy{font-size:10.5px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.15);padding:4px 9px;border-radius:6px;letter-spacing:.3px}
+  .copy:hover{color:#fff}
+  .kw{color:#f472b6;font-weight:700}.ty{color:#38bdf8}.st{color:#86efac}.cm{color:#64748b;font-style:italic}.fn{color:#fbbf24}
+
+  table.cmd{width:100%;border-collapse:collapse;margin:12px 0;border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+  table.cmd th{background:var(--brand-d);color:#fff;text-align:left;padding:9px 13px;font-size:13px}
+  table.cmd td{border-bottom:1px solid var(--line);padding:9px 13px;font-size:13.5px;background:var(--panel);vertical-align:top}
+  table.cmd td:first-child{font-family:'SF Mono',monospace;font-weight:700;color:var(--brand-d);white-space:nowrap}
+  [data-theme="dark"] table.cmd td:first-child{color:#7dd3fc}
+
+  .theme-foot{display:flex;align-items:center;justify-content:space-between;margin-top:30px;gap:12px;flex-wrap:wrap}
+  .btn{padding:11px 18px;border-radius:11px;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--panel)}
+  .btn:hover{border-color:var(--brand)}
+  .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .btn.done{background:var(--c-recap);color:#fff;border-color:var(--c-recap)}
+  .navbtns{display:flex;gap:8px}
+
+  .center-wrap{max-width:680px;margin:0 auto;text-align:center}
+  .fc-counter{color:var(--muted);font-size:13px;font-weight:600;margin:6px 0 16px}
+  .card{perspective:1600px;height:340px;margin:0 auto;max-width:560px}
+  .card-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+  .card.flip .card-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:34px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  .face .tag{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;position:absolute;top:20px}
+  .front{background:var(--panel)}
+  .front .tag{color:var(--brand)}
+  .front .q{font-size:22px;font-weight:700;line-height:1.35}
+  .back{background:linear-gradient(160deg,#0f172a,#1e3a8a);color:#fff;transform:rotateY(180deg)}
+  .back .tag{color:#93c5fd}
+  .back .a{font-size:17px;line-height:1.5}
+  .hint{color:var(--muted);font-size:12.5px;margin-top:14px}
+  .fc-controls{display:flex;gap:10px;justify-content:center;margin-top:22px}
+
+  .quiz-q{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow);text-align:left}
+  .quiz-q .qn{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
+  .quiz-q h3{font-size:19px;margin:0 0 18px;line-height:1.4}
+  .opt{display:block;width:100%;text-align:left;padding:13px 16px;border:1.5px solid var(--line);border-radius:11px;
+    margin-bottom:10px;font-size:14.5px;background:var(--panel2);transition:.15s}
+  .opt:hover{border-color:var(--brand)}
+  .opt.correct{border-color:var(--c-recap);background:var(--c-recap-bg);color:var(--c-recap-ink);font-weight:600}
+  .opt.wrong{border-color:#dc2626;background:#fef2f2;color:#b91c1c}
+  [data-theme="dark"] .opt.wrong{background:#2a1414}
+  .explain{margin-top:6px;padding:13px 16px;border-radius:11px;background:var(--c-tip-bg);border-left:4px solid var(--c-tip);
+    font-size:13.5px;color:var(--ink2)}
+  .result{text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:40px;box-shadow:var(--shadow)}
+  .result .score{font-size:54px;font-weight:800;color:var(--brand);line-height:1}
+  .result p{color:var(--muted)}
+  .loading{padding:44px;text-align:center;color:var(--muted);font-size:15px}
+  .ex-input{width:100%;min-height:72px;font-family:'SF Mono','JetBrains Mono',ui-monospace,monospace;font-size:13.5px;padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--ink);resize:vertical;outline:none;line-height:1.5}
+  .ex-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+  .exercise{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;box-shadow:var(--shadow)}
+  .ex-q{font-size:14.5px;font-weight:600;margin-bottom:10px;display:flex;gap:10px;align-items:baseline}
+  .ex-n{background:var(--brand);color:#fff;min-width:24px;height:24px;border-radius:7px;display:inline-grid;place-items:center;font-size:12px;flex:none}
+  .ex-actions{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  .ex-badge{font-size:12.5px;font-weight:700}
+  .ex-badge.ok{color:var(--c-recap-ink)}.ex-badge.no{color:#b91c1c}.ex-badge.err{color:var(--c-attr-ink)}
+  .ex-out{margin-top:10px}
+  .ex-sol{margin-top:8px;font-size:13px;color:var(--ink2);background:var(--c-tip-bg);padding:10px 12px;border-radius:9px;border-left:4px solid var(--c-tip)}
+  .grid-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:6px 0}
+  table.grid{border-collapse:collapse;width:100%;font-size:13px}
+  table.grid th{background:var(--brand-d);color:#fff;padding:7px 11px;text-align:left;font-family:'SF Mono',monospace}
+  table.grid td{border-bottom:1px solid var(--line);padding:7px 11px;background:var(--panel);font-family:'SF Mono',monospace}
+  table.grid td i{color:var(--muted)}
+  .sql-err{background:#fef2f2;border-left:4px solid #dc2626;color:#b91c1c;padding:12px 14px;border-radius:9px;font-size:13.5px;font-family:'SF Mono',monospace}
+  [data-theme="dark"] .sql-err{background:#2a1414}
+  .sql-empty{color:var(--muted);font-size:13px;padding:8px 0}
+  .sql-ok-msg{margin-top:8px;color:var(--c-recap-ink);font-weight:600;font-size:13.5px}
+  .sql-no-msg{margin-top:8px;color:#b91c1c;font-size:13.5px}
+  .hidden{display:none!important}
+  @media(max-width:820px){.sidebar{display:none}.modes button{padding:7px 9px}.brand p{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">SQL</div>
+    <div><h1>Caderno de SQL</h1><p>App de estudos · offline</p></div>
+  </div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+    <input id="search" placeholder="Buscar tema ou conceito..." autocomplete="off">
+  </div>
+  <div class="modes">
+    <button data-mode="study" class="on">Estudar</button>
+    <button data-mode="cards">Flashcards</button>
+    <button data-mode="quiz">Quiz</button>
+    <button data-mode="practice">Praticar</button>
+  </div>
+  <button class="icon-btn" id="themeBtn" title="Tema claro/escuro">◐</button>
+</div>
+
+<div class="stage">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="content" id="content"></main>
+</div>
+
+<script src="sql-asm.js"></script>
+<script>
+
+const DATE1 = "26 jun 2026";
+
+const THEMES = [
+{ id:"bd", num:"01", cat:"Fundamentos", title:"O que é Banco de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>Um <strong>banco de dados</strong> é uma coleção organizada de dados armazenados eletronicamente. Ele permite <strong>gerenciar, buscar e manipular</strong> informações de forma eficiente.</p>"},
+   {t:"h3",h:"Tabelas: a estrutura básica"},
+   {t:"plain",h:"<p>Os dados ficam em <strong>tabelas</strong>, organizadas em linhas e colunas:</p><ul><li><strong>Linha (registro):</strong> uma ocorrência completa, ex.: um cliente.</li><li><strong>Coluna (campo/atributo):</strong> uma característica, ex.: nome ou CPF.</li></ul>"},
+   {t:"tip",l:"Analogia",h:"<p>Pense numa planilha do Excel: cada <strong>aba</strong> é uma tabela, cada <strong>linha</strong> é um cadastro e cada <strong>coluna</strong> uma informação. Um banco faz isso preparado para muitos dados e acessos simultâneos, com regras de integridade.</p>"},
+   {t:"recap",l:"Na prática",h:"<p><strong>Em outras palavras:</strong> é onde a informação mora, organizada. <strong>O que significa:</strong> toda consulta SQL age sobre essas linhas e colunas.</p>"}
+  ],
+  cards:[["O que é um banco de dados?","Coleção organizada de dados armazenados eletronicamente, que permite gerenciar, buscar e manipular informações de forma eficiente."],
+         ["Linha vs. coluna numa tabela","Linha = um registro (ocorrência completa). Coluna = um campo/atributo (uma característica do dado)."]] },
+
+{ id:"sql", num:"02", cat:"Fundamentos", title:"O que é SQL", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p><strong>SQL</strong> (Structured Query Language) é a Linguagem Estruturada de Consulta. É o idioma para conversar com o banco: criar tabelas, inserir, alterar e consultar dados.</p>"},
+   {t:"plain",h:"<ul><li>Criada no <strong>início dos anos 70</strong>, pela <strong>IBM</strong>.</li><li><strong>Altíssimo nível:</strong> próxima do inglês. <code>SELECT</code>, <code>INSERT</code>, <code>DELETE</code> já dizem o que fazem.</li><li><strong>Declarativa:</strong> você descreve o resultado que quer, não o passo a passo.</li><li>Surgiram novos <strong>dialetos</strong>, evoluindo o SQL.</li></ul>"},
+   {t:"tip",l:"Declarativo vs. imperativo",h:"<p><strong>Declarativo (SQL):</strong> \"quero os clientes de SP\". O banco resolve como buscar.<br><strong>Imperativo (ex.: for em Python):</strong> você escreve cada passo. <strong>Por isso</strong> SQL é tão enxuto: você foca no \"o quê\".</p>"},
+   {t:"tip",l:"O que é dialeto",h:"<p>Versão do SQL adaptada por um fabricante: <strong>MySQL, PostgreSQL, SQL Server (T-SQL), Oracle (PL/SQL)</strong>. O núcleo é o mesmo; mudam detalhes de sintaxe.</p>"}
+  ],
+  cards:[["Quem criou o SQL e quando?","A IBM, no início dos anos 70."],
+         ["O que significa SQL ser \"declarativo\"?","Você descreve o resultado desejado, não o passo a passo. O motor do banco decide como executar."],
+         ["O que é um \"dialeto\" do SQL?","Uma versão adaptada por um fabricante (MySQL, PostgreSQL, Oracle, SQL Server). Mesmo núcleo, sintaxe ligeiramente diferente."]] },
+
+{ id:"padr", num:"03", cat:"Fundamentos", title:"Padronização", date:DATE1,
+  blocks:[
+   {t:"plain",h:"<p>Para o SQL funcionar de forma parecida em qualquer sistema, foi padronizado por dois órgãos:</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th style='width:30%'>Órgão</th><th>O que é</th><th style='width:14%'>Ano</th></tr><tr><td>ANSI</td><td>American National Standards Institute (padrões dos EUA).</td><td>1986</td></tr><tr><td>ISO</td><td>International Organization for Standardization (padrões internacionais).</td><td>1987</td></tr></table>"},
+   {t:"concept",l:"Conceito",h:"<p>O SQL é usado em praticamente <strong>todos os SGBDs</strong> do mercado.</p>"},
+   {t:"tip",l:"O que é SGBD",h:"<p><strong>SGBD</strong> = Sistema de Gerenciamento de Banco de Dados (DBMS). É o software que administra o banco: guarda dados, garante segurança e executa seus comandos. Ex.: MySQL, PostgreSQL, Oracle, SQL Server.</p>"},
+   {t:"attr",l:"Atenção",h:"<p>Mesmo padronizado, <strong>cada fabricante tem características próprias</strong>. Um comando pode rodar no MySQL e exigir ajuste no SQL Server. Sempre confira a documentação.</p>"}
+  ],
+  cards:[["Quais órgãos padronizaram o SQL e quando?","ANSI em 1986 e ISO em 1987."],
+         ["O que é um SGBD?","Sistema de Gerenciamento de Banco de Dados: o software que administra o banco e executa o SQL (MySQL, PostgreSQL, Oracle, SQL Server)."]] },
+
+{ id:"sub", num:"04", cat:"Sublinguagens", title:"As 5 sublinguagens do SQL", date:DATE1,
+  blocks:[
+   {t:"plain",h:"<p>O SQL é formado por <strong>cinco conjuntos de comandos</strong>, cada um com uma finalidade. Essa divisão organiza toda a matéria.</p>"},
+   {t:"map",l:"Mapa mental — o guarda-chuva SQL",h:SVG_SUB()},
+   {t:"table",h:"<table class='cmd'><tr><th>Sigla</th><th>Nome</th><th>Para quê serve</th></tr><tr><td>DDL</td><td>Data Definition Language</td><td>Definir a estrutura (criar/alterar/excluir tabelas).</td></tr><tr><td>DML</td><td>Data Manipulation Language</td><td>Manipular dados (inserir, alterar, deletar registros).</td></tr><tr><td>DQL</td><td>Data Query Language</td><td>Consultar dados (SELECT).</td></tr><tr><td>DCL</td><td>Data Control Language</td><td>Controlar acessos e permissões.</td></tr><tr><td>DTL</td><td>Data Transaction Language</td><td>Gerenciar transações (confirmar/desfazer).</td></tr></table>"},
+   {t:"recap",l:"Na prática",h:"<p>Ao ver um comando novo, pergunte: <strong>\"de qual sublinguagem ele faz parte?\"</strong>. Isso já revela o propósito.</p>"}
+  ],
+  cards:[["Quais são as 5 sublinguagens do SQL?","DDL (definição), DML (manipulação), DQL (consulta), DCL (controle), DTL (transação)."],
+         ["Para que serve a DDL?","Definir a estrutura do banco: criar, alterar e excluir tabelas."],
+         ["Para que serve a DML?","Manipular os dados: inserir, alterar e deletar registros."]] },
+
+{ id:"ddl", num:"05", cat:"Sublinguagens", title:"DDL — Definição de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>A <strong>DDL</strong> cuida da <strong>estrutura</strong> do banco (o esqueleto: tabelas e colunas), não dos dados em si.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>Ação</th></tr><tr><td>CREATE</td><td>Cria uma estrutura.</td></tr><tr><td>ALTER</td><td>Altera uma estrutura existente.</td></tr><tr><td>DROP</td><td>Exclui uma estrutura.</td></tr></table>"},
+   {t:"h3",h:"CREATE TABLE — criar tabela"},
+   {t:"code",h:"<span class='cm'>-- Forma geral:</span>\n<span class='kw'>CREATE TABLE</span> <span class='fn'>nomeTabela</span> (campo tipo atributo, ... );\n\n<span class='cm'>-- Exemplo: tabela de clientes</span>\n<span class='kw'>CREATE TABLE</span> <span class='fn'>CLIENTE</span> (\n  <span class='fn'>codigo</span>     <span class='ty'>int</span>          <span class='kw'>NOT NULL PRIMARY KEY</span>,\n  <span class='fn'>nome</span>       <span class='ty'>varchar</span>(30)  <span class='kw'>NOT NULL</span>,\n  <span class='fn'>cpf</span>        <span class='ty'>int</span>          <span class='kw'>UNIQUE</span>,\n  <span class='fn'>uf</span>         <span class='ty'>char</span>(2)      <span class='kw'>DEFAULT</span> <span class='kw'>null</span>,\n  <span class='fn'>nascimento</span> <span class='ty'>date</span>         <span class='kw'>DEFAULT</span> <span class='st'>'0000-00-00'</span>,\n  <span class='fn'>telefone</span>   <span class='ty'>char</span>(8)      <span class='kw'>DEFAULT</span> <span class='kw'>null</span>,\n  <span class='fn'>sexo</span>       <span class='ty'>char</span>(1)\n);"},
+   {t:"tip",l:"Lendo a sintaxe",h:"<p>Cada coluna segue <strong>nome · tipo · atributos</strong>. Ex.: <code>nome varchar(30) NOT NULL</code> = coluna nome, texto até 30 caracteres, não pode ficar vazia.</p>"},
+   {t:"h3",h:"ALTER TABLE — alterar tabela"},
+   {t:"code",h:"<span class='cm'>-- Incluir nova coluna:</span>\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>ADD</span> <span class='fn'>email</span> <span class='ty'>VARCHAR</span>(20);\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>ADD</span> <span class='fn'>fax</span> <span class='ty'>VARCHAR</span>(18) <span class='kw'>AFTER</span> <span class='fn'>uf</span>;\n\n<span class='cm'>-- Eliminar coluna:</span>\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>DROP</span> <span class='fn'>fax</span>;\n\n<span class='cm'>-- Alterar tipo de dado:</span>\n<span class='kw'>ALTER TABLE</span> <span class='fn'>CLIENTE</span> <span class='kw'>MODIFY</span> <span class='fn'>email</span> <span class='ty'>VARCHAR</span>(40);"},
+   {t:"h3",h:"DROP TABLE — excluir tabela"},
+   {t:"code",h:"<span class='kw'>DROP TABLE</span> [nome da tabela];"},
+   {t:"attr",l:"Atenção — DROP é destrutivo",h:"<p><strong>DROP TABLE</strong> apaga a tabela inteira com os dados, sem lixeira. <strong>ALTER...DROP coluna</strong> apaga só a coluna. Confirme o ambiente antes de rodar.</p>"}
+  ],
+  cards:[["Quais são os 3 comandos da DDL?","CREATE (cria), ALTER (altera), DROP (exclui)."],
+         ["Como adicionar uma coluna a uma tabela existente?","ALTER TABLE nome ADD coluna TIPO; ex.: ALTER TABLE CLIENTE ADD email VARCHAR(20);"],
+         ["Qual a diferença entre DROP TABLE e ALTER...DROP?","DROP TABLE apaga a tabela inteira; ALTER TABLE ... DROP coluna apaga só uma coluna."]] },
+
+{ id:"dml", num:"06", cat:"Sublinguagens", title:"DML — Manipulação de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>A <strong>DML</strong> trabalha com o <strong>conteúdo</strong> das tabelas: inserir, alterar e apagar <strong>registros</strong>. A estrutura já existe.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>Ação</th></tr><tr><td>INSERT</td><td>Insere dados (novas linhas).</td></tr><tr><td>UPDATE</td><td>Altera dados existentes.</td></tr><tr><td>DELETE</td><td>Deleta dados.</td></tr></table>"},
+   {t:"h3",h:"INSERT INTO"},
+   {t:"code",h:"<span class='kw'>INSERT INTO</span> <span class='fn'>TABELA</span> <span class='kw'>VALUES</span> (valores);\n\n<span class='cm'>-- Exemplo:</span>\n<span class='kw'>INSERT INTO</span> <span class='fn'>TABELA</span> <span class='kw'>VALUES</span>\n(123, <span class='st'>'Allan Rocker'</span>, <span class='st'>'12345'</span>, <span class='st'>'SP'</span>,\n <span class='st'>'1234-12-12'</span>, <span class='st'>'123456'</span>, <span class='st'>'M'</span>, <span class='st'>'allan@email.com'</span>);"},
+   {t:"h3",h:"UPDATE"},
+   {t:"code",h:"<span class='kw'>UPDATE</span> <span class='fn'>table_name</span>\n<span class='kw'>SET</span> <span class='fn'>column1</span> = value1, <span class='fn'>column2</span> = value2, ...\n<span class='kw'>WHERE</span> condition;"},
+   {t:"h3",h:"DELETE"},
+   {t:"code",h:"<span class='kw'>DELETE FROM</span> <span class='fn'>table_name</span> <span class='kw'>WHERE</span> condition;"},
+   {t:"attr",l:"Atenção — o perigo de esquecer o WHERE",h:"<p>Em UPDATE e DELETE, o <strong>WHERE</strong> define quais linhas são afetadas. <strong>Sem WHERE, atinge TODAS as linhas.</strong> Um <code>DELETE FROM CLIENTE;</code> apaga todos os clientes.</p>"},
+   {t:"recap",l:"Na prática",h:"<p><strong>Hábito de segurança:</strong> antes de um UPDATE/DELETE, rode um <code>SELECT</code> com o mesmo <code>WHERE</code> para ver o que será afetado.</p>"}
+  ],
+  cards:[["Quais são os 3 comandos da DML?","INSERT (insere), UPDATE (altera), DELETE (deleta)."],
+         ["Qual o risco de UPDATE/DELETE sem WHERE?","Afeta TODAS as linhas da tabela. DELETE FROM CLIENTE; apaga todos os registros."],
+         ["Hábito de segurança antes de UPDATE/DELETE?","Rodar um SELECT com o mesmo WHERE para conferir quais linhas serão afetadas."]] },
+
+{ id:"dql", num:"07", cat:"Sublinguagens", title:"DQL — Consulta de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>A <strong>DQL</strong> é dedicada a <strong>consultar</strong> dados. O comando central é o <strong>SELECT</strong>, o mais usado no dia a dia de dados.</p>"},
+   {t:"plain",h:"<p>O SELECT também permite:</p><ul><li><strong>Ordenação</strong> (ex.: por nome, data).</li><li><strong>Agrupamento</strong> (juntar por categoria).</li><li><strong>Funções aritméticas</strong> (somar, contar, média).</li><li><strong>Filtros</strong> de seleção.</li></ul>"},
+   {t:"h3",h:"SELECT"},
+   {t:"code",h:"<span class='kw'>SELECT</span> *\n<span class='kw'>FROM</span> <span class='fn'>TABELA</span>\n<span class='kw'>WHERE</span> <span class='fn'>nome</span> = <span class='st'>'Allan'</span>;"},
+   {t:"tip",l:"Lendo a consulta",h:"<p><code>SELECT *</code> = todas as colunas. <code>FROM TABELA</code> = da tabela. <code>WHERE nome='Allan'</code> = só as linhas onde nome é Allan.<br><strong>Ordem real de leitura do banco:</strong> FROM → WHERE → SELECT.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Na transição para Dados, o <code>SELECT</code> será sua ferramenta mais frequente. Domine bem <code>WHERE</code>, <code>ORDER BY</code> e <code>GROUP BY</code>.</p>"}
+  ],
+  cards:[["Qual comando central da DQL?","SELECT — usado para consultar (retornar) dados."],
+         ["Em que ordem o banco lê um SELECT simples?","Primeiro FROM, depois WHERE, por último SELECT."]] },
+
+{ id:"dcl", num:"08", cat:"Sublinguagens", title:"DCL — Controle de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>A <strong>DCL</strong> controla <strong>quem pode fazer o quê</strong> no banco. É a parte de <strong>permissões e segurança</strong>.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>Ação</th></tr><tr><td>GRANT</td><td>Concede acesso a dados e operações.</td></tr><tr><td>REVOKE</td><td>Revoga acesso a dados e operações.</td></tr></table>"},
+   {t:"tip",l:"Analogia — chaves de acesso",h:"<p><strong>GRANT</strong> = entregar a chave de uma sala. <strong>REVOKE</strong> = recolher a chave. O DCL define quem entra em quais \"salas\" (tabelas) e o que faz lá.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Em serviços financeiros, DCL garante que cada pessoa veja só o que tem permissão. É pilar de <strong>segurança e governança</strong> de dados.</p>"}
+  ],
+  cards:[["O que faz GRANT e REVOKE?","GRANT concede acesso/permissão; REVOKE retira o acesso."],
+         ["Para que serve a DCL?","Controlar permissões e segurança de acesso: quem pode fazer o quê no banco."]] },
+
+{ id:"dtl", num:"09", cat:"Sublinguagens", title:"DTL — Transação de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>A <strong>DTL</strong> gerencia <strong>transações</strong>: um conjunto de operações tratado como <strong>unidade única</strong> — ou tudo é confirmado, ou nada é aplicado.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Comando</th><th>Ação</th></tr><tr><td>START TRANSACTION</td><td>Inicia a transação.</td></tr><tr><td>COMMIT</td><td>Concretiza (confirma).</td></tr><tr><td>ROLLBACK</td><td>Anula (desfaz).</td></tr></table>"},
+   {t:"tip",l:"Analogia — transferência bancária",h:"<p>Debitar de uma conta e creditar em outra precisam acontecer juntos. <strong>COMMIT</strong> confirma os dois passos. <strong>ROLLBACK</strong>, se algo falhou, desfaz tudo. Ninguém perde dinheiro.</p>"},
+   {t:"recap",l:"Na prática",h:"<p><strong>Em outras palavras:</strong> transação garante o \"tudo ou nada\". <strong>Por que importa:</strong> dá confiabilidade a sistemas financeiros, evitando estados pela metade.</p>"}
+  ],
+  cards:[["O que é uma transação?","Conjunto de operações tratado como unidade única: ou tudo confirma, ou nada é aplicado."],
+         ["COMMIT vs. ROLLBACK?","COMMIT confirma/concretiza a transação; ROLLBACK desfaz e volta ao estado inicial."]] },
+
+{ id:"attr", num:"10", cat:"Estrutura e Chaves", title:"Atributos de colunas", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p><strong>Atributos</strong> são regras/propriedades aplicadas a uma coluna ao criá-la. Controlam o que ela aceita ou como se comporta.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Atributo</th><th>O que faz</th></tr><tr><td>NULL / NOT NULL</td><td>Permite ou não valores nulos. NULL é diferente de vazio: nulo = ausência de valor.</td></tr><tr><td>SIGNED / UNSIGNED</td><td>Permite ou não negativos. UNSIGNED = só positivos (idade, quantidade).</td></tr><tr><td>AUTO_INCREMENT</td><td>Gera sequências automáticas (contadores).</td></tr><tr><td>ZEROFILL</td><td>Completa o número com zeros à esquerda (7 → 007).</td></tr></table>"},
+   {t:"tip",l:"NULL não é zero nem espaço",h:"<p><strong>NULL</strong> = \"não há informação\". Diferente de <strong>0</strong> (número) e de <strong>''</strong> (texto vazio). Cliente sem telefone tem telefone <code>NULL</code>, não \"0\".</p>"},
+   {t:"recap",l:"Na prática",h:"<p><strong>AUTO_INCREMENT</strong> liga ao próximo tema: é a forma mais comum de gerar uma chave primária automática (surrogada).</p>"}
+  ],
+  cards:[["Diferença entre NULL e vazio?","NULL é ausência de valor (desconhecido). Diferente de 0 (número) e '' (texto vazio)."],
+         ["O que faz AUTO_INCREMENT?","Gera valores em sequência automaticamente — cada novo registro recebe o próximo número."]] },
+
+{ id:"chaves", num:"11", cat:"Estrutura e Chaves", title:"Chaves: PK, FK, UNIQUE e Surrogada", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são chaves",h:"<p><strong>Chaves</strong> são atributos (ou conjuntos de atributos) que identificam de forma única um registro numa tabela. São essenciais para a <strong>integridade dos dados</strong>: previnem duplicatas e permitem criar <strong>relacionamentos</strong> entre tabelas. Sem chaves, seria impossível gerenciar dados de forma eficaz.</p>"},
+   {t:"concept",l:"Chave Primária (Primary Key — PK)",h:"<p>Atributo (ou conjunto) que identifica de forma única <strong>cada registro</strong> da tabela. Garante que não existam dois registros com a mesma PK. Só pode haver <strong>uma por tabela</strong> e é sempre <strong>NOT NULL</strong>.</p><p><strong>Exemplo:</strong> na tabela <code>Clientes</code>, o <code>ID do cliente</code> é a PK — cada cliente tem um identificador único.</p>"},
+   {t:"concept",l:"Chave Estrangeira (Foreign Key — FK)",h:"<p>Campo de uma tabela que cria um <strong>vínculo</strong> com a PK de outra tabela. Mantém a <strong>integridade referencial</strong>: o valor da FK precisa sempre corresponder a uma PK válida na tabela relacionada.</p><p><strong>Exemplo:</strong> em <code>Pedidos</code>, o campo <code>id_cliente</code> é FK e aponta para a PK de <code>Clientes</code>. Não existe pedido de um cliente que não existe.</p>"},
+   {t:"tip",l:"PK e FK trabalhando juntas",h:"<p>A <strong>PK</strong> identifica a linha dentro da própria tabela. A <strong>FK</strong> é a referência dessa PK em outra tabela, criando a ligação. É esse par que torna possível relacionar tabelas (próximo tema).</p>"},
+   {t:"concept",l:"Restrições UNIQUE e PRIMARY KEY",h:"<p>Ambas <strong>asseguram valores únicos</strong> em cada linha. Evitam duplicidade (ex.: dois clientes com o mesmo CPF).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Restrição</th><th>Característica</th></tr><tr><td>PRIMARY KEY</td><td>Identificador principal da linha. Só uma por tabela. Única e obrigatoriamente NOT NULL.</td></tr><tr><td>UNIQUE</td><td>Garante unicidade, mas pode haver várias por tabela (ex.: e-mail, CPF).</td></tr></table>"},
+   {t:"attr",l:"Regra — relação com NOT NULL",h:"<p>Colunas PRIMARY KEY ou UNIQUE geralmente também são <strong>NOT NULL</strong>. O atributo NOT NULL impede valores nulos e é obrigatório em colunas PRIMARY KEY.</p>"},
+   {t:"concept",l:"Chave Surrogada (Surrogate Key)",h:"<p>Chave <strong>artificial</strong>, geralmente numérica, criada só para ser chave primária. Substitui uma <strong>chave natural</strong> complexa ou não ideal.</p>"},
+   {t:"tip",l:"Surrogada vs. natural",h:"<p><strong>Natural:</strong> um dado real que identifica a linha (ex.: CPF). <strong>Surrogada:</strong> número sem significado de negócio (ex.: <code>codigo</code> com AUTO_INCREMENT). <strong>Por que surrogada:</strong> simples, estável e rápida; resiste a mudanças de regra de negócio.</p>"}
+  ],
+  cards:[["O que é uma chave primária (PK)?","Atributo que identifica unicamente cada registro; uma por tabela e sempre NOT NULL. Ex.: ID do cliente."],
+         ["O que é uma chave estrangeira (FK)?","Campo que vincula uma tabela à PK de outra, mantendo a integridade referencial. Ex.: id_cliente em Pedidos aponta para Clientes."],
+         ["O que é integridade referencial?","Garantia de que toda FK corresponde a uma PK válida na tabela relacionada — não há pedido de cliente inexistente."],
+         ["PRIMARY KEY vs. UNIQUE?","PRIMARY KEY: identificador principal, só uma por tabela, sempre NOT NULL. UNIQUE: garante unicidade, pode haver várias por tabela."],
+         ["O que é chave surrogada?","Chave artificial (geralmente numérica) criada só para ser primária, substituindo uma chave natural complexa."],
+         ["Chave natural vs. surrogada?","Natural = dado real do mundo (ex.: CPF). Surrogada = número sem significado de negócio (ex.: id auto-incremento)."]] },
+
+{ id:"rel", num:"12", cat:"Modelagem", title:"Relacionamentos entre tabelas", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p>Relacionamento é a <strong>ligação</strong> entre tabelas por chaves: a <strong>PK</strong> de uma aparece em outra como <strong>FK</strong>. A cardinalidade diz <strong>quantas</strong> linhas de um lado se ligam ao outro.</p>"},
+   {t:"tip",l:"O que é Foreign Key (FK)",h:"<p>A <strong>chave estrangeira</strong> aponta para a PK de outra tabela. Conecta, por exemplo, uma Compra ao Cliente que a fez, garantindo <strong>integridade referencial</strong> (não existe compra de cliente inexistente).</p>"},
+   {t:"map",l:"Diagrama — os três tipos de cardinalidade",h:SVG_REL()},
+   {t:"recap",l:"Na prática",h:"<p><strong>1:1</strong> → cada um, um só (Pessoa↔CPF). <strong>1:N</strong> → um para muitos (Cliente→Compras). <strong>N:M</strong> → muitos para muitos (Compras↔Produtos).<br><strong>Atenção:</strong> N:M não é implementado direto; cria-se uma <strong>tabela intermediária</strong> que vira dois relacionamentos 1:N.</p>"}
+  ],
+  cards:[["O que são PK e FK num relacionamento?","PK (chave primária) identifica a linha; FK (chave estrangeira) é a coluna que aponta para a PK de outra tabela, conectando-as."],
+         ["1:1, 1:N e N:M — exemplos?","1:1 Pessoa↔CPF; 1:N Cliente→Compras; N:M Compras↔Produtos."],
+         ["Como se implementa N:M na prática?","Com uma tabela intermediária (associativa), que transforma o N:M em dois relacionamentos 1:N."]] },
+
+{ id:"modelos", num:"13", cat:"Modelagem", title:"Modelos de Dados", date:DATE1,
+  blocks:[
+   {t:"concept",l:"Conceito",h:"<p><strong>Modelos de dados</strong> são formas de organizar os dados. A escolha depende do objetivo: operação do dia a dia ou análise.</p>"},
+   {t:"map",l:"Mapa mental — quando usar cada modelo",h:SVG_MOD()},
+   {t:"concept",l:"Modelo Relacional",h:"<p>Tabelas inter-relacionadas por PK e FK. Ideal para <strong>operações transacionais</strong> (inserir, atualizar, excluir, consultar) com <strong>integridade referencial</strong>. É o modelo da maioria dos sistemas do dia a dia.</p>"},
+   {t:"concept",l:"Modelo Dimensional",h:"<p>Usado em <strong>data warehouses</strong> e <strong>BI</strong>. Organiza dados em <strong>fatos</strong> (quantitativos, ex.: vendas) e <strong>dimensões</strong> (contexto: tempo, produto, local).</p>"},
+   {t:"concept",l:"Star Schema (Esquema Estrela)",h:"<p>Tipo de modelo dimensional: uma <strong>tabela de fatos central</strong> ligada a várias <strong>dimensões</strong>, formando uma estrela. Simples e eficiente para análises rápidas e agregações.</p>"},
+   {t:"recap",l:"Na prática — sua transição para Dados",h:"<p><strong>Relacional</strong> = mundo da operação (registrar). <strong>Dimensional/Star Schema</strong> = mundo da análise (entender). Na migração para Dados e BI, você caminha do relacional para o dimensional.</p>"}
+  ],
+  cards:[["Modelo relacional serve melhor para quê?","Operações transacionais (inserir/atualizar/consultar) com integridade referencial. É o do dia a dia."],
+         ["O que é modelo dimensional?","Modelo de data warehouse/BI que separa fatos (dados quantitativos) de dimensões (contexto: tempo, produto, local)."],
+         ["O que é Star Schema?","Modelo dimensional com uma tabela de fatos central ligada a várias dimensões, formando uma estrela."]] },
+
+{ id:"where", num:"14", cat:"Consultas avançadas", title:"Filtros e a cláusula WHERE", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é o WHERE",h:"<p>O <strong>WHERE</strong> (\"onde\") filtra os resultados de uma consulta: define <strong>quais linhas</strong> aparecem. O banco testa a condição <strong>linha por linha</strong> — se for <strong>verdadeira</strong>, a linha aparece; se <strong>falsa</strong>, é ignorada.</p><p><strong>Por que usar:</strong> foco (ver só o que importa) e <strong>performance</strong> (processa menos dados, busca mais rápida).</p>"},
+   {t:"tip",l:"Tabela de exemplo — PESSOAS",h:"<p>Todos os exemplos abaixo usam esta tabela:</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>ID</th><th>NOME</th><th>IDADE</th><th>FILHOS</th></tr><tr><td>1</td><td>Eliana</td><td>20</td><td>0</td></tr><tr><td>2</td><td>Miguel</td><td>39</td><td>3</td></tr><tr><td>3</td><td>Raquel</td><td>36</td><td>2</td></tr><tr><td>4</td><td>João</td><td>22</td><td>1</td></tr><tr><td>5</td><td>Marta</td><td>48</td><td>2</td></tr></table>"},
+   {t:"h3",h:"Operadores de comparação"},
+   {t:"concept",l:"O que são",h:"<p>Fazem uma <strong>pergunta</strong> aos dados e devolvem um valor <strong>booleano</strong> (verdadeiro ou falso). Booleano = tipo de dado com apenas dois estados possíveis.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Operador</th><th>Significado</th></tr><tr><td>=</td><td>Igual a</td></tr><tr><td>!= ou &lt;&gt;</td><td>Diferente de</td></tr><tr><td>&gt;</td><td>Maior que</td></tr><tr><td>&lt;</td><td>Menor que</td></tr><tr><td>&gt;=</td><td>Maior ou igual</td></tr><tr><td>&lt;=</td><td>Menor ou igual</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Idade maior ou igual a 39:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> &gt;= 39;\n<span class='cm'>-- Resultado: Miguel (39) e Marta (48)</span>\n\n<span class='cm'>-- Diferente de zero filhos:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>FILHOS</span> &lt;&gt; 0;\n<span class='cm'>-- Resultado: Miguel, Raquel, João, Marta</span>"},
+   {t:"h3",h:"Álgebra booleana: AND, OR, NOT"},
+   {t:"concept",l:"Combinando condições",h:"<p><strong>AND (E):</strong> só retorna se <strong>todas</strong> as condições forem verdadeiras. Analogia: receita que exige \"ovo E leite\" — falta um, não dá.<br><strong>OR (OU):</strong> retorna se <strong>pelo menos uma</strong> for verdadeira. Analogia: \"suco OU refrigerante\".<br><strong>NOT (NÃO):</strong> inverte — traz o oposto da condição.</p>"},
+   {t:"code",h:"<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>IDADE</span> <span class='kw'>IN</span> (39, 48)\n  <span class='kw'>AND</span> <span class='fn'>FILHOS</span> &gt; 2;\n<span class='cm'>-- Só Miguel: tem 39 anos E mais de 2 filhos (3).</span>\n<span class='cm'>-- Marta sai: tem 48, mas só 2 filhos.</span>"},
+   {t:"h3",h:"Intervalo, lista, texto e nulos"},
+   {t:"table",h:"<table class='cmd'><tr><th>Operador</th><th>O que faz</th></tr><tr><td>BETWEEN</td><td>Valor dentro de um intervalo (inclui as pontas). Ex.: IDADE BETWEEN 20 AND 23.</td></tr><tr><td>IN</td><td>Valor que coincide com algum item de uma lista. Ex.: UF IN ('SP','RJ','MG').</td></tr><tr><td>LIKE</td><td>Busca padrões em texto. % = vários caracteres; _ = um caractere.</td></tr><tr><td>IS NULL / IS NOT NULL</td><td>Campo vazio (sem informação) ou preenchido.</td></tr><tr><td>DISTINCT</td><td>Remove duplicatas; retorna só valores exclusivos.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Nomes que começam com M:</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>NOME</span> <span class='kw'>LIKE</span> <span class='st'>'M%'</span>;\n<span class='cm'>-- Miguel e Marta</span>\n\n<span class='cm'>-- Idade entre 20 e 23 (inclui as pontas):</span>\n<span class='kw'>SELECT</span> * <span class='kw'>FROM</span> <span class='fn'>PESSOAS</span> <span class='kw'>WHERE</span> <span class='fn'>IDADE</span> <span class='kw'>BETWEEN</span> 20 <span class='kw'>AND</span> 23;\n<span class='cm'>-- Eliana (20) e João (22)</span>"},
+   {t:"attr",l:"Atenção — LIKE e wildcards",h:"<p><code>%</code> representa zero ou muitos caracteres; <code>_</code> representa exatamente um. <code>'M%'</code> = começa com M. <code>'%a'</code> = termina com a. <code>'_a%'</code> = a segunda letra é a.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>O <code>WHERE</code> é o coração da consulta no dia a dia de dados. Combine operadores de comparação com <code>AND/OR/NOT</code> e refine com <code>LIKE</code>, <code>BETWEEN</code>, <code>IN</code> e <code>IS NULL</code>. <strong>Próxima ação:</strong> teste cada exemplo mentalmente na tabela PESSOAS.</p>"}
+  ],
+  cards:[["Para que serve a cláusula WHERE?","Filtrar linhas: o banco testa a condição linha por linha; se verdadeira, mostra a linha; se falsa, ignora."],
+         ["Diferença entre AND e OR?","AND exige que todas as condições sejam verdadeiras. OR basta uma ser verdadeira."],
+         ["No LIKE, o que significam % e _?","% = zero ou muitos caracteres; _ = exatamente um caractere. Ex.: 'M%' começa com M."],
+         ["O que faz DISTINCT?","Remove duplicatas, retornando apenas valores exclusivos da consulta."],
+         ["BETWEEN inclui as pontas do intervalo?","Sim. IDADE BETWEEN 20 AND 23 inclui o 20 e o 23."]] },
+
+{ id:"agg", num:"15", cat:"Consultas avançadas", title:"Funções de agregação e GROUP BY", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que são funções de agregação",h:"<p>Calculam um <strong>único resultado</strong> a partir de um <strong>conjunto de valores</strong> (várias linhas). Em vez de ver cada linha, você vê um resumo: total, média, maior, menor.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>O que faz</th></tr><tr><td>COUNT</td><td>Conta linhas. COUNT(*) conta todas; COUNT(DISTINCT col) conta só valores diferentes. Ignora NULL.</td></tr><tr><td>SUM</td><td>Soma os valores de uma coluna.</td></tr><tr><td>AVG</td><td>Calcula a média aritmética.</td></tr><tr><td>MIN</td><td>Menor valor.</td></tr><tr><td>MAX</td><td>Maior valor.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'>-- Resumo da tabela PESSOAS:</span>\n<span class='kw'>SELECT</span>\n  <span class='kw'>COUNT</span>(*)      <span class='kw'>AS</span> <span class='fn'>total</span>,\n  <span class='kw'>AVG</span>(<span class='fn'>IDADE</span>)  <span class='kw'>AS</span> <span class='fn'>media_idade</span>,\n  <span class='kw'>MAX</span>(<span class='fn'>FILHOS</span>) <span class='kw'>AS</span> <span class='fn'>max_filhos</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>;\n<span class='cm'>-- total=5, media_idade=33, max_filhos=3</span>"},
+   {t:"tip",l:"AS (alias)",h:"<p><code>AS</code> dá um <strong>nome temporário</strong> a uma coluna ou tabela, deixando o resultado mais legível. <code>COUNT(*) AS total</code> faz a coluna aparecer como \"total\".</p>"},
+   {t:"concept",l:"GROUP BY — agrupar",h:"<p>Agrupa as linhas por uma coluna para aplicar a agregação <strong>a cada grupo separadamente</strong>. Sem GROUP BY, a agregação trata a tabela inteira como um só grupo.</p>"},
+   {t:"code",h:"<span class='cm'>-- Quantas pessoas têm cada quantidade de filhos:</span>\n<span class='kw'>SELECT</span> <span class='fn'>FILHOS</span>, <span class='kw'>COUNT</span>(*) <span class='kw'>AS</span> <span class='fn'>qtd</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>GROUP BY</span> <span class='fn'>FILHOS</span>;\n<span class='cm'>-- 0->1, 1->1, 2->2, 3->1</span>"},
+   {t:"attr",l:"Atenção — COUNT e NULL",h:"<p><code>COUNT(*)</code> conta todas as linhas. <code>COUNT(coluna)</code> conta só as linhas em que a coluna <strong>não é NULL</strong>. Útil para saber quantos registros têm aquele dado preenchido.</p>"},
+   {t:"recap",l:"Na prática",h:"<p>Agregação + GROUP BY é a base de qualquer relatório: \"total por categoria\", \"média por mês\", \"contagem por status\". <strong>Próxima ação:</strong> pense numa pergunta do seu trabalho que comece com \"quantos\" ou \"qual a média de\".</p>"}
+  ],
+  cards:[["O que fazem as funções de agregação?","Calculam um único resultado a partir de muitas linhas: COUNT, SUM, AVG, MIN, MAX."],
+         ["COUNT(*) vs COUNT(coluna)?","COUNT(*) conta todas as linhas; COUNT(coluna) conta só as que não são NULL."],
+         ["Para que serve GROUP BY?","Agrupar linhas por uma coluna para aplicar a agregação a cada grupo separadamente."],
+         ["O que é o AS em SQL?","Um alias: nome temporário para uma coluna ou tabela, deixando o resultado mais legível."]] },
+
+{ id:"order", num:"16", cat:"Consultas avançadas", title:"ORDER BY e operações aritméticas", date:DATE1,
+  blocks:[
+   {t:"concept",l:"ORDER BY — ordenar",h:"<p>Define a <strong>ordem</strong> dos resultados. <strong>ASC</strong> = crescente (A-Z, 0-9), é o padrão. <strong>DESC</strong> = decrescente.</p><p>É a <strong>última cláusula</strong> do SELECT. Pode ordenar até por colunas não selecionadas e pela <strong>posição numérica</strong> da coluna.</p>"},
+   {t:"code",h:"<span class='cm'>-- Do mais velho para o mais novo:</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>ORDER BY</span> <span class='fn'>IDADE</span> <span class='kw'>DESC</span>;\n<span class='cm'>-- Marta(48), Miguel(39), Raquel(36), João(22), Eliana(20)</span>"},
+   {t:"concept",l:"Operações aritméticas",h:"<p>Dá para calcular direto no SELECT com <code>+</code> (adição), <code>-</code> (subtração), <code>*</code> (multiplicação), <code>/</code> (divisão) e <code>%</code> (módulo = resto da divisão).</p>"},
+   {t:"attr",l:"Atenção — divisão por zero",h:"<p>Dividir por zero <strong>gera erro</strong>. Use o <code>WHERE</code> para descartar esses casos antes do cálculo.</p>"},
+   {t:"code",h:"<span class='cm'>-- Evita divisão por zero filtrando FILHOS > 0:</span>\n<span class='kw'>SELECT</span> <span class='fn'>NOME</span>, <span class='fn'>IDADE</span> / <span class='fn'>FILHOS</span> <span class='kw'>AS</span> <span class='fn'>idade_por_filho</span>\n<span class='kw'>FROM</span> <span class='fn'>PESSOAS</span>\n<span class='kw'>WHERE</span> <span class='fn'>FILHOS</span> &gt; 0;\n<span class='cm'>-- Eliana (0 filhos) é desconsiderada</span>"},
+   {t:"tip",l:"Ordem de execução (precedência)",h:"<p>Para o cálculo sair certo, o SQL segue esta hierarquia:</p><p>1. Parênteses <code>( )</code><br>2. Expoentes<br>3. Multiplicação <code>*</code> e divisão <code>/</code><br>4. Adição <code>+</code> e subtração <code>-</code></p><p>Use parênteses para deixar a intenção explícita.</p>"},
+   {t:"recap",l:"Na prática",h:"<p><code>ORDER BY</code> organiza a leitura; as operações aritméticas geram métricas direto na consulta. <strong>Próxima ação:</strong> filtre com WHERE antes de dividir, para nunca cair em divisão por zero.</p>"}
+  ],
+  cards:[["Qual a ordem padrão do ORDER BY?","ASC (crescente). Para decrescente, use DESC."],
+         ["ORDER BY pode usar a posição da coluna?","Sim. ORDER BY 2 ordena pela segunda coluna do SELECT."],
+         ["O que faz o operador % (módulo)?","Retorna o resto da divisão entre dois números."],
+         ["Qual a ordem de precedência dos cálculos?","Parênteses, expoentes, multiplicação/divisão, adição/subtração."],
+         ["Como evitar erro de divisão por zero?","Filtrar com WHERE para descartar divisores iguais a 0 (ex.: WHERE FILHOS > 0)."]] }
+];
+
+const QUIZ = [
+ {q:"O que significa o SQL ser uma linguagem \"declarativa\"?",o:["Você escreve cada passo da busca, linha a linha","Você descreve o resultado que quer; o banco decide como obtê-lo","Ela só funciona em um fabricante específico","Ela não usa palavras em inglês"],c:1,e:"Declarativo = você diz o \"o quê\". O imperativo (ex.: for em Python) exigiria o passo a passo."},
+ {q:"Quais são as 5 sublinguagens do SQL?",o:["SELECT, INSERT, UPDATE, DELETE, CREATE","DDL, DML, DQL, DCL, DTL","ANSI, ISO, IBM, SQL, BI","PK, FK, NULL, UNIQUE, INDEX"],c:1,e:"DDL (definição), DML (manipulação), DQL (consulta), DCL (controle), DTL (transação)."},
+ {q:"Qual comando da DDL apaga a tabela inteira, com os dados?",o:["DELETE","TRUNCATE","DROP TABLE","ALTER TABLE"],c:2,e:"DROP TABLE remove a estrutura inteira. DELETE apaga linhas; é da DML."},
+ {q:"O que acontece num DELETE sem cláusula WHERE?",o:["Dá erro de sintaxe","Apaga apenas a primeira linha","Apaga TODAS as linhas da tabela","Não faz nada"],c:2,e:"Sem WHERE, o comando atinge todas as linhas. Por isso teste antes com um SELECT."},
+ {q:"NULL é o mesmo que zero ou texto vazio?",o:["Sim, são equivalentes","Não: NULL é ausência de valor (desconhecido)","NULL é sempre igual a 0","NULL só existe em colunas de texto"],c:1,e:"NULL significa \"não há informação\", diferente de 0 (número) e '' (texto vazio)."},
+ {q:"Qual restrição só pode existir UMA vez por tabela e é sempre NOT NULL?",o:["UNIQUE","PRIMARY KEY","FOREIGN KEY","DEFAULT"],c:1,e:"A PRIMARY KEY é o identificador principal: única por tabela e obrigatoriamente NOT NULL."},
+ {q:"Uma chave surrogada é:",o:["O CPF do cliente","Uma chave artificial, geralmente numérica, criada só para ser primária","Uma chave estrangeira","Uma coluna que aceita NULL"],c:1,e:"Surrogada = artificial, sem significado de negócio (ex.: id auto-incremento). Substitui uma chave natural."},
+ {q:"Como o relacionamento N:M é implementado na prática?",o:["Diretamente entre as duas tabelas","Com uma tabela intermediária (associativa)","Usando apenas uma PRIMARY KEY","Não é possível em bancos relacionais"],c:1,e:"Cria-se uma tabela intermediária, transformando o N:M em dois relacionamentos 1:N."},
+ {q:"COMMIT e ROLLBACK pertencem a qual sublinguagem?",o:["DDL","DCL","DTL","DQL"],c:2,e:"DTL (transação). COMMIT confirma; ROLLBACK desfaz."},
+ {q:"Qual modelo é ideal para análise em BI / data warehouse?",o:["Relacional","Dimensional (ex.: Star Schema)","Nenhum","Modelo de rede"],c:1,e:"O dimensional separa fatos de dimensões; o Star Schema é seu formato mais comum para análises rápidas."},
+ {q:"Qual operador filtra valores dentro de um intervalo, incluindo as pontas?",o:["IN","BETWEEN","LIKE","DISTINCT"],c:1,e:"BETWEEN x AND y inclui x e y. Ex.: IDADE BETWEEN 20 AND 23 traz o 20 e o 23."},
+ {q:"No LIKE, o caractere % representa:",o:["Exatamente um caractere","Zero ou muitos caracteres","Apenas números","Um espaço em branco"],c:1,e:"% = zero ou muitos caracteres; _ = exatamente um. 'M%' significa: começa com M."},
+ {q:"Numa consulta com AND, a linha aparece quando:",o:["Pelo menos uma condição é verdadeira","Todas as condições são verdadeiras","Nenhuma condição é verdadeira","A primeira condição é falsa"],c:1,e:"AND exige todas as condições verdadeiras ao mesmo tempo. Com OR, bastaria uma."},
+ {q:"A função COUNT(coluna) conta:",o:["Todas as linhas, inclusive NULL","Apenas as linhas em que a coluna não é NULL","Somente valores negativos","Apenas a primeira linha"],c:1,e:"COUNT(coluna) ignora NULL. Para contar todas as linhas use COUNT(*)."},
+ {q:"Qual a ordem padrão (sem especificar) do ORDER BY?",o:["DESC (decrescente)","ASC (crescente)","Aleatória","Pela chave primária"],c:1,e:"O padrão é ASC, crescente. Para inverter, use DESC."},
+ {q:"Para evitar erro de divisão por zero, deve-se:",o:["Usar DISTINCT","Filtrar com WHERE os divisores iguais a zero","Trocar / por %","Usar GROUP BY"],c:1,e:"Filtre com WHERE (ex.: WHERE FILHOS > 0) para descartar divisores zero antes do cálculo."}
+];
+
+let DB=null,dbReady=false,dbError=null,dbStarted=false;
+function initDB(){
+  if(dbStarted)return; dbStarted=true;
+  if(typeof initSqlJs==='undefined'){ dbError="Motor SQL não encontrado (arquivo sql-asm.js)."; if(mode==='practice')renderPractice(); return; }
+  initSqlJs().then(SQL=>{
+    DB=new SQL.Database();
+    DB.run("CREATE TABLE PESSOAS(ID INTEGER, NOME TEXT, IDADE INTEGER, FILHOS INTEGER);INSERT INTO PESSOAS VALUES (1,'Eliana',20,0),(2,'Miguel',39,3),(3,'Raquel',36,2),(4,'João',22,1),(5,'Marta',48,2);CREATE TABLE COMPRAS(ID INTEGER, ID_PESSOA INTEGER, VALOR REAL);INSERT INTO COMPRAS VALUES (1,1,50.0),(2,2,12.5),(3,3,8.0),(4,3,20.0),(5,6,99.9);");
+    dbReady=true; if(mode==='practice')renderPractice();
+  }).catch(e=>{ dbError=String(e&&e.message||e); if(mode==='practice')renderPractice(); });
+}
+function runSQL(sql){
+  if(!dbReady)return {error:"Motor ainda carregando, tente novamente em instantes."};
+  try{ const res=DB.exec(sql); if(!res.length)return {empty:true}; const last=res[res.length-1]; return {columns:last.columns,values:last.values}; }
+  catch(e){ return {error:String(e&&e.message||e)}; }
+}
+function esc(s){ return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+function gridHTML(r){
+  if(r.error)return '<div class="sql-err">'+esc(r.error)+'</div>';
+  if(r.empty||!r.values||!r.values.length)return '<div class="sql-empty">Consulta executada. Nenhuma linha retornada.</div>';
+  let h='<div class="grid-wrap"><table class="grid"><tr>'+r.columns.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr>';
+  r.values.forEach(row=>{ h+='<tr>'+row.map(v=>'<td>'+(v===null?'<i>NULL</i>':esc(String(v)))+'</td>').join('')+'</tr>'; });
+  return h+'</table></div>';
+}
+function normRows(vals,ordered){ const rows=(vals||[]).map(r=>JSON.stringify(r)); return ordered?rows.join('|'):rows.slice().sort().join('|'); }
+const EXERCISES=[
+ {q:"Liste o NOME e a IDADE das pessoas com 36 anos ou mais.",sol:"SELECT NOME, IDADE FROM PESSOAS WHERE IDADE >= 36",ordered:false,dica:"Use WHERE com o operador >=."},
+ {q:"Quantas pessoas existem na tabela? (uma coluna com a contagem)",sol:"SELECT COUNT(*) FROM PESSOAS",ordered:false,dica:"Use COUNT(*)."},
+ {q:"Liste o NOME das pessoas cujo nome começa com a letra M.",sol:"SELECT NOME FROM PESSOAS WHERE NOME LIKE 'M%'",ordered:false,dica:"Use LIKE com o curinga %."},
+ {q:"Qual é a média de idade? (uma coluna com a média)",sol:"SELECT AVG(IDADE) FROM PESSOAS",ordered:false,dica:"Use AVG(IDADE)."},
+ {q:"Liste NOME e IDADE de todos, do mais velho para o mais novo.",sol:"SELECT NOME, IDADE FROM PESSOAS ORDER BY IDADE DESC",ordered:true,dica:"Use ORDER BY IDADE DESC."},
+ {q:"Mostre quantas pessoas têm cada quantidade de FILHOS (colunas: FILHOS e a contagem).",sol:"SELECT FILHOS, COUNT(*) FROM PESSOAS GROUP BY FILHOS",ordered:false,dica:"Combine GROUP BY FILHOS com COUNT(*)."},
+ {q:"Liste o NOME das pessoas com idade entre 20 e 23 (inclusive).",sol:"SELECT NOME FROM PESSOAS WHERE IDADE BETWEEN 20 AND 23",ordered:false,dica:"Use BETWEEN 20 AND 23."}
+];
+function renderPractice(){
+  sidebar.style.display='none';
+  if(!dbStarted)initDB();
+  if(dbError){ content.innerHTML='<div class="theme-wrap"><div class="sql-err">Não foi possível iniciar o motor SQL: '+esc(dbError)+'<br><br>Confirme que o arquivo <b>sql-asm.js</b> está na mesma pasta do app.</div></div>'; return; }
+  if(!dbReady){ content.innerHTML='<div class="theme-wrap"><div class="loading">Carregando o banco de dados de prática...</div></div>'; return; }
+  const sample=runSQL("SELECT * FROM PESSOAS");
+  const ex=EXERCISES.map((e,i)=>'<div class="exercise"><div class="ex-q"><span class="ex-n">'+(i+1)+'</span>'+esc(e.q)+'</div><textarea class="ex-input" id="ex'+i+'" spellcheck="false" placeholder="Escreva sua consulta SQL..."></textarea><div class="ex-actions"><button class="btn primary" onclick="checkEx('+i+')">Rodar e verificar</button><button class="btn" onclick="toggleSol('+i+')">Ver solução</button><span class="ex-badge" id="exbadge'+i+'"></span></div><div class="ex-out" id="exout'+i+'"></div><div class="ex-sol hidden" id="exsol'+i+'"><b>Solução:</b> <code>'+esc(e.sol)+'</code></div></div>').join('');
+  content.innerHTML='<div class="theme-wrap"><div class="crumb">Praticar</div><div class="theme-head"><h2><span class="tnum">DB</span>Pratique e valide</h2></div><div class="block concept"><span class="label">Como funciona</span><p>Há um banco de dados <strong>real</strong> rodando dentro do app (SQLite, offline). Escreva a consulta, clique em <strong>Rodar e verificar</strong> e o app compara o seu resultado com o esperado.</p><p>Tabelas disponíveis: <code>PESSOAS</code> (ID, NOME, IDADE, FILHOS) e <code>COMPRAS</code> (ID, ID_PESSOA, VALOR).</p></div><h3 class="sub">Dados de PESSOAS</h3>'+gridHTML(sample)+'<h3 class="sub">Exercícios</h3>'+ex+'<h3 class="sub">Área livre</h3><textarea class="ex-input" id="freebox" spellcheck="false">SELECT NOME, IDADE FROM PESSOAS ORDER BY IDADE DESC;</textarea><div class="ex-actions"><button class="btn primary" onclick="runFree()">Rodar</button></div><div class="ex-out" id="freeout"></div></div>';
+  content.scrollTop=0;
+}
+function setBadge(i,s){ const b=document.getElementById('exbadge'+i); if(!b)return; b.className='ex-badge '+s; b.textContent=s==='ok'?'✓ Correto':s==='no'?'✗ Ainda não':s==='err'?'⚠ Erro':''; }
+function checkEx(i){
+  const sql=(document.getElementById('ex'+i).value||'').trim(); const out=document.getElementById('exout'+i),e=EXERCISES[i];
+  if(!sql){ setBadge(i,'no'); out.innerHTML='<div class="sql-empty">Escreva uma consulta antes de verificar.</div>'; return; }
+  const got=runSQL(sql);
+  if(got.error){ setBadge(i,'err'); out.innerHTML=gridHTML(got); return; }
+  const exp=runSQL(e.sol);
+  const ok=normRows(got.values,e.ordered)===normRows(exp.values,e.ordered)&&(got.columns||[]).length===(exp.columns||[]).length;
+  setBadge(i,ok?'ok':'no');
+  out.innerHTML=gridHTML(got)+(ok?'<div class="sql-ok-msg">Resultado igual ao esperado. Muito bem.</div>':'<div class="sql-no-msg">Ainda não bate. Compare as linhas e ajuste. Dica: '+esc(e.dica)+'</div>');
+}
+function toggleSol(i){ const el=document.getElementById('exsol'+i); if(el)el.classList.toggle('hidden'); }
+function runFree(){ const sql=(document.getElementById('freebox').value||'').trim(); document.getElementById('freeout').innerHTML=sql?gridHTML(runSQL(sql)):'<div class="sql-empty">Escreva uma consulta.</div>'; }
+
+function SVG_SUB(){return `<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<rect x="300" y="6" width="120" height="44" rx="10" fill="#0f172a"/><text x="360" y="27" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">SQL</text><text x="360" y="43" fill="#93c5fd" font-size="9" text-anchor="middle">5 sublinguagens</text>
+<g stroke="#94a3b8" stroke-width="1.5" fill="none"><path d="M360 50 C360 70,80 66,78 92"/><path d="M360 50 C360 70,220 66,220 92"/><path d="M360 50 C360 70,360 74,360 92"/><path d="M360 50 C360 70,500 66,500 92"/><path d="M360 50 C360 70,642 66,642 92"/></g>
+<g text-anchor="middle"><rect x="20" y="92" width="116" height="38" rx="8" fill="#2563eb"/><text x="78" y="110" fill="#fff" font-size="14" font-weight="700">DDL</text><text x="78" y="124" fill="#dbeafe" font-size="8">Definição</text>
+<rect x="162" y="92" width="116" height="38" rx="8" fill="#16a34a"/><text x="220" y="110" fill="#fff" font-size="14" font-weight="700">DML</text><text x="220" y="124" fill="#dcfce7" font-size="8">Manipulação</text>
+<rect x="304" y="92" width="116" height="38" rx="8" fill="#7c3aed"/><text x="362" y="110" fill="#fff" font-size="14" font-weight="700">DQL</text><text x="362" y="124" fill="#ede9fe" font-size="8">Consulta</text>
+<rect x="446" y="92" width="116" height="38" rx="8" fill="#d97706"/><text x="504" y="110" fill="#fff" font-size="14" font-weight="700">DCL</text><text x="504" y="124" fill="#fef3c7" font-size="8">Controle</text>
+<rect x="588" y="92" width="116" height="38" rx="8" fill="#0d9488"/><text x="646" y="110" fill="#fff" font-size="14" font-weight="700">DTL</text><text x="646" y="124" fill="#ccfbf1" font-size="8">Transação</text></g>
+<g font-size="9" text-anchor="middle">
+<rect x="24" y="146" width="108" height="20" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="78" y="160" fill="#1e3a8a">CREATE</text><rect x="24" y="170" width="108" height="20" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="78" y="184" fill="#1e3a8a">ALTER</text><rect x="24" y="194" width="108" height="20" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="78" y="208" fill="#1e3a8a">DROP</text>
+<rect x="166" y="146" width="108" height="20" rx="5" fill="#f0fdf4" stroke="#bbf7d0"/><text x="220" y="160" fill="#15803d">INSERT</text><rect x="166" y="170" width="108" height="20" rx="5" fill="#f0fdf4" stroke="#bbf7d0"/><text x="220" y="184" fill="#15803d">UPDATE</text><rect x="166" y="194" width="108" height="20" rx="5" fill="#f0fdf4" stroke="#bbf7d0"/><text x="220" y="208" fill="#15803d">DELETE</text>
+<rect x="308" y="146" width="108" height="20" rx="5" fill="#f5f3ff" stroke="#ddd6fe"/><text x="362" y="160" fill="#6d28d9">SELECT</text>
+<rect x="450" y="146" width="108" height="20" rx="5" fill="#fffbeb" stroke="#fde68a"/><text x="504" y="160" fill="#b45309">GRANT</text><rect x="450" y="170" width="108" height="20" rx="5" fill="#fffbeb" stroke="#fde68a"/><text x="504" y="184" fill="#b45309">REVOKE</text>
+<rect x="592" y="146" width="108" height="20" rx="5" fill="#f0fdfa" stroke="#99f6e4"/><text x="646" y="160" fill="#0f766e" font-size="8">START TRANS.</text><rect x="592" y="170" width="108" height="20" rx="5" fill="#f0fdfa" stroke="#99f6e4"/><text x="646" y="184" fill="#0f766e">COMMIT</text><rect x="592" y="194" width="108" height="20" rx="5" fill="#f0fdfa" stroke="#99f6e4"/><text x="646" y="208" fill="#0f766e">ROLLBACK</text></g>
+<text x="360" y="240" fill="#64748b" font-size="10.5" text-anchor="middle" font-style="italic">Defino estrutura (DDL) → mexo nos dados (DML) → consulto (DQL)</text>
+<text x="360" y="257" fill="#64748b" font-size="10.5" text-anchor="middle" font-style="italic">→ controlo acesso (DCL) → garanto a transação (DTL)</text></svg>`}
+
+function SVG_REL(){return `<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<text x="8" y="20" font-size="12.5" font-weight="800" fill="#0f172a">Relacionamento 1:1</text>
+<rect x="60" y="30" width="110" height="40" rx="9" fill="#2563eb"/><text x="115" y="55" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Pessoa</text>
+<text x="190" y="46" font-size="12" font-weight="800" fill="#1e293b" text-anchor="middle">1</text>
+<polygon points="285,32 330,52 285,72 240,52" fill="#475569"/><text x="285" y="56" fill="#fff" font-size="9" text-anchor="middle">Possui</text>
+<text x="380" y="46" font-size="12" font-weight="800" fill="#1e293b" text-anchor="middle">1</text>
+<rect x="410" y="30" width="110" height="40" rx="9" fill="#2563eb"/><text x="465" y="55" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">CPF</text>
+<line x1="170" y1="52" x2="240" y2="52" stroke="#94a3b8" stroke-width="2"/><line x1="330" y1="52" x2="410" y2="52" stroke="#94a3b8" stroke-width="2"/>
+<text x="545" y="49" font-size="9" fill="#64748b">Cada lado tem</text><text x="545" y="61" font-size="9" fill="#64748b">exatamente 1.</text>
+<text x="8" y="120" font-size="12.5" font-weight="800" fill="#0f172a">Relacionamento 1:N</text>
+<rect x="60" y="130" width="110" height="40" rx="9" fill="#16a34a"/><text x="115" y="155" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Cliente</text>
+<text x="190" y="146" font-size="12" font-weight="800" fill="#1e293b" text-anchor="middle">1</text>
+<polygon points="285,132 330,152 285,172 240,152" fill="#475569"/><text x="285" y="156" fill="#fff" font-size="9" text-anchor="middle">Realiza</text>
+<text x="380" y="146" font-size="12" font-weight="800" fill="#1e293b" text-anchor="middle">N</text>
+<rect x="410" y="130" width="110" height="40" rx="9" fill="#16a34a"/><text x="465" y="155" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Compra</text>
+<line x1="170" y1="152" x2="240" y2="152" stroke="#94a3b8" stroke-width="2"/><line x1="330" y1="152" x2="410" y2="152" stroke="#94a3b8" stroke-width="2"/>
+<text x="545" y="149" font-size="9" fill="#64748b">1 cliente faz</text><text x="545" y="161" font-size="9" fill="#64748b">muitas compras.</text>
+<text x="8" y="220" font-size="12.5" font-weight="800" fill="#0f172a">Relacionamento N:M</text>
+<rect x="60" y="230" width="110" height="40" rx="9" fill="#7c3aed"/><text x="115" y="255" fill="#fff" font-size="11.5" font-weight="700" text-anchor="middle">Compras</text>
+<text x="190" y="246" font-size="12" font-weight="800" fill="#1e293b" text-anchor="middle">N</text>
+<polygon points="285,232 332,252 285,272 238,252" fill="#475569"/><text x="285" y="256" fill="#fff" font-size="8.5" text-anchor="middle">Possuem</text>
+<text x="380" y="246" font-size="12" font-weight="800" fill="#1e293b" text-anchor="middle">M</text>
+<rect x="410" y="230" width="110" height="40" rx="9" fill="#7c3aed"/><text x="465" y="255" fill="#fff" font-size="11.5" font-weight="700" text-anchor="middle">Produtos</text>
+<line x1="170" y1="252" x2="238" y2="252" stroke="#94a3b8" stroke-width="2"/><line x1="332" y1="252" x2="410" y2="252" stroke="#94a3b8" stroke-width="2"/>
+<text x="545" y="249" font-size="9" fill="#64748b">Muitos dos dois</text><text x="545" y="261" font-size="9" fill="#64748b">lados se ligam.</text>
+<rect x="60" y="300" width="460" height="48" rx="9" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="74" y="319" font-size="9.5" fill="#475569">Retângulo = entidade (tabela)   •   Losango = relacionamento (ação)</text>
+<text x="74" y="336" font-size="9.5" fill="#475569">1, N, M = cardinalidade (quantos de cada lado participam)</text></svg>`}
+
+function SVG_MOD(){return `<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif">
+<rect x="290" y="6" width="140" height="42" rx="10" fill="#0f172a"/><text x="360" y="32" fill="#fff" font-size="12.5" font-weight="700" text-anchor="middle">Modelos de Dados</text>
+<g stroke="#94a3b8" stroke-width="1.5" fill="none"><path d="M360 48 C360 72,130 66,130 88"/><path d="M360 48 C360 72,360 76,360 88"/><path d="M360 48 C360 72,590 66,590 88"/></g>
+<rect x="40" y="88" width="180" height="38" rx="8" fill="#2563eb"/><text x="130" y="112" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Relacional</text>
+<rect x="270" y="88" width="180" height="38" rx="8" fill="#0d9488"/><text x="360" y="112" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Dimensional</text>
+<rect x="500" y="88" width="180" height="38" rx="8" fill="#d97706"/><text x="590" y="112" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Star Schema</text>
+<foreignObject x="40" y="134" width="180" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font:10px Inter,sans-serif;color:#334155;line-height:1.35">Tabelas ligadas por PK e FK. Ideal para <b>operações transacionais</b> com <b>integridade referencial</b>.</div></foreignObject>
+<foreignObject x="270" y="134" width="180" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font:10px Inter,sans-serif;color:#334155;line-height:1.35">Usado em <b>data warehouse</b> e <b>BI</b>. Separa <b>fatos</b> (vendas) de <b>dimensões</b> (tempo, produto, local).</div></foreignObject>
+<foreignObject x="500" y="134" width="180" height="110"><div xmlns="http://www.w3.org/1999/xhtml" style="font:10px Inter,sans-serif;color:#334155;line-height:1.35">Modelo dimensional: 1 tabela de <b>fato</b> central ligada a várias <b>dimensões</b>, formando uma estrela.</div></foreignObject></svg>`}
+
+const store = {
+  get studied(){ try{return JSON.parse(localStorage.getItem('sql_studied')||'[]')}catch(e){return[]} },
+  set studied(v){ localStorage.setItem('sql_studied', JSON.stringify(v)) },
+  get best(){ return +(localStorage.getItem('sql_quiz_best')||0) },
+  set best(v){ localStorage.setItem('sql_quiz_best', v) },
+  get theme(){ return localStorage.getItem('sql_theme')||'light' },
+  set theme(v){ localStorage.setItem('sql_theme', v) }
+};
+let mode='study', current=THEMES[0].id, filter='';
+
+const $=s=>document.querySelector(s);
+const content=$('#content'), sidebar=$('#sidebar');
+
+function isDone(id){ return store.studied.includes(id) }
+function toggleDone(id){ let s=store.studied; s.includes(id)? s=s.filter(x=>x!==id): s.push(id); store.studied=s }
+
+function renderSidebar(){
+  const studied=store.studied, total=THEMES.length, n=studied.length, pct=Math.round(n/total*100);
+  const cats=[...new Set(THEMES.map(t=>t.cat))];
+  let html=`<div class="progress-card"><div class="row"><b>Seu progresso</b><span class="pct">${pct}%</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px">${n} de ${total} temas estudados</div></div>`;
+  cats.forEach(cat=>{
+    html+=`<div class="cat-label">${cat}</div>`;
+    THEMES.filter(t=>t.cat===cat).forEach(t=>{
+      html+=`<button class="nav-item ${t.id===current?'on':''} ${isDone(t.id)?'done':''}" onclick="go('${t.id}')">
+        <span class="dot">${isDone(t.id)?'✓':''}</span><span class="nt">${t.num}. ${t.title}</span></button>`;
+    });
+  });
+  sidebar.innerHTML=html;
+}
+
+function blockHTML(b){
+  if(b.t==='h3') return `<h3 class="sub">${b.h}</h3>`;
+  if(b.t==='plain') return `<div style="margin:10px 0">${b.h}</div>`;
+  if(b.t==='table') return b.h;
+  if(b.t==='code') return `<div class="code"><span class="label">Código SQL <button class="copy" onclick="copyCode(this)">copiar</button></span><pre>${b.h}</pre></div>`;
+  const lab=b.l?`<span class="label">${b.l}</span>`:'';
+  return `<div class="block ${b.t}">${lab}${b.h}</div>`;
+}
+
+function renderStudy(){
+  const t=THEMES.find(x=>x.id===current);
+  const idx=THEMES.indexOf(t), prev=THEMES[idx-1], next=THEMES[idx+1], done=isDone(t.id);
+  content.innerHTML=`<div class="theme-wrap">
+    <div class="crumb">${t.cat}</div>
+    <div class="theme-head"><h2><span class="tnum">${t.num}</span>${t.title}</h2><span class="when">estudado em ${t.date}</span></div>
+    ${t.blocks.map(blockHTML).join('')}
+    <div class="theme-foot">
+      <button class="btn ${done?'done':'primary'}" onclick="markDone('${t.id}')">${done?'✓ Estudado':'Marcar como estudado'}</button>
+      <div class="navbtns">
+        ${prev?`<button class="btn" onclick="go('${prev.id}')">← ${prev.num}</button>`:''}
+        ${next?`<button class="btn" onclick="go('${next.id}')">${next.num} →</button>`:''}
+      </div>
+    </div></div>`;
+  content.scrollTop=0;
+}
+function markDone(id){ toggleDone(id); renderStudy(); renderSidebar(); }
+function go(id){ current=id; mode='study'; setModeUI(); renderSidebar(); renderStudy(); }
+function copyCode(btn){
+  const pre=btn.closest('.code').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{btn.textContent='copiado!';setTimeout(()=>btn.textContent='copiar',1200)});
+}
+
+let deck=[], fi=0, flipped=false;
+function buildDeck(){ deck=[]; THEMES.forEach(t=>(t.cards||[]).forEach(c=>deck.push({q:c[0],a:c[1],cat:t.title}))); }
+function renderCards(){
+  if(!deck.length) buildDeck();
+  const c=deck[fi];
+  content.innerHTML=`<div class="center-wrap">
+    <div class="fc-counter">Cartão ${fi+1} de ${deck.length} · ${c.cat}</div>
+    <div class="card ${flipped?'flip':''}" id="card" onclick="flip()">
+      <div class="card-inner">
+        <div class="face front"><span class="tag">Pergunta</span><div class="q">${c.q}</div><div class="hint">clique para ver a resposta</div></div>
+        <div class="face back"><span class="tag">Resposta</span><div class="a">${c.a}</div></div>
+      </div></div>
+    <div class="fc-controls">
+      <button class="btn" onclick="prevCard()">← Anterior</button>
+      <button class="btn" onclick="shuffle()">↺ Embaralhar</button>
+      <button class="btn primary" onclick="nextCard()">Próximo →</button>
+    </div></div>`;
+}
+function flip(){ flipped=!flipped; $('#card').classList.toggle('flip'); }
+function nextCard(){ fi=(fi+1)%deck.length; flipped=false; renderCards(); }
+function prevCard(){ fi=(fi-1+deck.length)%deck.length; flipped=false; renderCards(); }
+function shuffle(){ for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]} fi=0;flipped=false;renderCards(); }
+
+let qi=0, qscore=0, qorder=[], answered=false;
+function startQuiz(){ qi=0;qscore=0;answered=false; qorder=QUIZ.map((_,i)=>i); renderQuiz(); }
+function renderQuiz(){
+  if(qi>=QUIZ.length) return renderResult();
+  const q=QUIZ[qorder[qi]];
+  content.innerHTML=`<div class="center-wrap" style="max-width:640px">
+    <div class="fc-counter">Pergunta ${qi+1} de ${QUIZ.length} · acertos: ${qscore}</div>
+    <div class="quiz-q"><div class="qn">Quiz</div><h3>${q.q}</h3>
+      <div id="opts">${q.o.map((o,i)=>`<button class="opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+      <div id="exp"></div>
+      <div id="qnav" style="text-align:right;margin-top:14px"></div>
+    </div></div>`;
+}
+function answer(i){
+  if(answered) return; answered=true;
+  const q=QUIZ[qorder[qi]], opts=document.querySelectorAll('.opt');
+  opts.forEach((o,idx)=>{ o.style.pointerEvents='none';
+    if(idx===q.c) o.classList.add('correct');
+    if(idx===i && i!==q.c) o.classList.add('wrong'); });
+  if(i===q.c) qscore++;
+  $('#exp').innerHTML=`<div class="explain"><strong>${i===q.c?'Correto. ':'Resposta certa acima. '}</strong>${q.e}</div>`;
+  $('#qnav').innerHTML=`<button class="btn primary" onclick="nextQuiz()">${qi+1<QUIZ.length?'Próxima →':'Ver resultado'}</button>`;
+}
+function nextQuiz(){ qi++; answered=false; renderQuiz(); }
+function renderResult(){
+  const pct=Math.round(qscore/QUIZ.length*100); const best=Math.max(store.best,qscore); store.best=best;
+  let msg = pct>=80?'Excelente domínio.':pct>=50?'Bom caminho. Revise os temas marcados.':'Vale revisar os temas antes de seguir.';
+  content.innerHTML=`<div class="center-wrap"><div class="result">
+    <div class="score">${qscore}/${QUIZ.length}</div>
+    <p style="font-size:16px;color:var(--ink);margin-top:10px">${msg}</p>
+    <p>Você acertou ${pct}%. Melhor resultado: ${best}/${QUIZ.length}.</p>
+    <div style="margin-top:18px"><button class="btn primary" onclick="startQuiz()">↻ Refazer quiz</button>
+    <button class="btn" onclick="setMode('study')">Voltar a estudar</button></div>
+  </div></div>`;
+}
+
+function search(q){
+  filter=q.toLowerCase().trim();
+  if(!filter){ renderSidebar(); return; }
+  const hits=THEMES.filter(t=>(t.title+' '+t.cat+' '+JSON.stringify(t.blocks)).toLowerCase().includes(filter));
+  let html=`<div class="cat-label">Resultados (${hits.length})</div>`;
+  if(!hits.length) html+=`<div style="padding:10px;color:var(--muted);font-size:13px">Nada encontrado.</div>`;
+  hits.forEach(t=>{ html+=`<button class="nav-item ${isDone(t.id)?'done':''}" onclick="go('${t.id}')"><span class="dot">${isDone(t.id)?'✓':''}</span><span class="nt">${t.num}. ${t.title}</span></button>`; });
+  sidebar.innerHTML=html;
+}
+
+function setMode(m){ mode=m; setModeUI(); render(); }
+function setModeUI(){ document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode)); }
+function render(){
+  const showSide = mode==='study';
+  sidebar.style.display = showSide?'block':'none';
+  if(mode==='study'){ renderSidebar(); renderStudy(); }
+  else if(mode==='cards'){ fi=0;flipped=false;buildDeck();renderCards(); }
+  else if(mode==='quiz'){ startQuiz(); }
+  else if(mode==='practice'){ renderPractice(); }
+}
+document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$('#search').addEventListener('input',e=>search(e.target.value));
+$('#themeBtn').onclick=()=>{ const nt=store.theme==='dark'?'light':'dark'; store.theme=nt; document.documentElement.dataset.theme=nt; };
+
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(mode==='cards'){ if(e.key==='ArrowRight')nextCard(); if(e.key==='ArrowLeft')prevCard(); if(e.key===' '){e.preventDefault();flip();} }
+  if(mode==='study'){ const idx=THEMES.findIndex(t=>t.id===current);
+    if(e.key==='ArrowRight'&&THEMES[idx+1])go(THEMES[idx+1].id);
+    if(e.key==='ArrowLeft'&&THEMES[idx-1])go(THEMES[idx-1].id); }
+});
+
+document.documentElement.dataset.theme=store.theme;
+render();
+initDB();
+</script>
+</body>
+</html>

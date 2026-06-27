@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Caderno de SQL</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 20mm 16mm;
+    @bottom-center {
+      content: "Caderno de SQL  ·  página " counter(page);
+      font-family: 'Lato', sans-serif;
+      font-size: 8.5pt;
+      color: #94a3b8;
+    }
+  }
+  @page :first { margin: 0; @bottom-center { content: ""; } }
+
+  * { box-sizing: border-box; }
+  html { -weasy-hyphens: none; }
+  body {
+    font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+    color: #1e293b;
+    font-size: 10.8pt;
+    line-height: 1.55;
+    margin: 0;
+  }
+  p { margin: 0 0 8px 0; }
+  strong { color: #0f172a; }
+  code {
+    font-family: 'Latin Modern Mono', 'DejaVu Sans Mono', monospace;
+    background: #f1f5f9;
+    color: #0f172a;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 9.4pt;
+  }
+
+  .cover {
+    height: 297mm;
+    background: linear-gradient(150deg, #0f172a 0%, #1e3a8a 55%, #2563eb 100%);
+    color: #fff;
+    padding: 40mm 24mm;
+    page-break-after: always;
+    position: relative;
+  }
+  .cover .kicker {
+    font-size: 12pt; letter-spacing: 5px; text-transform: uppercase;
+    color: #93c5fd; font-weight: 700; margin-bottom: 14px;
+  }
+  .cover h1 { font-size: 58pt; line-height: 1.02; margin: 0 0 10px 0; font-weight: 800; letter-spacing: -1px; }
+  .cover .sub { font-size: 18pt; color: #dbeafe; font-weight: 400; margin-top: 6px; }
+  .cover .tagbox { position: absolute; bottom: 38mm; left: 24mm; right: 24mm; }
+  .cover .tag {
+    display: inline-block; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px; padding: 7px 16px; font-size: 11pt; margin: 0 8px 10px 0; color: #eff6ff;
+  }
+  .cover .meta { margin-top: 26px; font-size: 11pt; color: #bfdbfe; }
+
+  .section-title {
+    font-size: 20pt; font-weight: 800; color: #0f172a; margin: 4px 0 4px 0;
+    padding-bottom: 6px; border-bottom: 3px solid #2563eb; letter-spacing: -0.3px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 14px;
+  }
+  .section-title .st-left { flex: 1 1 auto; }
+  .section-title .when {
+    font-size: 8.5pt; font-weight: 600; letter-spacing: 0; color: #94a3b8;
+    font-style: italic; white-space: nowrap; padding-bottom: 3px;
+  }
+  .section-num {
+    display: inline-block; background: #2563eb; color: #fff; font-size: 12pt;
+    width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 8px;
+    margin-right: 10px; vertical-align: 2px;
+  }
+  h3 { font-size: 13pt; color: #1e3a8a; margin: 16px 0 6px 0; }
+  .page-break { page-break-before: always; }
+
+  .block {
+    border-radius: 10px; padding: 13px 16px 13px 16px; margin: 10px 0;
+    page-break-inside: avoid; border-left: 5px solid;
+  }
+  .block .label {
+    font-size: 8pt; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    display: block; margin-bottom: 5px;
+  }
+  
+  .concept { background: #eff6ff; border-color: #2563eb; }
+  .concept .label { color: #2563eb; }
+  
+  .attr { background: #fffbeb; border-color: #d97706; }
+  .attr .label { color: #b45309; }
+  
+  .tip { background: #f5f3ff; border-color: #7c3aed; }
+  .tip .label { color: #6d28d9; }
+  
+  .recap { background: #f0fdf4; border-color: #16a34a; }
+  .recap .label { color: #15803d; }
+  
+  .map { background: #f0fdfa; border: 1px solid #99f6e4; border-left: 5px solid #0d9488; }
+  .map .label { color: #0f766e; }
+
+  .code {
+    background: #0f172a; border-radius: 10px; padding: 14px 16px; margin: 10px 0;
+    page-break-inside: avoid; border-left: 5px solid #38bdf8;
+  }
+  .code .label { font-size: 8pt; font-weight: 800; letter-spacing: 1.5px; color: #38bdf8; text-transform: uppercase; display: block; margin-bottom: 8px; }
+  .code pre {
+    margin: 0; font-family: 'Latin Modern Mono', 'DejaVu Sans Mono', monospace;
+    font-size: 9.2pt; line-height: 1.5; color: #e2e8f0; white-space: pre-wrap;
+  }
+  .kw { color: #f472b6; font-weight: 700; }   
+  .ty { color: #38bdf8; }                       
+  .st { color: #86efac; }                       
+  .cm { color: #64748b; font-style: italic; }   
+  .fn { color: #fbbf24; }                        
+
+  table.cmd { width: 100%; border-collapse: collapse; margin: 8px 0; page-break-inside: avoid; }
+  table.cmd th { background: #1e3a8a; color: #fff; text-align: left; padding: 7px 11px; font-size: 9.5pt; }
+  table.cmd td { border-bottom: 1px solid #e2e8f0; padding: 7px 11px; font-size: 9.8pt; vertical-align: top; }
+  table.cmd td:first-child { font-family: 'Latin Modern Mono', monospace; font-weight: 700; color: #1e3a8a; white-space: nowrap; }
+  table.cmd tr:nth-child(even) td { background: #f8fafc; }
+
+  .toc-item { display: flex; align-items: baseline; padding: 6px 0; border-bottom: 1px dashed #cbd5e1; font-size: 11pt; }
+  .toc-item .n { color: #2563eb; font-weight: 800; width: 30px; }
+  .toc-item .t { flex: 1; color: #1e293b; }
+  .toc-item .tag2 { font-size: 8.5pt; color: #64748b; }
+
+  .legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .legend-cell { border-radius: 8px; padding: 9px 12px; font-size: 9.5pt; border-left: 5px solid; }
+  ul.clean { margin: 6px 0 6px 0; padding-left: 20px; }
+  ul.clean li { margin-bottom: 4px; }
+  .small { font-size: 9pt; color: #64748b; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Caderno de Estudos</div>
+  <h1>SQL</h1>
+  <div class="sub">Structured Query Language &middot; Banco de Dados</div>
+  <div class="tagbox">
+    <div class="tag">Organizado por temas</div>
+    <div class="tag">DDL &middot; DML &middot; DQL &middot; DCL &middot; DTL</div>
+    <div class="tag">Relacionamentos &amp; Modelos de Dados</div>
+    <div class="meta">Última atualização: 26/06/2026 &nbsp;|&nbsp; Diego &nbsp;|&nbsp; uso no GoodNotes</div>
+  </div>
+</div>
+
+<div>
+  <div class="section-title">Como usar este caderno</div>
+  <p style="margin-top:10px">Este é o seu caderno único de SQL, <strong>organizado por temas</strong> e não por ordem de aula. Cada novo conteúdo é encaixado no tema a que pertence, mantendo o mesmo padrão visual. As cores indicam o <strong>tipo</strong> de conteúdo, para você localizar a informação rapidamente. Ao lado de cada título há uma <strong>data discreta</strong> indicando quando aquele tema foi estudado.</p>
+
+  <div class="legend-grid" style="margin-top:12px">
+    <div class="legend-cell" style="background:#eff6ff;border-color:#2563eb"><strong style="color:#2563eb">CONCEITO</strong><br>Definição ou ideia central.</div>
+    <div class="legend-cell" style="background:#0f172a;border-color:#38bdf8;color:#e2e8f0"><strong style="color:#38bdf8">CÓDIGO SQL</strong><br>Sintaxe e exemplos prontos.</div>
+    <div class="legend-cell" style="background:#fffbeb;border-color:#d97706"><strong style="color:#b45309">ATRIBUTO / REGRA</strong><br>Restrições e propriedades de colunas.</div>
+    <div class="legend-cell" style="background:#f5f3ff;border-color:#7c3aed"><strong style="color:#6d28d9">DICA / ATENÇÃO</strong><br>Pontos que costumam confundir.</div>
+    <div class="legend-cell" style="background:#f0fdfa;border-color:#0d9488"><strong style="color:#0f766e">MAPA MENTAL</strong><br>Visão geral em diagrama.</div>
+    <div class="legend-cell" style="background:#f0fdf4;border-color:#16a34a"><strong style="color:#15803d">NA PRÁTICA</strong><br>Resumo e o que fazer com isso.</div>
+  </div>
+
+  <div class="section-title" style="margin-top:24px">Índice por temas</div>
+  <div class="toc-item"><span class="n">01</span><span class="t">O que é Banco de Dados</span><span class="tag2">Conceito</span></div>
+  <div class="toc-item"><span class="n">02</span><span class="t">O que é SQL</span><span class="tag2">Conceito</span></div>
+  <div class="toc-item"><span class="n">03</span><span class="t">Padronização (ANSI / ISO)</span><span class="tag2">Conceito</span></div>
+  <div class="toc-item"><span class="n">04</span><span class="t">As 5 sublinguagens do SQL</span><span class="tag2">Mapa mental</span></div>
+  <div class="toc-item"><span class="n">05</span><span class="t">DDL &mdash; Definição (CREATE, ALTER, DROP)</span><span class="tag2">Código</span></div>
+  <div class="toc-item"><span class="n">06</span><span class="t">DML &mdash; Manipulação (INSERT, UPDATE, DELETE)</span><span class="tag2">Código</span></div>
+  <div class="toc-item"><span class="n">07</span><span class="t">DQL &mdash; Consulta (SELECT)</span><span class="tag2">Código</span></div>
+  <div class="toc-item"><span class="n">08</span><span class="t">DCL &mdash; Controle (GRANT, REVOKE)</span><span class="tag2">Código</span></div>
+  <div class="toc-item"><span class="n">09</span><span class="t">DTL &mdash; Transação (COMMIT, ROLLBACK)</span><span class="tag2">Código</span></div>
+  <div class="toc-item"><span class="n">10</span><span class="t">Atributos de colunas</span><span class="tag2">Atributo</span></div>
+  <div class="toc-item"><span class="n">11</span><span class="t">Chaves: PK, FK, UNIQUE e Surrogada</span><span class="tag2">Chaves</span></div>
+  <div class="toc-item"><span class="n">12</span><span class="t">Relacionamentos: 1:1, 1:N, N:M</span><span class="tag2">Diagrama</span></div>
+  <div class="toc-item"><span class="n">13</span><span class="t">Modelos de Dados</span><span class="tag2">Mapa mental</span></div>
+  <div class="toc-item"><span class="n">14</span><span class="t">Filtros e a cláusula WHERE</span><span class="tag2">Consultas avançadas</span></div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">01</span>O que é Banco de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    Um <strong>banco de dados</strong> é uma coleção organizada de dados armazenados eletronicamente em um sistema de computador. Ele permite <strong>gerenciar, buscar e manipular</strong> essas informações de forma eficiente.
+  </div>
+
+  <h3>Tabelas: a estrutura básica</h3>
+  <p>Dentro de um banco, os dados ficam em <strong>tabelas</strong>, organizadas em <strong>linhas</strong> e <strong>colunas</strong>:</p>
+  <ul class="clean">
+    <li><strong>Linha (registro):</strong> representa uma ocorrência completa &mdash; por exemplo, um cliente específico.</li>
+    <li><strong>Coluna (campo / atributo):</strong> representa uma característica do dado &mdash; por exemplo, "nome" ou "CPF".</li>
+  </ul>
+
+  <div class="block tip">
+    <span class="label">Analogia</span>
+    Pense numa planilha do Excel. Cada <strong>aba</strong> é uma tabela, cada <strong>linha</strong> é um cadastro e cada <strong>coluna</strong> é uma informação daquele cadastro. Um banco de dados é isso, porém preparado para muitos dados e muitos acessos ao mesmo tempo, com regras de integridade.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <strong>Em outras palavras:</strong> banco de dados = onde a informação mora, de forma organizada.<br>
+    <strong>O que isso significa:</strong> toda consulta SQL que você escrever depois vai agir sobre essas linhas e colunas.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">02</span>O que é SQL</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    <strong>SQL</strong> (Structured Query Language) é a "Linguagem Estruturada de Consulta". É o idioma que usamos para conversar com o banco de dados: criar tabelas, inserir, alterar e consultar dados.
+  </div>
+
+  <ul class="clean">
+    <li>Criada no <strong>início dos anos 70</strong>, pela <strong>IBM</strong>.</li>
+    <li>Linguagem de <strong>altíssimo nível</strong>: bem próxima da linguagem humana (inglês). Comandos como <code>SELECT</code>, <code>INSERT</code> e <code>DELETE</code> já dizem o que fazem.</li>
+    <li>É uma linguagem <strong>declarativa</strong>: você descreve <em>o resultado que quer</em>, não o passo a passo de como obtê-lo.</li>
+    <li>Ao longo do tempo surgiram novos <strong>dialetos</strong>, derivando e evoluindo o SQL.</li>
+  </ul>
+
+  <div class="block tip">
+    <span class="label">Dica &mdash; declarativo vs. imperativo</span>
+    <strong>Declarativo</strong> (SQL): "quero os clientes de SP". Você não diz como percorrer a tabela; o banco resolve.<br>
+    <strong>Imperativo</strong> (ex.: um <code>for</code> em Python): você escreve cada passo da busca.<br>
+    <strong>Por que importa:</strong> isso explica por que SQL é tão enxuto. Você foca no "o quê", e o motor do banco cuida do "como".
+  </div>
+
+  <div class="block tip">
+    <span class="label">Dica &mdash; o que é "dialeto"</span>
+    Um <strong>dialeto</strong> é uma versão do SQL adaptada por um fabricante. Exemplos: <strong>MySQL</strong>, <strong>PostgreSQL</strong>, <strong>SQL Server (T-SQL)</strong>, <strong>Oracle (PL/SQL)</strong>. O núcleo é o mesmo; mudam alguns detalhes de sintaxe.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">03</span>Padronização</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <p>Para que o SQL funcionasse de forma parecida em qualquer sistema, ele foi padronizado por dois órgãos:</p>
+
+  <table class="cmd">
+    <tr><th style="width:34%">Órgão</th><th>O que é</th><th style="width:14%">Ano</th></tr>
+    <tr><td>ANSI</td><td>American National Standards Institute &mdash; instituto de padrões dos EUA.</td><td>1986</td></tr>
+    <tr><td>ISO</td><td>International Organization for Standardization &mdash; padrões internacionais.</td><td>1987</td></tr>
+  </table>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    O SQL é a linguagem usada em praticamente <strong>todos os SGBDs</strong> do mercado.
+  </div>
+
+  <div class="block tip">
+    <span class="label">Dica &mdash; o que é SGBD</span>
+    <strong>SGBD</strong> = Sistema de Gerenciamento de Banco de Dados (em inglês, DBMS). É o software que administra o banco: guarda os dados, garante segurança e executa seus comandos SQL. Exemplos: MySQL, PostgreSQL, Oracle, SQL Server.
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção</span>
+    Mesmo com a padronização, <strong>cada fabricante tem suas características</strong> próprias. Um comando pode funcionar no MySQL e exigir pequeno ajuste no SQL Server. Por isso, sempre confira a documentação do banco que você está usando.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">04</span>As 5 sublinguagens do SQL</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <p>O SQL não é um bloco único. Ele é formado por <strong>cinco conjuntos de comandos</strong>, cada um com uma finalidade. Entender essa divisão organiza todo o resto da matéria.</p>
+
+  <div class="map">
+    <span class="label">Mapa mental &mdash; o "guarda-chuva" SQL</span>
+    <svg viewBox="0 0 720 430" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Lato, sans-serif">
+      
+      <rect x="300" y="8" width="120" height="46" rx="10" fill="#0f172a"/>
+      <text x="360" y="30" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">SQL</text>
+      <text x="360" y="47" fill="#93c5fd" font-size="9.5" text-anchor="middle">5 sublinguagens</text>
+
+      <g stroke="#94a3b8" stroke-width="1.6" fill="none">
+        <path d="M360 54 C360 75, 80 70, 78 96"/>
+        <path d="M360 54 C360 75, 220 70, 220 96"/>
+        <path d="M360 54 C360 75, 360 78, 360 96"/>
+        <path d="M360 54 C360 75, 500 70, 500 96"/>
+        <path d="M360 54 C360 75, 642 70, 642 96"/>
+      </g>
+
+      <rect x="20" y="96" width="116" height="40" rx="8" fill="#2563eb"/>
+      <text x="78" y="113" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">DDL</text>
+      <text x="78" y="129" fill="#dbeafe" font-size="8.5" text-anchor="middle">Definição</text>
+      <g font-size="9.5" text-anchor="middle">
+        <rect x="24" y="150" width="108" height="22" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="78" y="165" fill="#1e3a8a">CREATE</text>
+        <rect x="24" y="178" width="108" height="22" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="78" y="193" fill="#1e3a8a">ALTER</text>
+        <rect x="24" y="206" width="108" height="22" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="78" y="221" fill="#1e3a8a">DROP</text>
+      </g>
+
+      <rect x="162" y="96" width="116" height="40" rx="8" fill="#16a34a"/>
+      <text x="220" y="113" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">DML</text>
+      <text x="220" y="129" fill="#dcfce7" font-size="8.5" text-anchor="middle">Manipulação</text>
+      <g font-size="9.5" text-anchor="middle">
+        <rect x="166" y="150" width="108" height="22" rx="5" fill="#f0fdf4" stroke="#bbf7d0"/><text x="220" y="165" fill="#15803d">INSERT</text>
+        <rect x="166" y="178" width="108" height="22" rx="5" fill="#f0fdf4" stroke="#bbf7d0"/><text x="220" y="193" fill="#15803d">UPDATE</text>
+        <rect x="166" y="206" width="108" height="22" rx="5" fill="#f0fdf4" stroke="#bbf7d0"/><text x="220" y="221" fill="#15803d">DELETE</text>
+      </g>
+
+      <rect x="304" y="96" width="116" height="40" rx="8" fill="#7c3aed"/>
+      <text x="362" y="113" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">DQL</text>
+      <text x="362" y="129" fill="#ede9fe" font-size="8.5" text-anchor="middle">Consulta</text>
+      <g font-size="9.5" text-anchor="middle">
+        <rect x="308" y="150" width="108" height="22" rx="5" fill="#f5f3ff" stroke="#ddd6fe"/><text x="362" y="165" fill="#6d28d9">SELECT</text>
+      </g>
+
+      <rect x="446" y="96" width="116" height="40" rx="8" fill="#d97706"/>
+      <text x="504" y="113" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">DCL</text>
+      <text x="504" y="129" fill="#fef3c7" font-size="8.5" text-anchor="middle">Controle</text>
+      <g font-size="9.5" text-anchor="middle">
+        <rect x="450" y="150" width="108" height="22" rx="5" fill="#fffbeb" stroke="#fde68a"/><text x="504" y="165" fill="#b45309">GRANT</text>
+        <rect x="450" y="178" width="108" height="22" rx="5" fill="#fffbeb" stroke="#fde68a"/><text x="504" y="193" fill="#b45309">REVOKE</text>
+      </g>
+
+      <rect x="588" y="96" width="116" height="40" rx="8" fill="#0d9488"/>
+      <text x="646" y="113" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">DTL</text>
+      <text x="646" y="129" fill="#ccfbf1" font-size="8.5" text-anchor="middle">Transação</text>
+      <g font-size="9" text-anchor="middle">
+        <rect x="592" y="150" width="108" height="22" rx="5" fill="#f0fdfa" stroke="#99f6e4"/><text x="646" y="165" fill="#0f766e">START TRANS.</text>
+        <rect x="592" y="178" width="108" height="22" rx="5" fill="#f0fdfa" stroke="#99f6e4"/><text x="646" y="193" fill="#0f766e">COMMIT</text>
+        <rect x="592" y="206" width="108" height="22" rx="5" fill="#f0fdfa" stroke="#99f6e4"/><text x="646" y="221" fill="#0f766e">ROLLBACK</text>
+      </g>
+
+      <text x="360" y="270" fill="#475569" font-size="11" text-anchor="middle" font-style="italic">Defino a estrutura (DDL) &rarr; coloco/mudo dados (DML) &rarr; consulto (DQL)</text>
+      <text x="360" y="290" fill="#475569" font-size="11" text-anchor="middle" font-style="italic">&rarr; controlo quem acessa (DCL) &rarr; garanto a transação (DTL)</text>
+    </svg>
+  </div>
+
+  <table class="cmd">
+    <tr><th>Sigla</th><th>Nome</th><th>Para quê serve</th></tr>
+    <tr><td>DDL</td><td>Data Definition Language</td><td>Definir a estrutura (criar/alterar/excluir tabelas).</td></tr>
+    <tr><td>DML</td><td>Data Manipulation Language</td><td>Manipular os dados (inserir, alterar, deletar registros).</td></tr>
+    <tr><td>DQL</td><td>Data Query Language</td><td>Consultar dados (SELECT).</td></tr>
+    <tr><td>DCL</td><td>Data Control Language</td><td>Controlar acessos e permissões.</td></tr>
+    <tr><td>DTL</td><td>Data Transaction Language</td><td>Gerenciar transações (confirmar ou desfazer).</td></tr>
+  </table>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Quando estudar qualquer comando novo, primeiro pergunte: <strong>"de qual sublinguagem ele faz parte?"</strong>. Isso já diz o propósito dele e evita confusão.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">05</span>DDL &mdash; Linguagem de Definição de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    A <strong>DDL</strong> cuida da <strong>estrutura</strong> do banco. Ela não mexe nos dados em si, e sim no "esqueleto": as tabelas e suas colunas.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Comando</th><th>Ação</th></tr>
+    <tr><td>CREATE</td><td>Cria uma estrutura (ex.: uma tabela).</td></tr>
+    <tr><td>ALTER</td><td>Altera uma estrutura existente.</td></tr>
+    <tr><td>DROP</td><td>Exclui uma estrutura.</td></tr>
+  </table>
+
+  <h3>CREATE TABLE &mdash; criar uma tabela</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Forma geral:</span>
+<span class="kw">CREATE TABLE</span> <span class="fn">nomeTabela</span> (campo tipo atributo, ... );
+
+<span class="cm">-- Exemplo: tabela de clientes</span>
+<span class="kw">CREATE TABLE</span> <span class="fn">CLIENTE</span> (
+  <span class="fn">codigo</span>     <span class="ty">int</span>          <span class="kw">NOT NULL PRIMARY KEY</span>,
+  <span class="fn">nome</span>       <span class="ty">varchar</span>(30)  <span class="kw">NOT NULL</span>,
+  <span class="fn">cpf</span>        <span class="ty">int</span>          <span class="kw">UNIQUE</span>,
+  <span class="fn">uf</span>         <span class="ty">char</span>(2)      <span class="kw">DEFAULT</span> <span class="kw">null</span>,
+  <span class="fn">nascimento</span> <span class="ty">date</span>         <span class="kw">DEFAULT</span> <span class="st">'0000-00-00'</span>,
+  <span class="fn">telefone</span>   <span class="ty">char</span>(8)      <span class="kw">DEFAULT</span> <span class="kw">null</span>,
+  <span class="fn">sexo</span>       <span class="ty">char</span>(1)
+);</pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Lendo a sintaxe</span>
+    Cada coluna segue o padrão <strong>nome &middot; tipo &middot; atributos</strong>. Exemplo: <code>nome varchar(30) NOT NULL</code> = coluna "nome", texto de até 30 caracteres, que não pode ficar vazia.
+  </div>
+
+  <h3>ALTER TABLE &mdash; alterar uma tabela</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Incluir uma nova coluna:</span>
+<span class="kw">ALTER TABLE</span> <span class="fn">CLIENTE</span> <span class="kw">ADD</span> <span class="fn">email</span> <span class="ty">VARCHAR</span>(20);
+<span class="kw">ALTER TABLE</span> <span class="fn">CLIENTE</span> <span class="kw">ADD</span> <span class="fn">fax</span> <span class="ty">VARCHAR</span>(18) <span class="kw">AFTER</span> <span class="fn">uf</span>;
+
+<span class="cm">-- Eliminar uma coluna existente:</span>
+<span class="kw">ALTER TABLE</span> <span class="fn">CLIENTE</span> <span class="kw">DROP</span> <span class="fn">fax</span>;
+
+<span class="cm">-- Alterar o tipo de dado de uma coluna:</span>
+<span class="kw">ALTER TABLE</span> <span class="fn">CLIENTE</span> <span class="kw">MODIFY</span> <span class="fn">email</span> <span class="ty">VARCHAR</span>(40);</pre>
+  </div>
+
+  <h3>DROP TABLE &mdash; excluir uma tabela</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">DROP TABLE</span> [nome da tabela];</pre>
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção &mdash; cuidado com DROP e ALTER...DROP</span>
+    <strong>DROP TABLE</strong> apaga a tabela inteira, com todos os dados, e não tem "lixeira". <strong>ALTER TABLE ... DROP coluna</strong> apaga só a coluna. São ações destrutivas: confirme o ambiente antes de rodar.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">06</span>DML &mdash; Linguagem de Manipulação de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    A <strong>DML</strong> trabalha com o <strong>conteúdo</strong> das tabelas: inserir, alterar e apagar <strong>registros</strong> (linhas). A estrutura já existe; aqui mexemos nos dados.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Comando</th><th>Ação</th></tr>
+    <tr><td>INSERT</td><td>Insere dados (novas linhas).</td></tr>
+    <tr><td>UPDATE</td><td>Altera dados existentes.</td></tr>
+    <tr><td>DELETE</td><td>Deleta dados.</td></tr>
+  </table>
+
+  <h3>INSERT INTO &mdash; inserir registros</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">INSERT INTO</span> <span class="fn">TABELA</span> <span class="kw">VALUES</span> (valores);
+
+<span class="cm">-- Exemplo:</span>
+<span class="kw">INSERT INTO</span> <span class="fn">TABELA</span> <span class="kw">VALUES</span>
+(123, <span class="st">'Allan Rocker'</span>, <span class="st">'12345'</span>, <span class="st">'SP'</span>,
+ <span class="st">'1234-12-12'</span>, <span class="st">'123456'</span>, <span class="st">'M'</span>, <span class="st">'allan@email.com'</span>);</pre>
+  </div>
+
+  <h3>UPDATE &mdash; atualizar registros</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">UPDATE</span> <span class="fn">table_name</span>
+<span class="kw">SET</span> <span class="fn">column1</span> = value1, <span class="fn">column2</span> = value2, ...
+<span class="kw">WHERE</span> condition;</pre>
+  </div>
+
+  <h3>DELETE &mdash; apagar registros</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">DELETE FROM</span> <span class="fn">table_name</span> <span class="kw">WHERE</span> condition;</pre>
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção &mdash; o perigo de esquecer o WHERE</span>
+    Em <code>UPDATE</code> e <code>DELETE</code>, a cláusula <strong>WHERE</strong> define <em>quais</em> linhas serão afetadas. <strong>Sem WHERE, o comando atinge TODAS as linhas da tabela.</strong> Um <code>DELETE FROM CLIENTE;</code> sem WHERE apaga todos os clientes.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <strong>Hábito de segurança:</strong> antes de rodar um UPDATE/DELETE, escreva primeiro um <code>SELECT</code> com o mesmo <code>WHERE</code> para ver exatamente quais linhas serão afetadas.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">07</span>DQL &mdash; Linguagem de Consulta de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    A <strong>DQL</strong> é dedicada a <strong>consultar</strong> dados. O comando central é o <strong>SELECT</strong>, o mais usado no dia a dia de quem trabalha com dados.
+  </div>
+
+  <p>O SELECT também permite:</p>
+  <ul class="clean">
+    <li><strong>Ordenação</strong> de dados (ex.: por nome, por data).</li>
+    <li><strong>Agrupamento</strong> de dados (juntar por categoria).</li>
+    <li><strong>Funções aritméticas</strong> (somar, contar, calcular médias).</li>
+    <li><strong>Filtros</strong> de seleção (escolher só o que interessa).</li>
+  </ul>
+
+  <h3>SELECT &mdash; consultar</h3>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">SELECT</span> *
+<span class="kw">FROM</span> <span class="fn">TABELA</span>
+<span class="kw">WHERE</span> <span class="fn">nome</span> = <span class="st">'Allan'</span>;</pre>
+  </div>
+
+  <div class="block tip">
+    <span class="label">Lendo a consulta</span>
+    <code>SELECT *</code> = "traga todas as colunas". <code>FROM TABELA</code> = "da tabela TABELA". <code>WHERE nome = 'Allan'</code> = "apenas as linhas onde a coluna nome for igual a Allan".<br>
+    <strong>Dica de leitura:</strong> mentalmente, o banco lê primeiro o <code>FROM</code>, depois o <code>WHERE</code> e por último o <code>SELECT</code>.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    Como você está em transição para Dados, o <code>SELECT</code> será sua ferramenta mais frequente. Vale dominar bem <code>WHERE</code>, <code>ORDER BY</code> e <code>GROUP BY</code> nas próximas aulas.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">08</span>DCL &mdash; Linguagem de Controle de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    A <strong>DCL</strong> controla <strong>quem pode fazer o quê</strong> no banco. É a parte de <strong>permissões e segurança</strong> de acesso.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Comando</th><th>Ação</th></tr>
+    <tr><td>GRANT</td><td>Habilita (concede) acesso a dados e operações.</td></tr>
+    <tr><td>REVOKE</td><td>Revoga (retira) acesso a dados e operações.</td></tr>
+  </table>
+
+  <div class="block tip">
+    <span class="label">Analogia &mdash; chaves de acesso</span>
+    Pense num prédio. <strong>GRANT</strong> é entregar a chave de uma sala a alguém. <strong>REVOKE</strong> é recolher essa chave. O DCL define quem entra em quais "salas" (tabelas) e o que pode fazer lá dentro.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    No seu contexto de serviços financeiros, DCL é o que garante que cada pessoa veja apenas os dados que tem permissão. É um pilar de <strong>segurança e governança</strong> de dados.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">09</span>DTL &mdash; Linguagem de Transação de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    A <strong>DTL</strong> gerencia <strong>transações</strong>. Uma transação é um conjunto de operações tratado como uma <strong>unidade única</strong>: ou tudo dá certo e é confirmado, ou nada é aplicado.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Comando</th><th>Ação</th></tr>
+    <tr><td>START TRANSACTION</td><td>Inicia a transação.</td></tr>
+    <tr><td>COMMIT</td><td>Concretiza (confirma) a transação.</td></tr>
+    <tr><td>ROLLBACK</td><td>Anula (desfaz) a transação.</td></tr>
+  </table>
+
+  <div class="block tip">
+    <span class="label">Analogia &mdash; transferência bancária</span>
+    Numa transferência, dois passos precisam acontecer juntos: <strong>debitar</strong> de uma conta e <strong>creditar</strong> em outra. Se o sistema cair no meio, não pode debitar sem creditar.<br>
+    <strong>COMMIT</strong> = confirma os dois passos juntos. <strong>ROLLBACK</strong> = se algo falhou, desfaz tudo e volta ao estado inicial. Ninguém perde dinheiro.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <strong>Em outras palavras:</strong> transação garante o "tudo ou nada". <strong>Por que importa:</strong> é o que dá <strong>confiabilidade</strong> a sistemas financeiros, evitando estados pela metade.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">10</span>Atributos de colunas</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    <strong>Atributos</strong> são regras e propriedades que você aplica a uma coluna no momento de criá-la. Eles controlam o que aquela coluna aceita ou como se comporta.
+  </div>
+
+  <table class="cmd">
+    <tr><th>Atributo</th><th>O que faz</th></tr>
+    <tr><td>NULL / NOT NULL</td><td>Permite ou não valores nulos na coluna. <strong>NULL é diferente de vazio:</strong> nulo = "ausência de valor / desconhecido".</td></tr>
+    <tr><td>SIGNED / UNSIGNED</td><td>Permite ou não números negativos. <code>UNSIGNED</code> = só positivos (útil para idade, quantidade).</td></tr>
+    <tr><td>AUTO_INCREMENT</td><td>Gera sequências automáticas (contadores). Cada novo registro recebe o próximo número.</td></tr>
+    <tr><td>ZEROFILL</td><td>Preenche o número completando com zeros à esquerda (ex.: 7 vira 007).</td></tr>
+  </table>
+
+  <div class="block tip">
+    <span class="label">Dica &mdash; NULL não é zero nem espaço</span>
+    <strong>NULL</strong> significa "não há informação". É diferente de <strong>0</strong> (um número) e de <strong>''</strong> (texto vazio). Exemplo: um cliente sem telefone cadastrado tem telefone <code>NULL</code>, não telefone "0".
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <strong>AUTO_INCREMENT</strong> conecta com o próximo tópico: é a forma mais comum de gerar uma <strong>chave primária</strong> automática (a chave surrogada).
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">11</span>Chaves: PK, FK, UNIQUE e Surrogada</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito &mdash; o que são chaves</span>
+    <strong>Chaves</strong> são atributos (ou conjuntos de atributos) que identificam de forma única um registro numa tabela. São essenciais para a <strong>integridade dos dados</strong>: previnem duplicatas e permitem criar <strong>relacionamentos</strong> entre tabelas. Sem chaves, seria impossível gerenciar dados de forma eficaz.
+  </div>
+
+  <div class="block concept">
+    <span class="label">Chave Primária (Primary Key &mdash; PK)</span>
+    Atributo (ou conjunto) que identifica de forma única <strong>cada registro</strong> da tabela. Garante que não existam dois registros com a mesma PK. Só pode haver <strong>uma por tabela</strong> e é sempre <strong>NOT NULL</strong>.<br>
+    <strong>Exemplo:</strong> na tabela <code>Clientes</code>, o <code>ID do cliente</code> é a PK &mdash; cada cliente tem um identificador único.
+  </div>
+
+  <div class="block concept">
+    <span class="label">Chave Estrangeira (Foreign Key &mdash; FK)</span>
+    Campo de uma tabela que cria um <strong>vínculo</strong> com a PK de outra tabela. Mantém a <strong>integridade referencial</strong>: o valor da FK precisa sempre corresponder a uma PK válida na tabela relacionada.<br>
+    <strong>Exemplo:</strong> em <code>Pedidos</code>, o campo <code>id_cliente</code> é FK e aponta para a PK de <code>Clientes</code>. Não existe pedido de um cliente que não existe.
+  </div>
+
+  <div class="block tip">
+    <span class="label">PK e FK trabalhando juntas</span>
+    A <strong>PK</strong> identifica a linha dentro da própria tabela. A <strong>FK</strong> é a referência dessa PK em outra tabela, criando a ligação. É esse par que torna possível relacionar tabelas (próximo tema).
+  </div>
+
+  <div class="block concept">
+    <span class="label">Conceito &mdash; restrições UNIQUE e PRIMARY KEY</span>
+    Ambas <strong>asseguram que os valores de uma ou mais colunas sejam únicos</strong> em cada linha da tabela. Servem para não ter duplicidade (ex.: dois clientes com o mesmo CPF).
+  </div>
+
+  <table class="cmd">
+    <tr><th>Restrição</th><th>Característica</th></tr>
+    <tr><td>PRIMARY KEY</td><td>Identificador <strong>principal</strong> da linha. Só pode haver <strong>uma</strong> por tabela. É única e <strong>obrigatoriamente NOT NULL</strong>.</td></tr>
+    <tr><td>UNIQUE</td><td>Garante unicidade, mas pode haver <strong>várias</strong> na mesma tabela. Usada em colunas que também devem ser únicas (ex.: e-mail, CPF).</td></tr>
+  </table>
+
+  <div class="block attr">
+    <span class="label">Regra &mdash; relação com NOT NULL</span>
+    Colunas definidas como <strong>PRIMARY KEY</strong> ou <strong>UNIQUE</strong> geralmente também precisam ser <strong>NOT NULL</strong>. O atributo <code>NOT NULL</code> impede valores nulos e é <strong>obrigatório</strong> em colunas com restrição PRIMARY KEY.
+  </div>
+
+  <div class="block concept">
+    <span class="label">Conceito &mdash; Chave Surrogada (Surrogate Key)</span>
+    Uma <strong>chave surrogada</strong> é uma chave <strong>artificial</strong>, geralmente numérica, criada apenas para servir de chave primária. Ela substitui uma <strong>chave natural</strong> que seria complexa ou não ideal.
+  </div>
+
+  <div class="block tip">
+    <span class="label">Dica &mdash; surrogada vs. natural</span>
+    <strong>Chave natural:</strong> um dado real do mundo que identifica a linha, como o CPF.<br>
+    <strong>Chave surrogada:</strong> um número sem significado de negócio, criado só para identificar (ex.: <code>codigo</code> com AUTO_INCREMENT).<br>
+    <strong>Por que usar surrogada:</strong> é simples, estável e rápida. Se a regra de negócio mudar (ex.: passar a aceitar clientes estrangeiros sem CPF), a chave artificial continua funcionando.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">12</span>Relacionamentos entre tabelas</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    Relacionamento é a <strong>ligação</strong> entre tabelas, feita por chaves: a <strong>Primary Key (PK)</strong> de uma tabela aparece em outra como <strong>Foreign Key (FK)</strong>. A "cardinalidade" diz <strong>quantas</strong> linhas de um lado se ligam ao outro.
+  </div>
+
+  <div class="block tip">
+    <span class="label">Dica &mdash; o que é Foreign Key (FK)</span>
+    A <strong>chave estrangeira</strong> é uma coluna que aponta para a chave primária de outra tabela. É o que conecta, por exemplo, uma <code>Compra</code> ao <code>Cliente</code> que a realizou. Ela garante a <strong>integridade referencial</strong> (não existe compra de um cliente que não existe).
+  </div>
+
+  <div class="map">
+    <span class="label">Diagrama &mdash; os três tipos de cardinalidade</span>
+    <svg viewBox="0 0 720 470" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Lato, sans-serif">
+      
+      <text x="10" y="24" font-size="13" font-weight="800" fill="#0f172a">Relacionamento 1:1</text>
+      <rect x="60" y="38" width="120" height="46" rx="9" fill="#2563eb"/>
+      <text x="120" y="66" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Pessoa</text>
+      <text x="200" y="56" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">1</text>
+      <polygon points="300,40 350,61 300,82 250,61" fill="#475569"/>
+      <text x="300" y="65" fill="#fff" font-size="9.5" text-anchor="middle">Possui</text>
+      <text x="400" y="56" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">1</text>
+      <rect x="430" y="38" width="120" height="46" rx="9" fill="#2563eb"/>
+      <text x="490" y="66" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">CPF</text>
+      <line x1="180" y1="61" x2="250" y2="61" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="350" y1="61" x2="430" y2="61" stroke="#94a3b8" stroke-width="2"/>
+      <text x="575" y="55" font-size="9" fill="#64748b">Cada lado tem</text>
+      <text x="575" y="68" font-size="9" fill="#64748b">exatamente 1</text>
+      <text x="575" y="81" font-size="9" fill="#64748b">correspondente.</text>
+
+      <text x="10" y="150" font-size="13" font-weight="800" fill="#0f172a">Relacionamento 1:N</text>
+      <rect x="60" y="164" width="120" height="46" rx="9" fill="#16a34a"/>
+      <text x="120" y="192" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Cliente</text>
+      <text x="200" y="182" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">1</text>
+      <polygon points="300,166 350,187 300,208 250,187" fill="#475569"/>
+      <text x="300" y="191" fill="#fff" font-size="9.5" text-anchor="middle">Realiza</text>
+      <text x="400" y="182" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">N</text>
+      <rect x="430" y="164" width="120" height="46" rx="9" fill="#16a34a"/>
+      <text x="490" y="192" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Compra</text>
+      <line x1="180" y1="187" x2="250" y2="187" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="350" y1="187" x2="430" y2="187" stroke="#94a3b8" stroke-width="2"/>
+      <text x="575" y="181" font-size="9" fill="#64748b">1 cliente faz</text>
+      <text x="575" y="194" font-size="9" fill="#64748b">muitas compras.</text>
+      <text x="575" y="207" font-size="9" fill="#64748b">É o mais comum.</text>
+
+      <text x="10" y="276" font-size="13" font-weight="800" fill="#0f172a">Relacionamento N:M</text>
+      <rect x="60" y="290" width="120" height="46" rx="9" fill="#7c3aed"/>
+      <text x="120" y="318" fill="#fff" font-size="12.5" font-weight="700" text-anchor="middle">Compras</text>
+      <text x="200" y="308" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">N</text>
+      <polygon points="300,292 352,313 300,334 248,313" fill="#475569"/>
+      <text x="300" y="317" fill="#fff" font-size="9" text-anchor="middle">Possuem</text>
+      <text x="400" y="308" font-size="13" font-weight="800" fill="#1e293b" text-anchor="middle">M</text>
+      <rect x="430" y="290" width="120" height="46" rx="9" fill="#7c3aed"/>
+      <text x="490" y="318" fill="#fff" font-size="12.5" font-weight="700" text-anchor="middle">Produtos</text>
+      <line x1="180" y1="313" x2="248" y2="313" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="352" y1="313" x2="430" y2="313" stroke="#94a3b8" stroke-width="2"/>
+      <text x="575" y="307" font-size="9" fill="#64748b">Muitos dos dois</text>
+      <text x="575" y="320" font-size="9" fill="#64748b">lados se ligam.</text>
+
+      <rect x="60" y="378" width="490" height="74" rx="9" fill="#f8fafc" stroke="#e2e8f0"/>
+      <text x="74" y="398" font-size="10" font-weight="700" fill="#334155">Como ler:</text>
+      <text x="74" y="416" font-size="9.5" fill="#475569">&bull;  Retângulo = entidade (tabela)        &bull;  Losango = o relacionamento (ação)</text>
+      <text x="74" y="433" font-size="9.5" fill="#475569">&bull;  1, N, M = cardinalidade (quantos de cada lado participam)</text>
+      <text x="74" y="448" font-size="9.5" fill="#475569">&bull;  N:M geralmente vira uma tabela intermediária na implementação real.</text>
+    </svg>
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    <strong>1:1</strong> &rarr; cada um, um só (Pessoa &harr; CPF). <strong>1:N</strong> &rarr; um para muitos (Cliente &rarr; Compras). <strong>N:M</strong> &rarr; muitos para muitos (Compras &harr; Produtos).<br>
+    <strong>Atenção:</strong> bancos relacionais não implementam N:M diretamente. Cria-se uma <strong>tabela intermediária</strong> (associativa) que transforma o N:M em dois relacionamentos 1:N.
+  </div>
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">13</span>Modelos de Dados</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito</span>
+    <strong>Modelos de dados</strong> são formas de organizar e estruturar os dados num banco. A escolha depende do objetivo: operação do dia a dia ou análise.
+  </div>
+
+  <div class="map">
+    <span class="label">Mapa mental &mdash; quando usar cada modelo</span>
+    <svg viewBox="0 0 720 300" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Lato, sans-serif">
+      <rect x="290" y="8" width="140" height="44" rx="10" fill="#0f172a"/>
+      <text x="360" y="35" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Modelos de Dados</text>
+      <g stroke="#94a3b8" stroke-width="1.6" fill="none">
+        <path d="M360 52 C360 78, 130 70, 130 92"/>
+        <path d="M360 52 C360 78, 360 80, 360 92"/>
+        <path d="M360 52 C360 78, 590 70, 590 92"/>
+      </g>
+      
+      <rect x="40" y="92" width="180" height="40" rx="8" fill="#2563eb"/>
+      <text x="130" y="117" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Relacional</text>
+      <foreignObject x="40" y="140" width="180" height="120">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Lato,sans-serif;font-size:9px;color:#334155;line-height:1.35">
+          Tabelas ligadas por PK e FK. Ideal para <b>operações transacionais</b> (inserir, atualizar, consultar) com <b>integridade referencial</b>.
+        </div>
+      </foreignObject>
+      
+      <rect x="270" y="92" width="180" height="40" rx="8" fill="#0d9488"/>
+      <text x="360" y="117" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Dimensional</text>
+      <foreignObject x="270" y="140" width="180" height="120">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Lato,sans-serif;font-size:9px;color:#334155;line-height:1.35">
+          Usado em <b>data warehouse</b> e <b>BI</b>. Separa <b>fatos</b> (dados quantitativos, ex.: vendas) de <b>dimensões</b> (contexto: tempo, produto, local).
+        </div>
+      </foreignObject>
+      
+      <rect x="500" y="92" width="180" height="40" rx="8" fill="#d97706"/>
+      <text x="590" y="117" fill="#fff" font-size="12" font-weight="700" text-anchor="middle">Star Schema</text>
+      <foreignObject x="500" y="140" width="180" height="120">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Lato,sans-serif;font-size:9px;color:#334155;line-height:1.35">
+          Tipo de modelo dimensional: 1 tabela de <b>fato</b> central ligada a várias <b>dimensões</b>, formando uma estrela. Simples e rápido para análises.
+        </div>
+      </foreignObject>
+    </svg>
+  </div>
+
+  <h3>Detalhamento</h3>
+  <div class="block concept">
+    <span class="label">Modelo Relacional</span>
+    Organiza dados em <strong>tabelas inter-relacionadas</strong> por chaves primárias e estrangeiras. Ideal para <strong>operações transacionais</strong>: inserir, atualizar, excluir e consultar com <strong>garantia de integridade referencial</strong>. É o modelo da maior parte dos sistemas do dia a dia (ex.: o cadastro de clientes do banco).
+  </div>
+  <div class="block concept">
+    <span class="label">Modelo Dimensional</span>
+    Usado principalmente em <strong>data warehouses</strong> e sistemas de <strong>BI</strong> (Business Intelligence). Organiza os dados em duas categorias: <strong>fatos</strong> (dados quantitativos, como vendas) e <strong>dimensões</strong> (contexto/descritores, como tempo, produto ou localização).
+  </div>
+  <div class="block concept">
+    <span class="label">Star Schema (Esquema Estrela)</span>
+    É um tipo de modelo dimensional: uma <strong>tabela de fatos central</strong> conectada a várias <strong>tabelas de dimensão</strong>, formando o desenho de uma estrela. É simples e eficiente para consultas, facilitando <strong>análises rápidas</strong> e agregações de dados.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática &mdash; conexão com sua transição para Dados</span>
+    <strong>Relacional</strong> = mundo da <strong>operação</strong> (registrar o que acontece). <strong>Dimensional / Star Schema</strong> = mundo da <strong>análise</strong> (entender o que aconteceu). Na sua migração para Dados e BI, você sairá do relacional em direção ao dimensional.
+  </div>
+
+</div>
+
+<div class="page-break">
+  <div class="section-title"><span class="st-left"><span class="section-num">14</span>Filtros e a cláusula WHERE</span><span class="when">estudado em 26 jun 2026</span></div>
+
+  <div class="block concept">
+    <span class="label">Conceito &mdash; o que é o WHERE</span>
+    O <strong>WHERE</strong> ("onde") filtra os resultados de uma consulta: define <strong>quais linhas</strong> aparecem. O banco testa a condição <strong>linha por linha</strong> &mdash; se for verdadeira, a linha aparece; se falsa, é ignorada.<br>
+    <strong>Por que usar:</strong> foco (ver só o que importa) e <strong>performance</strong> (processa menos dados, busca mais rápida).
+  </div>
+
+  <h3>Tabela de exemplo &mdash; PESSOAS</h3>
+  <table class="cmd">
+    <tr><th>ID</th><th>NOME</th><th>IDADE</th><th>FILHOS</th></tr>
+    <tr><td>1</td><td>Eliana</td><td>20</td><td>0</td></tr>
+    <tr><td>2</td><td>Miguel</td><td>39</td><td>3</td></tr>
+    <tr><td>3</td><td>Raquel</td><td>36</td><td>2</td></tr>
+    <tr><td>4</td><td>João</td><td>22</td><td>1</td></tr>
+    <tr><td>5</td><td>Marta</td><td>48</td><td>2</td></tr>
+  </table>
+
+  <h3>Operadores de comparação</h3>
+  <div class="block concept">
+    <span class="label">O que são</span>
+    Fazem uma <strong>pergunta</strong> aos dados e devolvem um valor <strong>booleano</strong> (verdadeiro ou falso). Booleano = tipo de dado com apenas dois estados possíveis.
+  </div>
+  <table class="cmd">
+    <tr><th>Operador</th><th>Significado</th></tr>
+    <tr><td>=</td><td>Igual a</td></tr>
+    <tr><td>!= ou &lt;&gt;</td><td>Diferente de</td></tr>
+    <tr><td>&gt;</td><td>Maior que</td></tr>
+    <tr><td>&lt;</td><td>Menor que</td></tr>
+    <tr><td>&gt;=</td><td>Maior ou igual</td></tr>
+    <tr><td>&lt;=</td><td>Menor ou igual</td></tr>
+  </table>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Idade maior ou igual a 39:</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="kw">WHERE</span> <span class="fn">IDADE</span> &gt;= 39;
+<span class="cm">-- Resultado: Miguel (39) e Marta (48)</span>
+
+<span class="cm">-- Diferente de zero filhos:</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="kw">WHERE</span> <span class="fn">FILHOS</span> &lt;&gt; 0;
+<span class="cm">-- Resultado: Miguel, Raquel, João, Marta</span></pre>
+  </div>
+
+  <h3>Álgebra booleana: AND, OR, NOT</h3>
+  <div class="block concept">
+    <span class="label">Combinando condições</span>
+    <strong>AND (E):</strong> só retorna se <strong>todas</strong> as condições forem verdadeiras. Analogia: receita que exige "ovo E leite" &mdash; falta um, não dá.<br>
+    <strong>OR (OU):</strong> retorna se <strong>pelo menos uma</strong> for verdadeira. Analogia: "suco OU refrigerante".<br>
+    <strong>NOT (NÃO):</strong> inverte &mdash; traz o oposto da condição.
+  </div>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">PESSOAS</span>
+<span class="kw">WHERE</span> <span class="fn">IDADE</span> <span class="kw">IN</span> (39, 48)
+  <span class="kw">AND</span> <span class="fn">FILHOS</span> &gt; 2;
+<span class="cm">-- Só Miguel: tem 39 anos E mais de 2 filhos (3).</span>
+<span class="cm">-- Marta sai: tem 48, mas só 2 filhos.</span></pre>
+  </div>
+
+  <h3>Intervalo, lista, texto e nulos</h3>
+  <table class="cmd">
+    <tr><th>Operador</th><th>O que faz</th></tr>
+    <tr><td>BETWEEN</td><td>Valor dentro de um intervalo (inclui as pontas). Ex.: IDADE BETWEEN 20 AND 23.</td></tr>
+    <tr><td>IN</td><td>Valor que coincide com algum item de uma lista. Ex.: UF IN ('SP','RJ','MG').</td></tr>
+    <tr><td>LIKE</td><td>Busca padrões em texto. % = vários caracteres; _ = um caractere.</td></tr>
+    <tr><td>IS NULL / IS NOT NULL</td><td>Campo vazio (sem informação) ou preenchido.</td></tr>
+    <tr><td>DISTINCT</td><td>Remove duplicatas; retorna só valores exclusivos.</td></tr>
+  </table>
+  <div class="code">
+    <span class="label">Código SQL</span>
+<pre><span class="cm">-- Nomes que começam com M:</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="kw">WHERE</span> <span class="fn">NOME</span> <span class="kw">LIKE</span> <span class="st">'M%'</span>;
+<span class="cm">-- Miguel e Marta</span>
+
+<span class="cm">-- Idade entre 20 e 23 (inclui as pontas):</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">PESSOAS</span> <span class="kw">WHERE</span> <span class="fn">IDADE</span> <span class="kw">BETWEEN</span> 20 <span class="kw">AND</span> 23;
+<span class="cm">-- Eliana (20) e João (22)</span></pre>
+  </div>
+
+  <div class="block attr">
+    <span class="label">Atenção &mdash; LIKE e wildcards</span>
+    <code>%</code> representa zero ou muitos caracteres; <code>_</code> representa exatamente um. <code>'M%'</code> = começa com M. <code>'%a'</code> = termina com a. <code>'_a%'</code> = a segunda letra é a.
+  </div>
+
+  <div class="block recap">
+    <span class="label">Na prática</span>
+    O <code>WHERE</code> é o coração da consulta no dia a dia de dados. Combine operadores de comparação com <code>AND/OR/NOT</code> e refine com <code>LIKE</code>, <code>BETWEEN</code>, <code>IN</code> e <code>IS NULL</code>. <strong>Próxima ação:</strong> teste cada exemplo mentalmente na tabela PESSOAS.
+  </div>
+
+  <div class="block tip" style="margin-top:18px">
+    <span class="label">Caderno vivo</span>
+    Novos conteúdos entram organizados por <strong>tema e categoria</strong>, com a data em que foram estudados. Assim o caderno cresce de forma previsível e você rastreia quando aprendeu cada coisa.
+  </div>
+</div>
+
+</body>
+</html>
