@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadernos de Estudo</title>
-<meta name="app-version" content="20260627-2">
+<meta name="app-version" content="20260627-3">
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2460,6 +2460,100 @@ const PL_THEMES = [
     ["Quando usar as versões no plural (SES)?","Quando há mais de uma condição."],
     ["Como se escreve o critério \">100\"?","Entre aspas."],
     ["Qual cuidado entre SOMASE e SOMASES?","A ordem dos argumentos muda; no plural a soma vem primeiro."]] }
+,
+{ id:"pl-datas", num:"09", cat:"Datas", title:"Datas e horas", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (cálculos) e 04 (funções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Por baixo, a planilha guarda data como um número (a contagem de dias desde uma data base). Por isso dá para somar e subtrair datas como se fossem números.</p><p>As funções de data leem e montam esses valores.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Quase todo relatório envolve tempo: vencimentos, prazos, idade, meses. Tratar data como número evita erros e permite contas como dias entre duas datas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Para calcular prazos, agrupar por mês ou ano, achar a diferença entre datas, ou marcar o dia de hoje em um controle.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>HOJE devolve a data atual; AGORA inclui a hora. DIA, MÊS e ANO extraem cada parte de uma data. Para a diferença entre datas, subtrai-se uma da outra, ou usa-se DATADIF para diferenças em anos, meses ou dias.</p>"},
+   {t:"code",h:"=HOJE()              <span class='cm'>data de hoje</span>\n=AGORA()             <span class='cm'>data e hora agora</span>\n=ANO(A2)             <span class='cm'>só o ano da data em A2</span>\n=MÊS(A2)             <span class='cm'>só o mês</span>\n=B2-A2               <span class='cm'>dias entre duas datas</span>\n=DATADIF(A2;B2;\"Y\")  <span class='cm'>diferença em anos completos</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Português</th><th>Inglês</th></tr><tr><td>HOJE</td><td>TODAY</td></tr><tr><td>AGORA</td><td>NOW</td></tr><tr><td>DIA / MÊS / ANO</td><td>DAY / MONTH / YEAR</td></tr><tr><td>DATADIF</td><td>DATEDIF</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Todas funcionam nos dois. DATADIF existe nos dois, mas fica oculta (não aparece no assistente); pode digitar normalmente. O formato visual da data (dia/mês/ano) segue a configuração de idioma do programa.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Tratar uma data digitada como texto (aí as contas não funcionam).</p><p>Confundir a ordem dia/mês conforme a região.</p><p>Esquecer que HOJE muda sozinha todo dia; para fixar uma data, digite o valor.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Garanta que a célula esteja no formato de data, não texto. Use HOJE para controles que devem se atualizar. Para guardar a data de um registro que não muda, digite a data fixa.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Mostre a data de hoje em uma célula.</p><p><b>2.</b> Calcule quantos dias faltam para uma data em B2.</p><p><b>3.</b> Extraia só o mês e o ano de uma data.</p>"},
+   {t:"code",l:"Soluções",h:"=HOJE()\n=B2-HOJE()\n=MÊS(A2)\n=ANO(A2)"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Data é número por baixo. HOJE e AGORA dão o momento atual. DIA, MÊS e ANO extraem partes. Subtração dá dias; DATADIF dá anos, meses ou dias. Iguais em Excel e Sheets.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Como achar a diferença em dias entre duas datas? Subtraindo uma da outra. E em anos completos? Com DATADIF. Por que data se comporta como número? Porque é guardada como contagem de dias.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Datas<ul><li>É número por baixo</li><li>HOJE / AGORA → momento atual</li><li>DIA / MÊS / ANO → partes</li><li>B2-A2 → dias</li><li>DATADIF → anos, meses, dias</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> monte um controle de vencimentos com a coluna de data e outra que mostra os dias restantes até hoje.</p><p><b>Conexão:</b> são as mesmas ideias das funções de data do SQL (tema 19) e do módulo datetime do Python.</p>"}
+  ],
+  cards:[
+    ["Como mostrar a data de hoje?","Com a função HOJE()."],
+    ["Como achar os dias entre duas datas?","Subtraindo uma da outra (B2-A2)."],
+    ["O que DATADIF faz?","Calcula a diferença entre datas em anos, meses ou dias."],
+    ["Por que a data se comporta como número?","Porque é guardada como uma contagem de dias."]] },
+{ id:"pl-pivot", num:"10", cat:"Resumo de dados", title:"Tabela dinâmica", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 (funções) e 08 (resumo condicional).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Tabela dinâmica (em inglês pivot table) é uma ferramenta que resume uma tabela grande arrastando campos: você escolhe o que vira linha, o que vira coluna e o que é somado, sem escrever fórmula.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>É a forma mais rápida de transformar milhares de linhas em um resumo claro: total por vendedor, por mês, por categoria. Faz em segundos o que levaria muitas fórmulas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando você tem uma tabela com muitas linhas e quer ver totais por grupo. É a ponte natural depois de aprender SOMASE: a tabela dinâmica faz vários agrupamentos de uma vez.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Você seleciona a tabela e cria a tabela dinâmica. Depois arrasta os campos para quatro áreas: Linhas (os grupos), Colunas (outra divisão), Valores (o que somar ou contar) e Filtros. O resumo se monta sozinho.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Área</th><th>O que colocar</th></tr><tr><td>Linhas</td><td>O grupo principal (ex.: vendedor).</td></tr><tr><td>Colunas</td><td>Uma segunda divisão (ex.: mês).</td></tr><tr><td>Valores</td><td>O número a resumir (ex.: soma do valor).</td></tr><tr><td>Filtros</td><td>O que limita o resumo (ex.: região).</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Os dois têm. No Excel chama-se Tabela Dinâmica (menu Inserir); no Sheets, Tabela dinâmica (menu Inserir). O conceito de arrastar campos para Linhas, Colunas e Valores é igual; muda só onde ficam os botões.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Criar a tabela dinâmica sobre dados com linhas em branco ou cabeçalhos repetidos.</p><p>Esquecer de atualizar a tabela dinâmica depois de mudar os dados de origem.</p><p>Colocar texto na área de Valores esperando uma soma (texto só conta).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Deixe os dados de origem limpos, com uma linha de cabeçalho e sem linhas vazias. Atualize a tabela dinâmica após mudanças. Comece simples: um campo em Linhas e um em Valores.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Com uma tabela de vendas, monte um resumo de total por vendedor.</p><p><b>2.</b> Acrescente o mês nas colunas para ver total por vendedor e mês.</p><p><b>3.</b> Use a região como filtro.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Vendedor em Linhas, soma do Valor em Valores.</p><p><b>2.</b> Mês em Colunas, mantendo Vendedor em Linhas e a soma do Valor em Valores.</p><p><b>3.</b> Região na área de Filtros, escolhendo a região desejada.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Tabela dinâmica resume arrastando campos para Linhas, Colunas, Valores e Filtros. Não precisa de fórmula. Dados limpos e atualização são essenciais. Existe em Excel e Sheets.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Para que serve uma tabela dinâmica? Resumir rapidamente uma tabela grande por grupos. Quais as áreas? Linhas, Colunas, Valores e Filtros.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Tabela dinâmica<ul><li>Resume sem fórmula</li><li>Linhas → grupos</li><li>Colunas → 2ª divisão</li><li>Valores → soma/contagem</li><li>Filtros → recorte</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> a partir de uma planilha de vendas, monte um resumo de total por produto e por mês.</p><p><b>Conexão:</b> é a mesma lógica de GROUP BY no SQL (tema 15): agrupar e resumir. No Power BI, o visual de matriz faz o mesmo papel.</p>"}
+  ],
+  cards:[
+    ["O que é uma tabela dinâmica?","Uma ferramenta que resume uma tabela grande arrastando campos, sem fórmula."],
+    ["Quais as quatro áreas?","Linhas, Colunas, Valores e Filtros."],
+    ["A que comando SQL ela se parece?","Ao GROUP BY: agrupar e resumir."],
+    ["O que colocar em Valores?","O número a somar ou contar."]] },
+{ id:"pl-formatcond", num:"11", cat:"Visual", title:"Formatação condicional", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (comparações) e 05 (lógica).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Formatação condicional muda a aparência da célula (cor de fundo, do texto) automaticamente quando ela atende a uma regra, como valores acima de uma meta ou abaixo de zero.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Faz os pontos importantes saltarem aos olhos sem leitura número a número. Um relatório com alertas em vermelho e metas em verde comunica em segundos.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Para destacar exceções: atrasos, valores negativos, metas batidas, duplicados. Ajuda a revisar dados e a apresentar resultados.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Você seleciona as células, abre a formatação condicional e define a regra (por exemplo, maior que 100) e o formato (por exemplo, fundo verde). A planilha aplica e reaplica sozinha quando os valores mudam.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Regra comum</th><th>Uso</th></tr><tr><td>Maior / menor que</td><td>Destacar acima ou abaixo de um limite.</td></tr><tr><td>Está entre</td><td>Marcar uma faixa de valores.</td></tr><tr><td>Texto contém</td><td>Realçar uma palavra ou status.</td></tr><tr><td>Escala de cores</td><td>Mapa de calor do menor ao maior.</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Os dois têm. No Excel fica em Página Inicial, Formatação Condicional; no Sheets, em Formatar, Formatação condicional. As regras são equivalentes; muda o caminho do menu.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Aplicar a regra em um intervalo errado e colorir o que não devia.</p><p>Criar regras demais que se sobrepõem e confundem.</p><p>Usar muitas cores fortes, cansando a leitura.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use poucas cores com significado claro (verde bom, vermelho atenção). Selecione o intervalo certo antes de criar a regra. Em escala de cores, deixe o gradiente fazer o trabalho, sem exagerar.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Pinte de verde as células com valor acima de 100.</p><p><b>2.</b> Pinte de vermelho os valores negativos.</p><p><b>3.</b> Aplique uma escala de cores a uma coluna de notas.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Regra: maior que 100, formato de fundo verde.</p><p><b>2.</b> Regra: menor que 0, formato de fundo vermelho.</p><p><b>3.</b> Regra de escala de cores na coluna, do menor (uma cor) ao maior (outra).</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Formatação condicional colore a célula por regra, automaticamente. Boa para destacar exceções. Poucas cores com significado. Existe em Excel e Sheets, em menus diferentes.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Para que serve a formatação condicional? Destacar valores que atendem a uma regra, sem olhar um a um. Cuidado principal? Não exagerar nas cores, para não cansar a leitura.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Formatação condicional<ul><li>Regra → formato automático</li><li>Maior/menor, entre, contém</li><li>Escala de cores → mapa de calor</li><li>Poucas cores com significado</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> em uma lista de metas, destaque em verde quem bateu e em vermelho quem ficou abaixo.</p><p><b>Conexão:</b> a ideia de usar cor com propósito é a mesma do caderno de Visualização (cores e destaque) e do Power BI.</p>"}
+  ],
+  cards:[
+    ["O que a formatação condicional faz?","Muda a aparência da célula automaticamente quando ela atende a uma regra."],
+    ["Para que serve principalmente?","Destacar exceções, como atrasos, metas e negativos."],
+    ["O que é a escala de cores?","Um mapa de calor que colore do menor ao maior valor."],
+    ["Qual o cuidado principal?","Usar poucas cores com significado claro."]] },
+{ id:"pl-graficos", num:"12", cat:"Visual", title:"Gráficos", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 (funções) e 10 (tabela dinâmica).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Gráfico é a forma visual de mostrar números: barras, linhas, pizza. A planilha cria o gráfico a partir de um intervalo de dados selecionado.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Um gráfico comunica uma tendência ou comparação em segundos, o que uma tabela de números esconde. É como você apresenta resultados para outras pessoas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando a mensagem é uma comparação, uma evolução no tempo ou uma composição. A escolha do tipo vem da pergunta, como visto no caderno de Visualização.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Você seleciona os dados (rótulos e valores) e insere um gráfico. A planilha sugere um tipo; você ajusta para barras, linha ou outro, e edita título e rótulos.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Pergunta</th><th>Gráfico</th></tr><tr><td>Comparar categorias</td><td>Barras ou colunas.</td></tr><tr><td>Evolução no tempo</td><td>Linha.</td></tr><tr><td>Partes de um todo</td><td>Barras empilhadas.</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Os dois inserem gráfico pelo menu Inserir. Os tipos são equivalentes (colunas, linha, pizza, dispersão). Muda a aparência padrão e alguns nomes, mas a lógica de escolher dados e tipo é a mesma.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Selecionar dados sem os rótulos, e o gráfico ficar sem nomes.</p><p>Usar pizza com muitas fatias.</p><p>Deixar o gráfico sem título, sem dizer o que ele mostra.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Inclua os rótulos na seleção. Escolha o tipo pela pergunta, não pela aparência. Dê um título claro e mantenha o gráfico limpo, sem excesso de cores e efeitos.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Faça um gráfico de colunas comparando vendas por produto.</p><p><b>2.</b> Faça um gráfico de linha mostrando vendas mês a mês.</p><p><b>3.</b> Dê um título claro a cada um.</p>"},
+   {t:"plain",l:"Soluções",h:"<p><b>1.</b> Selecione produto e valor, insira gráfico de colunas.</p><p><b>2.</b> Selecione mês e valor, insira gráfico de linha.</p><p><b>3.</b> Edite o título para algo como Vendas por produto e Vendas por mês.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Gráfico mostra números de forma visual. Selecione dados com rótulos, escolha o tipo pela pergunta, dê título claro. Barras comparam, linha mostra tempo. Igual em Excel e Sheets.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Como escolher o tipo de gráfico? Pela pergunta: comparar usa barras, tempo usa linha. O que todo gráfico precisa? Rótulos e um título claro.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Gráficos<ul><li>Selecionar dados + rótulos</li><li>Barras → comparar</li><li>Linha → tempo</li><li>Empilhadas → todo</li><li>Título claro, visual limpo</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> crie dois gráficos a partir de uma tabela de vendas: um de colunas por produto e um de linha por mês.</p><p><b>Conexão:</b> fecha o Planilhas ligando direto ao caderno de Visualização (como escolher o gráfico certo) e ao Power BI.</p>"}
+  ],
+  cards:[
+    ["O que um gráfico faz?","Mostra números de forma visual, revelando comparação ou tendência."],
+    ["Como escolher o tipo?","Pela pergunta: barras comparam, linha mostra o tempo."],
+    ["O que incluir na seleção?","Os rótulos junto dos valores."],
+    ["O que todo gráfico precisa?","Um título claro e um visual limpo."]] }
 ];
 const PL_QUIZ = [
  {q:"Toda fórmula em Excel e Sheets começa com:",o:["Dois pontos","O sinal de igual (=)","Aspas","Um espaço"],c:1,e:"O sinal de igual indica que a célula é uma fórmula."},
@@ -2471,6 +2565,13 @@ const PL_QUIZ = [
  {q:"No PROCV, o que garante correspondência exata?",o:["VERDADEIRO no final","FALSO no final","Travar com $","Usar aspas"],c:1,e:"FALSO no último argumento pede correspondência exata."},
  {q:"Qual função exige Excel 365 ou 2021 e não existe em versões antigas?",o:["PROCV","ÍNDICE","PROCX","SOMASE"],c:2,e:"PROCX (XLOOKUP) só existe no Excel 365/2021 e no Sheets; use ÍNDICE/CORRESP para compatibilidade."},
  {q:"Para somar só os valores de uma região, usa-se:",o:["SOMA","SOMASE","CONT.SE","MÉDIA"],c:1,e:"SOMASE soma apenas as células que atendem à condição."}
+,
+ {q:"Como mostrar a data de hoje, que se atualiza sozinha?",o:["=AGORA(7)","=HOJE()","=DATA()","=DIA()"],c:1,e:"HOJE() devolve a data atual e se atualiza a cada dia."},
+ {q:"Para achar os dias entre duas datas, o jeito mais direto é:",o:["Somar as duas","Subtrair uma da outra (B2-A2)","Usar PROCV","Usar SE"],c:1,e:"Como data é número por baixo, a subtração dá a diferença em dias."},
+ {q:"A tabela dinâmica serve para:",o:["Colorir células","Resumir uma tabela grande por grupos, sem fórmula","Buscar um valor","Criar datas"],c:1,e:"Ela agrupa e resume arrastando campos, parecida com o GROUP BY do SQL."},
+ {q:"Na tabela dinâmica, o número a ser somado vai em qual área?",o:["Linhas","Colunas","Valores","Filtros"],c:2,e:"A área de Valores recebe o que será somado ou contado."},
+ {q:"Formatação condicional serve para:",o:["Calcular médias","Mudar a aparência da célula automaticamente por uma regra","Criar gráficos","Juntar textos"],c:1,e:"Ela aplica cor ou formato quando a célula atende à regra definida."},
+ {q:"Para escolher o tipo de gráfico, você deve se guiar por:",o:["Pela cor preferida","Pela pergunta que quer responder","Pelo tamanho da tela","Pelo programa usado"],c:1,e:"A intenção (comparar, evoluir, compor) define o tipo, como no caderno de Visualização."}
 ];
 const SUBJECTS = {
   intro:      { name:"01 · Introdução", code:"INTRO", themes:INTRO_THEMES, quiz:INTRO_QUIZ, themeEx:{}, practice:false, ready:true },
