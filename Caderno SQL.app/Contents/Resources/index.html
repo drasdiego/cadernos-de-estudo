@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadernos de Estudo</title>
-<meta name="app-version" content="20260627-7">
+<meta name="app-version" content="20260627-8">
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2406,7 +2406,7 @@ const PL_QUIZ = [
  {q:"Para escolher o tipo de gráfico, você deve se guiar por:",o:["Pela cor preferida","Pela pergunta que quer responder","Pelo tamanho da tela","Pelo programa usado"],c:1,e:"A intenção (comparar, evoluir, compor) define o tipo, como no caderno de Visualização."}
 ];
 const SUBJECTS = {
-  intro:      { name:"01 · Introdução", code:"INTRO", themes:INTRO_THEMES, quiz:INTRO_QUIZ, themeEx:{}, practice:false, ready:true },
+  intro:      { name:"01 · Introdução", code:"INTRO", themes:INTRO_THEMES, quiz:INTRO_QUIZ, themeEx:{}, practice:false, simple:true, ready:true },
   planilhas:  { name:"02 · Planilhas", code:"PL", themes:PL_THEMES, quiz:PL_QUIZ, themeEx:{}, practice:false, ready:true },
   sql:        { name:"03 · SQL", code:"SQL", themes:SQL_THEMES, quiz:SQL_QUIZ, themeEx:SQL_THEMEEX, practice:true, ready:true },
   python:     { name:"04 · Python", code:"PY", themes:PY_THEMES, quiz:PY_QUIZ, themeEx:{}, practice:false, ready:true },
@@ -2414,7 +2414,7 @@ const SUBJECTS = {
   estatistica:{ name:"06 · Estatística", code:"EST", themes:EST_THEMES, quiz:EST_QUIZ, themeEx:{}, practice:false, ready:true },
   powerbi:    { name:"07 · Power BI", code:"BI", themes:BI_THEMES, quiz:BI_QUIZ, themeEx:{}, practice:false, ready:true },
   ia:         { name:"08 · Inteligência Artificial", code:"IA", themes:IA_THEMES, quiz:IA_QUIZ, themeEx:{}, practice:false, ready:true },
-  referencia: { name:"09 · Guia de Referência", code:"REF", themes:REF_THEMES, quiz:REF_QUIZ, themeEx:{}, practice:false, ready:true }
+  referencia: { name:"09 · Guia de Referência", code:"REF", themes:REF_THEMES, quiz:REF_QUIZ, themeEx:{}, practice:false, simple:true, ready:true }
 };
 let curSubject='intro';
 let THEMES=SUBJECTS.intro.themes, QUIZ=SUBJECTS.intro.quiz, THEME_EX=SUBJECTS.intro.themeEx;
@@ -2436,7 +2436,7 @@ function loadSubject(id){
   mode='study';
   const logo=document.querySelector('.logo'); if(logo) logo.textContent=s.code;
   const sub=document.querySelector('.brand p'); if(sub) sub.textContent = s.ready? 'App de estudos · offline' : 'matéria em breve';
-  const modes=document.querySelector('.modes'); if(modes) modes.style.display = s.ready?'flex':'none';
+  const modes=document.querySelector('.modes'); if(modes) modes.style.display = (s.ready && !s.simple)?'flex':'none';
   const pb=document.querySelector('.modes button[data-mode="practice"]'); if(pb) pb.style.display = s.practice?'':'none';
   const se=document.getElementById('subjectSel'); if(se) se.value=id;
   fillThemeSel();
