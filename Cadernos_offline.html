@@ -2234,17 +2234,239 @@ const REF_QUIZ = [
  {q:"Por onde começar no Machine Learning para dados em tabela?",o:["PyTorch","TensorFlow","scikit-learn","Hugging Face"],c:2,e:"scikit-learn cobre o ML clássico, ideal para problemas tabulares."},
  {q:"O que conecta o Python a um banco SQL para trazer dados ao pandas?",o:["openpyxl","SQLAlchemy","Plotly","venv"],c:1,e:"SQLAlchemy liga o Python ao banco de dados."}
 ];
+const INTRO_THEMES = [
+{ id:"intro-app", num:"01", cat:"Comece por aqui", title:"Como usar estes cadernos", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Este é um conjunto de cadernos de estudo para a transição rumo a Dados, Inteligência Artificial e Engenharia de Software. Cada caderno é uma matéria, dividida em temas curtos e numerados.</p><p>A estrutura é sempre a mesma, para você saber o que esperar em cada capítulo.</p>"},
+   {t:"plain",l:"Os cadernos",h:"<ul><li><b>02 Planilhas</b> — Excel e Google Sheets: fórmulas e lógica que servem nos dois.</li><li><b>03 SQL</b> — consultar e modelar bancos de dados (com MySQL na prática).</li><li><b>04 Python</b> — base da linguagem até a ponte para Dados com pandas.</li><li><b>05 Visualização de Dados</b> — escolher e ler gráficos com clareza.</li><li><b>06 Estatística</b> — resumir dados, probabilidade e regressão.</li><li><b>07 Power BI</b> — modelar, calcular com DAX e publicar painéis.</li><li><b>08 Inteligência Artificial</b> — aprendizado de máquina, avaliação e prompt.</li><li><b>09 Guia de Referência</b> — quais bibliotecas usar em cada área.</li></ul>"},
+   {t:"tip",l:"Como cada tema é montado",h:"<p>Todo tema segue a mesma ordem: o que é, por que importa, quando usar, como funciona, exemplo, erros comuns, boas práticas, exercícios, o que lembrar, em entrevistas, mapa mental e mini-projeto.</p><p>Você pode ler na ordem ou pular para o que precisa.</p>"},
+   {t:"tip",l:"Os quatro modos",h:"<p><b>Estudar:</b> lê o conteúdo do tema.</p><p><b>Flashcards:</b> pergunta e resposta para fixar (repetição espaçada).</p><p><b>Quiz:</b> questões de múltipla escolha para testar.</p><p><b>Praticar:</b> no SQL, você escreve a consulta e o app confere sozinho.</p>"},
+   {t:"plain",l:"Como navegar",h:"<p>No topo, o primeiro seletor troca de caderno e o segundo troca de tema (01, 02, 03 e assim por diante). O progresso de leitura e a melhor nota do quiz ficam salvos no seu aparelho.</p>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Cada caderno é uma matéria com temas curtos e numerados. A estrutura é sempre a mesma. Há quatro modos: Estudar, Flashcards, Quiz e Praticar. Comece pelo caderno que fizer mais sentido para o seu momento.</p>"}
+  ],
+  cards:[
+    ["Quantos modos de estudo o app tem?","Quatro: Estudar, Flashcards, Quiz e Praticar."],
+    ["Em qual caderno o app corrige sua consulta sozinho?","No SQL, no modo Praticar."],
+    ["A estrutura dos temas muda entre cadernos?","Não. É sempre a mesma ordem, para dar previsibilidade."]] }
+];
+const INTRO_QUIZ = [
+ {q:"Quais são os quatro modos do app?",o:["Ler, copiar, colar e salvar","Estudar, Flashcards, Quiz e Praticar","Excel, SQL, Python e IA","Fácil, médio, difícil e extra"],c:1,e:"Os modos são Estudar, Flashcards, Quiz e Praticar."},
+ {q:"O que o seletor de temas faz?",o:["Troca de caderno","Troca o tema dentro do caderno (01, 02, ...)","Muda a cor","Salva o arquivo"],c:1,e:"O segundo seletor navega entre os temas numerados do caderno atual."}
+];
+const PL_THEMES = [
+{ id:"pl-intro", num:"01", cat:"Fundamentos", title:"Visão geral de planilhas", date:DATE1,
+  blocks:[
+   {t:"concept",l:"O que é",h:"<p>Uma planilha é uma grade de células organizadas em colunas (A, B, C) e linhas (1, 2, 3). Cada célula tem um endereço, como A1, e pode guardar um valor ou uma fórmula.</p><p>Fórmula é um cálculo que começa com o sinal de igual (=).</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Planilha é a ferramenta de dados mais usada no mundo do trabalho. Dominar fórmulas e lógica resolve relatórios, controles e análises rápidas, e é base para SQL e Power BI depois.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Para cálculos, listas, controles e análises de tamanho pequeno a médio. Quando os dados ficam muito grandes ou precisam de várias pessoas e regras, migra-se para banco de dados (SQL) ou Power BI.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Você digita um valor ou uma fórmula na célula. A fórmula referencia outras células pelo endereço (A1, B2) e recalcula sozinha quando os valores mudam. O conteúdo deste caderno funciona em Excel e em Google Sheets.</p>"},
+   {t:"code",h:"<span class='cm'>Em A1 digita-se um número, em A2 outro</span>\nA1 = 10\nA2 = 5\n\n<span class='cm'>Em A3, uma fórmula que soma os dois</span>\nA3 = =A1+A2     <span class='cm'>resultado 15</span>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>As fórmulas são as mesmas nos dois. O que muda: o nome das funções segue o idioma do programa. Em português, os dois usam SOMA, SE, PROCV e o separador ponto e vírgula (;). Em inglês, viram SUM, IF, VLOOKUP e o separador é a vírgula (,).</p><p>Exclusivos: o Sheets tem IMPORTRANGE e GOOGLEFINANCE; o Excel tem Power Query e Flash Fill.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esquecer o sinal de igual e a célula virar texto, sem calcular.</p><p>Confundir o endereço da célula (A1) com o valor dentro dela.</p><p>Usar o separador errado para o idioma (vírgula onde o programa espera ponto e vírgula).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Comece toda fórmula com =. Use uma célula por informação. Mantenha cabeçalhos claros na primeira linha. Padronize o idioma do programa para não trocar o separador sem querer.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Em três células, coloque dois números e a soma deles por fórmula.</p><p><b>2.</b> Troque um dos números e veja a soma recalcular.</p><p><b>3.</b> Escreva, com suas palavras, a diferença entre A1 e o valor dentro de A1.</p>"},
+   {t:"code",l:"Soluções",h:"A1 = 8\nA2 = 12\nA3 = =A1+A2     <span class='cm'>resultado 20</span>\n\n<span class='cm'>Ao mudar A1 para 10, A3 vira 22 sozinho.</span>\n<span class='cm'>A1 é o endereço; o valor é o que está guardado nesse endereço.</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Planilha é grade de células com endereço (A1). Fórmula começa com =. O conteúdo serve em Excel e Sheets. Em português, nomes e separador (;) são iguais nos dois.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>O que diferencia Excel de Sheets nas fórmulas? Quase nada na lógica; muda o nome por idioma e alguns recursos exclusivos. Toda fórmula começa com o quê? Com o sinal de igual.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Planilha<ul><li>Células com endereço (A1)</li><li>Fórmula começa com =</li><li>Recalcula sozinha</li><li>Excel e Sheets: mesma lógica</li><li>Muda: nome por idioma, separador</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> monte uma mini tabela de despesas com uma coluna de valores e uma célula de total.</p><p><b>Conexão:</b> a ideia de linhas e colunas é a mesma de uma tabela de SQL e de um DataFrame do pandas.</p>"}
+  ],
+  cards:[
+    ["O que toda fórmula precisa no início?","O sinal de igual (=)."],
+    ["O que é o endereço A1?","A posição da célula: coluna A, linha 1."],
+    ["As fórmulas mudam entre Excel e Sheets?","A lógica é a mesma; muda o nome por idioma e alguns recursos exclusivos."],
+    ["Qual o separador em português?","Ponto e vírgula (;) nos dois programas."]] },
+{ id:"pl-operadores", num:"02", cat:"Cálculos", title:"Operadores e cálculos", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (visão geral).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Operadores são os sinais que fazem contas e comparações dentro das fórmulas: somar, subtrair, multiplicar, dividir e comparar valores.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>São a base de tudo. Antes de funções prontas, a planilha já calcula com operadores. Entender a ordem das contas evita resultados errados.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Em qualquer cálculo direto: total, diferença, percentual, comparação para uma decisão. Para muitos valores de uma vez, combina-se com funções (próximos temas).</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A planilha segue a ordem matemática: primeiro o que está entre parênteses, depois multiplicação e divisão, por fim soma e subtração. Use parênteses para deixar a intenção clara.</p>"},
+   {t:"code",h:"=A1+A2        <span class='cm'>soma</span>\n=A1-A2        <span class='cm'>subtração</span>\n=A1*A2        <span class='cm'>multiplicação</span>\n=A1/A2        <span class='cm'>divisão</span>\n=(A1+A2)*B1   <span class='cm'>parênteses primeiro</span>\n=A1>A2        <span class='cm'>comparação: devolve VERDADEIRO ou FALSO</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Operador</th><th>O que faz</th></tr><tr><td>+  -  *  /</td><td>Soma, subtrai, multiplica, divide.</td></tr><tr><td>^</td><td>Potência (2^3 = 8).</td></tr><tr><td>=  &lt;&gt;</td><td>Igual e diferente.</td></tr><tr><td>&gt;  &lt;  &gt;=  &lt;=</td><td>Maior, menor e combinações.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esquecer parênteses e a conta seguir a ordem matemática, não a desejada.</p><p>Dividir por uma célula vazia ou zero e ver o erro de divisão.</p><p>Comparar texto com número sem perceber a diferença de tipo.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use parênteses para deixar a ordem explícita. Confira divisões que podem ter zero no denominador. Trate o resultado de comparações (VERDADEIRO/FALSO) com a função SE quando precisar de uma ação.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Calcule o total de A1 mais A2 multiplicado por 2.</p><p><b>2.</b> Escreva uma fórmula que diga se A1 é maior que B1.</p><p><b>3.</b> Explique por que =A1+A2*2 pode não ser o que você quer.</p>"},
+   {t:"code",l:"Soluções",h:"=(A1+A2)*2\n\n=A1>B1     <span class='cm'>devolve VERDADEIRO ou FALSO</span>\n\n<span class='cm'>=A1+A2*2 multiplica A2 por 2 antes de somar A1.</span>\n<span class='cm'>Para somar primeiro, use (A1+A2)*2.</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Operadores fazem contas e comparações. A ordem é: parênteses, potência, multiplicação e divisão, soma e subtração. Comparação devolve VERDADEIRO ou FALSO.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Qual a ordem das operações na planilha? Parênteses, potência, depois multiplicação e divisão, por fim soma e subtração. O que uma comparação devolve? VERDADEIRO ou FALSO.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Operadores<ul><li>Aritméticos: + - * / ^</li><li>Comparação: = &lt;&gt; &gt; &lt; &gt;= &lt;=</li><li>Ordem: parênteses primeiro</li><li>Comparação → VERDADEIRO/FALSO</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> monte uma fórmula de preço com desconto usando parênteses.</p><p><b>Conexão:</b> os operadores de comparação são os mesmos do WHERE no SQL (tema 14) e das condições em Python.</p>"}
+  ],
+  cards:[
+    ["Qual a ordem das operações?","Parênteses, potência, multiplicação e divisão, soma e subtração."],
+    ["O que uma comparação devolve?","VERDADEIRO ou FALSO."],
+    ["Como garantir a ordem desejada?","Usando parênteses."],
+    ["Qual operador é diferente de?","O sinal <> (menor seguido de maior)."]] },
+{ id:"pl-referencias", num:"03", cat:"Cálculos", title:"Referências relativas e absolutas", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 e 02.</p>"},
+   {t:"concept",l:"O que é",h:"<p>Quando você arrasta uma fórmula para baixo, as referências mudam junto. Isso é referência relativa. Quando você quer travar uma célula para ela não mudar, usa referência absoluta, com o sinal de cifrão ($).</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>É o erro número um de quem está começando. Travar ou não travar a célula certa decide se a fórmula copiada vai dar o resultado correto em todas as linhas.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Use absoluta quando uma fórmula precisa sempre apontar para a mesma célula, por exemplo uma taxa fixa ou um total geral que serve de base para todas as linhas.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A1 é relativa: muda ao copiar. $A$1 trava coluna e linha. $A1 trava só a coluna. A$1 trava só a linha. O cifrão antes da letra trava a coluna; antes do número, trava a linha.</p>"},
+   {t:"code",h:"<span class='cm'>Taxa fixa em B1. Valores em A2, A3, A4.</span>\nC2 = =A2*$B$1\n\n<span class='cm'>Ao copiar C2 para baixo:</span>\nC3 = =A3*$B$1    <span class='cm'>A muda, B1 fica travada</span>\nC4 = =A4*$B$1"},
+   {t:"table",h:"<table class='cmd'><tr><th>Escrita</th><th>O que trava</th></tr><tr><td>A1</td><td>Nada: muda ao copiar.</td></tr><tr><td>$A$1</td><td>Coluna e linha.</td></tr><tr><td>$A1</td><td>Só a coluna.</td></tr><tr><td>A$1</td><td>Só a linha.</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Copiar uma fórmula com taxa fixa sem travar a célula da taxa, e cada linha pegar um valor diferente.</p><p>Travar tudo por hábito, quebrando a fórmula ao copiar para o lado.</p><p>Esquecer um dos cifrões e travar só metade.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Pergunte: esta célula deve mudar ao copiar? Se não, trave. Em Excel e Sheets, a tecla de atalho F4 alterna os tipos de trava enquanto edita a fórmula.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Crie uma coluna de valor com imposto, usando uma taxa fixa travada.</p><p><b>2.</b> Copie a fórmula para baixo e confira se a taxa não mudou.</p><p><b>3.</b> Explique a diferença entre $A1 e A$1.</p>"},
+   {t:"code",l:"Soluções",h:"<span class='cm'>Taxa em B1</span>\nC2 = =A2*$B$1\n<span class='cm'>copiar para C3, C4...</span>\n\n<span class='cm'>$A1 trava a coluna A; A$1 trava a linha 1.</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Relativa muda ao copiar; absoluta ($) trava. $ antes da letra trava coluna; antes do número trava linha. F4 alterna. Vale igual em Excel e Sheets.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre referência relativa e absoluta? A relativa muda ao copiar; a absoluta, travada com $, permanece fixa. Para que serve o $A1? Travar só a coluna.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Referências<ul><li>A1 → relativa (muda)</li><li>$A$1 → trava tudo</li><li>$A1 → trava coluna</li><li>A$1 → trava linha</li><li>F4 alterna</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> calcule o valor com 10% de imposto para uma lista, com a taxa em uma célula travada.</p><p><b>Conexão:</b> travar uma base lembra usar um valor constante em uma consulta ou variável fixa em Python.</p>"}
+  ],
+  cards:[
+    ["O que é referência relativa?","A que muda ao copiar a fórmula (A1)."],
+    ["O que é referência absoluta?","A travada com cifrão, que não muda ($A$1)."],
+    ["O que $A1 trava?","Apenas a coluna."],
+    ["Qual tecla alterna os tipos de trava?","F4."]] },
+{ id:"pl-funcoes", num:"04", cat:"Funções", title:"Funções essenciais", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 a 03.</p>"},
+   {t:"concept",l:"O que é",h:"<p>Funções são fórmulas prontas que fazem uma tarefa comum sobre um intervalo de células. As essenciais resumem números: somar, tirar média, contar, achar o menor e o maior.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Em vez de somar célula por célula, uma função resolve um intervalo inteiro. É o ganho que torna a planilha rápida e confiável.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Sempre que precisar de um resumo: total de vendas, média de notas, quantidade de itens. Intervalo é a faixa de células, escrita com dois pontos, como A2:A100.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>A função recebe um intervalo entre parênteses e devolve um número. CONT.NÚM conta só células com número; CONT.VALORES conta qualquer célula preenchida, inclusive texto.</p>"},
+   {t:"code",h:"=SOMA(A2:A100)        <span class='cm'>total</span>\n=MÉDIA(A2:A100)       <span class='cm'>média</span>\n=CONT.NÚM(A2:A100)    <span class='cm'>quantos números</span>\n=CONT.VALORES(A2:A100)<span class='cm'>quantas células preenchidas</span>\n=MÍNIMO(A2:A100)      <span class='cm'>menor valor</span>\n=MÁXIMO(A2:A100)      <span class='cm'>maior valor</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Português</th><th>Inglês</th></tr><tr><td>SOMA</td><td>SUM</td></tr><tr><td>MÉDIA</td><td>AVERAGE</td></tr><tr><td>CONT.NÚM</td><td>COUNT</td></tr><tr><td>CONT.VALORES</td><td>COUNTA</td></tr><tr><td>MÍNIMO / MÁXIMO</td><td>MIN / MAX</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Todas funcionam igual nos dois. Os nomes acima valem para a interface em português; em inglês use a coluna da direita. O separador entre argumentos é ; em português e , em inglês.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Incluir o cabeçalho de texto no intervalo de uma soma sem necessidade.</p><p>Confundir CONT.NÚM (só números) com CONT.VALORES (tudo preenchido).</p><p>Deixar células vazias no meio achando que a média vai considerá-las como zero (ela ignora vazias).</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Selecione o intervalo certo, sem o cabeçalho nos cálculos numéricos. Escolha CONT.NÚM ou CONT.VALORES conforme o que quer contar. Deixe os dados em colunas limpas para as funções funcionarem bem.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Some os valores de A2 a A20.</p><p><b>2.</b> Conte quantas células de A2 a A20 têm número.</p><p><b>3.</b> Ache o maior e o menor valor desse intervalo.</p>"},
+   {t:"code",l:"Soluções",h:"=SOMA(A2:A20)\n=CONT.NÚM(A2:A20)\n=MÁXIMO(A2:A20)\n=MÍNIMO(A2:A20)"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>SOMA, MÉDIA, CONT.NÚM, CONT.VALORES, MÍNIMO e MÁXIMO resumem um intervalo (A2:A100). CONT.NÚM conta números; CONT.VALORES conta tudo preenchido. Iguais em Excel e Sheets.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre CONT.NÚM e CONT.VALORES? Uma conta só números; a outra, qualquer célula preenchida. A média considera células vazias? Não, ela as ignora.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Funções essenciais<ul><li>SOMA → total</li><li>MÉDIA → média</li><li>CONT.NÚM → conta números</li><li>CONT.VALORES → conta preenchidas</li><li>MÍNIMO / MÁXIMO → menor / maior</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> resuma uma coluna de vendas com total, média, maior e menor.</p><p><b>Conexão:</b> são as mesmas ideias de SUM, AVG, COUNT, MIN e MAX no SQL (tema 15) e no pandas.</p>"}
+  ],
+  cards:[
+    ["O que SOMA faz?","Soma todos os números de um intervalo."],
+    ["Diferença entre CONT.NÚM e CONT.VALORES?","CONT.NÚM conta números; CONT.VALORES conta qualquer célula preenchida."],
+    ["A MÉDIA considera células vazias?","Não; ela ignora as vazias."],
+    ["Como se escreve um intervalo?","Com dois pontos, como A2:A100."]] },
+{ id:"pl-logica", num:"05", cat:"Lógica", title:"Lógica com SE, E, OU", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 (comparações) e 04 (funções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>A função SE decide entre dois caminhos a partir de uma condição: se a condição for verdadeira, devolve um valor; se for falsa, devolve outro.</p><p>E e OU combinam várias condições.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>É o que transforma a planilha em algo que decide: aprovar ou reprovar, dar ou não desconto, classificar faixas. Quase todo relatório útil usa SE.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando o resultado depende de uma regra. Para várias faixas, encadeia-se SE dentro de SE, ou usa-se SES (em inglês IFS), que testa várias condições em sequência.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>SE recebe três partes: a condição, o valor se verdadeiro e o valor se falso. E devolve verdadeiro só quando todas as condições passam; OU, quando pelo menos uma passa.</p>"},
+   {t:"code",h:"=SE(A2>=7;\"Aprovado\";\"Reprovado\")\n\n<span class='cm'>Duas condições juntas com E</span>\n=SE(E(A2>=7;B2>=0.75);\"Aprovado\";\"Reprovado\")\n\n<span class='cm'>Várias faixas com SES</span>\n=SES(A2>=9;\"A\";A2>=7;\"B\";A2>=5;\"C\";VERDADEIRO;\"D\")"},
+   {t:"table",h:"<table class='cmd'><tr><th>Português</th><th>Inglês</th></tr><tr><td>SE</td><td>IF</td></tr><tr><td>E</td><td>AND</td></tr><tr><td>OU</td><td>OR</td></tr><tr><td>SES</td><td>IFS</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>SE, E, OU e SES funcionam nos dois. SES exige Excel 365 ou 2019 em diante; no Sheets está disponível. Em Excel antigo, use SE encadeado no lugar de SES.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Esquecer aspas no texto do resultado (Aprovado vira erro sem aspas).</p><p>Inverter a ordem das faixas no SES e classificar errado.</p><p>Trocar E por OU e mudar todo o sentido da regra.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Coloque texto entre aspas. No SES, vá da faixa mais alta para a mais baixa. Use VERDADEIRO como última condição do SES para o caso padrão. Prefira SES a muitos SE encadeados, quando disponível.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Classifique a nota de A2 em Aprovado (>= 7) ou Reprovado.</p><p><b>2.</b> Aprove só quem tem nota >= 7 e frequência (B2) >= 0,75.</p><p><b>3.</b> Crie conceitos A, B, C e D por faixa de nota.</p>"},
+   {t:"code",l:"Soluções",h:"=SE(A2>=7;\"Aprovado\";\"Reprovado\")\n=SE(E(A2>=7;B2>=0.75);\"Aprovado\";\"Reprovado\")\n=SES(A2>=9;\"A\";A2>=7;\"B\";A2>=5;\"C\";VERDADEIRO;\"D\")"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>SE decide entre dois caminhos. E exige todas as condições; OU, pelo menos uma. SES trata várias faixas, da maior para a menor. Texto vai entre aspas.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre E e OU? E exige todas verdadeiras; OU, ao menos uma. Como tratar várias faixas? Com SES ou SE encadeado, da faixa mais alta para a mais baixa.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Lógica<ul><li>SE → condição, se sim, se não</li><li>E → todas verdadeiras</li><li>OU → ao menos uma</li><li>SES → várias faixas</li><li>Texto entre aspas</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> monte uma coluna de situação (Aprovado/Reprovado) e outra de conceito por faixa.</p><p><b>Conexão:</b> SE é o primo do CASE no SQL (tema 20) e do if no Python (tema 04 de Python).</p>"}
+  ],
+  cards:[
+    ["O que a função SE faz?","Decide entre dois valores conforme uma condição ser verdadeira ou falsa."],
+    ["Diferença entre E e OU?","E exige todas as condições; OU, pelo menos uma."],
+    ["Quando usar SES?","Para classificar em várias faixas em sequência."],
+    ["Texto no resultado precisa de quê?","De aspas."]] },
+{ id:"pl-texto", num:"06", cat:"Texto", title:"Funções de texto", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 e 04.</p>"},
+   {t:"concept",l:"O que é",h:"<p>São funções que tratam texto: juntar, separar pedaços, medir o tamanho, limpar espaços e mudar maiúsculas e minúsculas.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Dados reais chegam bagunçados: nomes com espaços extras, códigos colados, maiúsculas trocadas. Limpar texto é metade do trabalho antes de qualquer análise.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Ao padronizar cadastros, separar nome e sobrenome, montar códigos ou comparar textos que precisam estar no mesmo formato.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O operador &amp; junta textos. ESQUERDA, DIREITA e EXT.TEXTO pegam pedaços. NÚM.CARACT mede o tamanho. ARRUMAR remove espaços extras. MAIÚSCULA e MINÚSCULA mudam a caixa.</p>"},
+   {t:"code",h:"=A2 &amp; \" \" &amp; B2     <span class='cm'>junta nome e sobrenome</span>\n=ESQUERDA(A2;3)      <span class='cm'>três primeiras letras</span>\n=DIREITA(A2;2)       <span class='cm'>duas últimas</span>\n=NÚM.CARACT(A2)      <span class='cm'>tamanho do texto</span>\n=ARRUMAR(A2)         <span class='cm'>remove espaços extras</span>\n=MAIÚSCULA(A2)       <span class='cm'>tudo em maiúsculas</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Português</th><th>Inglês</th></tr><tr><td>ESQUERDA / DIREITA</td><td>LEFT / RIGHT</td></tr><tr><td>EXT.TEXTO</td><td>MID</td></tr><tr><td>NÚM.CARACT</td><td>LEN</td></tr><tr><td>ARRUMAR</td><td>TRIM</td></tr><tr><td>MAIÚSCULA / MINÚSCULA</td><td>UPPER / LOWER</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Todas funcionam nos dois. O operador &amp; para juntar textos é igual. O Sheets também tem a função SPLIT para separar em colunas; no Excel, o equivalente moderno é DIVIDIRTEXTO (Excel 365) ou o recurso Texto para Colunas.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Comparar textos que parecem iguais, mas têm espaços extras (resolve com ARRUMAR).</p><p>Contar caracteres errados por esquecer que o espaço também conta.</p><p>Esperar que MAIÚSCULA mude o valor original: ela cria um novo resultado.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Limpe com ARRUMAR antes de comparar. Padronize a caixa com MAIÚSCULA ou MINÚSCULA. Junte textos com &amp; e separadores claros, como espaço ou hífen.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Junte nome (A2) e sobrenome (B2) com um espaço.</p><p><b>2.</b> Pegue as três primeiras letras de um código em A2.</p><p><b>3.</b> Limpe os espaços extras de um nome bagunçado.</p>"},
+   {t:"code",l:"Soluções",h:"=A2 &amp; \" \" &amp; B2\n=ESQUERDA(A2;3)\n=ARRUMAR(A2)"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>&amp; junta textos. ESQUERDA, DIREITA e EXT.TEXTO pegam pedaços. NÚM.CARACT mede. ARRUMAR limpa espaços. MAIÚSCULA e MINÚSCULA mudam a caixa. Iguais em Excel e Sheets.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Como juntar dois textos? Com o operador &amp;. Como remover espaços extras? Com ARRUMAR. Por que padronizar a caixa? Para comparar textos de forma justa.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Texto<ul><li>&amp; → juntar</li><li>ESQUERDA / DIREITA / EXT.TEXTO → pedaços</li><li>NÚM.CARACT → tamanho</li><li>ARRUMAR → limpar espaços</li><li>MAIÚSCULA / MINÚSCULA → caixa</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> padronize uma lista de nomes, limpando espaços e juntando nome e sobrenome.</p><p><b>Conexão:</b> são as mesmas funções de string do SQL (tema 18) e dos métodos de texto do Python.</p>"}
+  ],
+  cards:[
+    ["Como juntar dois textos?","Com o operador &."],
+    ["O que ARRUMAR faz?","Remove espaços extras do texto."],
+    ["O que NÚM.CARACT devolve?","O tamanho do texto, em caracteres."],
+    ["ESQUERDA(A2;3) faz o quê?","Pega as três primeiras letras de A2."]] },
+{ id:"pl-procura", num:"07", cat:"Procura", title:"PROCV, PROCX e ÍNDICE/CORRESP", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 03 (referências) e 05 (lógica).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São funções que buscam um valor em uma tabela e trazem a informação correspondente. Exemplo: dado um código de produto, trazer o nome e o preço.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>É a função mais cobrada em entrevistas de planilha. Liga duas tabelas, do mesmo jeito que um JOIN faz no SQL. Sem ela, você copia dados na mão e erra.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando precisa cruzar duas listas por uma chave em comum (código, CPF, matrícula). PROCV é a clássica; PROCX é a moderna; ÍNDICE com CORRESP é a alternativa universal.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>PROCV procura um valor na primeira coluna de um intervalo e devolve algo de uma coluna à direita. PROCX procura em qualquer direção e é mais simples. ÍNDICE devolve o valor de uma posição; CORRESP acha a posição.</p>"},
+   {t:"code",h:"<span class='cm'>PROCV: procura o código de A2 na tabela e traz a 3ª coluna</span>\n=PROCV(A2;$E$2:$G$100;3;FALSO)\n\n<span class='cm'>PROCX: procura A2 na coluna E e devolve da coluna G</span>\n=PROCX(A2;$E$2:$E$100;$G$2:$G$100)\n\n<span class='cm'>ÍNDICE + CORRESP: alternativa universal</span>\n=ÍNDICE($G$2:$G$100;CORRESP(A2;$E$2:$E$100;0))"},
+   {t:"table",h:"<table class='cmd'><tr><th>Função</th><th>Quando preferir</th></tr><tr><td>PROCV</td><td>Busca simples, valor à direita da chave.</td></tr><tr><td>PROCX</td><td>Mais flexível; busca em qualquer direção.</td></tr><tr><td>ÍNDICE/CORRESP</td><td>Funciona em qualquer versão; busca para a esquerda.</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>PROCV e ÍNDICE/CORRESP funcionam em todas as versões dos dois. PROCX (em inglês XLOOKUP) exige Excel 365 ou 2021; versões antigas do Excel não têm. No Sheets, PROCX está disponível. Quando precisar de compatibilidade ampla, use ÍNDICE/CORRESP.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>No PROCV, esquecer FALSO no final e receber correspondência aproximada, trazendo o valor errado.</p><p>Não travar o intervalo da tabela com $ e a referência mudar ao copiar.</p><p>Tentar PROCV para buscar uma coluna à esquerda da chave, o que ele não faz.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>No PROCV, use sempre FALSO para correspondência exata. Trave a tabela com $. Quando puder, prefira PROCX pela clareza, ou ÍNDICE/CORRESP pela compatibilidade. Garanta que a chave não tenha espaços extras (ARRUMAR).</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Com PROCV, traga o nome do produto a partir do código em A2.</p><p><b>2.</b> Reescreva a mesma busca com PROCX.</p><p><b>3.</b> Faça a busca com ÍNDICE e CORRESP.</p>"},
+   {t:"code",l:"Soluções",h:"=PROCV(A2;$E$2:$G$100;2;FALSO)\n=PROCX(A2;$E$2:$E$100;$F$2:$F$100)\n=ÍNDICE($F$2:$F$100;CORRESP(A2;$E$2:$E$100;0))"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>PROCV busca na primeira coluna e traz à direita (use FALSO). PROCX é flexível, mas exige Excel 365. ÍNDICE/CORRESP funciona em tudo e busca para qualquer lado. Trave a tabela com $.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Por que usar FALSO no PROCV? Para correspondência exata. Vantagem do PROCX sobre o PROCV? Busca em qualquer direção e é mais simples. Quando usar ÍNDICE/CORRESP? Para compatibilidade e busca à esquerda.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Procura<ul><li>PROCV → simples, valor à direita, use FALSO</li><li>PROCX → flexível (Excel 365 ou Sheets)</li><li>ÍNDICE/CORRESP → universal</li><li>Sempre travar a tabela com $</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> com uma tabela de produtos, traga nome e preço a partir do código.</p><p><b>Conexão:</b> cruzar tabelas por uma chave é exatamente a ideia do JOIN no SQL (tema 21).</p>"}
+  ],
+  cards:[
+    ["O que o PROCV faz?","Busca um valor na primeira coluna e traz algo de uma coluna à direita."],
+    ["Por que usar FALSO no PROCV?","Para garantir correspondência exata."],
+    ["Qual a limitação do PROCX?","Exige Excel 365 ou 2021; não existe em versões antigas do Excel."],
+    ["Qual a alternativa universal?","ÍNDICE com CORRESP."]] },
+{ id:"pl-condicionais", num:"08", cat:"Resumo condicional", title:"SOMASE, CONT.SE e MÉDIASE", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 04 (funções) e 05 (lógica).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São funções que resumem só as células que atendem a uma condição: somar apenas as vendas de uma região, contar só os aprovados, tirar a média de um grupo.</p>"},
+   {t:"concept",l:"Por que é importante",h:"<p>Unem cálculo e lógica em uma fórmula. É o que gera relatórios por categoria sem precisar separar os dados antes.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Quando o resumo precisa de filtro: total por vendedor, contagem por status, média por turma. Para mais de uma condição, use as versões no plural: SOMASES, CONT.SES e MÉDIASES.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>SOMASE recebe o intervalo de teste, o critério e o intervalo a somar. CONT.SE conta os que atendem ao critério. As versões no plural aceitam vários pares de intervalo e critério.</p>"},
+   {t:"code",h:"<span class='cm'>Soma os valores (B) onde a região (A) é Sul</span>\n=SOMASE(A2:A100;\"Sul\";B2:B100)\n\n<span class='cm'>Conta quantos estão Aprovados</span>\n=CONT.SE(C2:C100;\"Aprovado\")\n\n<span class='cm'>Média dos valores acima de 100</span>\n=MÉDIASE(B2:B100;\">100\")\n\n<span class='cm'>Duas condições: região Sul e valor acima de 100</span>\n=SOMASES(B2:B100;A2:A100;\"Sul\";B2:B100;\">100\")"},
+   {t:"table",h:"<table class='cmd'><tr><th>Português</th><th>Inglês</th></tr><tr><td>SOMASE / SOMASES</td><td>SUMIF / SUMIFS</td></tr><tr><td>CONT.SE / CONT.SES</td><td>COUNTIF / COUNTIFS</td></tr><tr><td>MÉDIASE / MÉDIASES</td><td>AVERAGEIF / AVERAGEIFS</td></tr></table>"},
+   {t:"tip",l:"Excel x Sheets",h:"<p>Todas funcionam nos dois. Atenção à ordem dos argumentos, que muda entre as versões simples e plural: no SOMASE vem intervalo, critério e soma; no SOMASES o intervalo de soma vem primeiro.</p>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Trocar a ordem dos argumentos entre SOMASE e SOMASES.</p><p>Escrever o critério sem aspas (\">100\" precisa de aspas).</p><p>Usar intervalos de tamanhos diferentes, o que causa erro ou resultado errado.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Coloque o critério entre aspas, inclusive comparações como \">100\". Use intervalos do mesmo tamanho. Para vários filtros, vá direto para as versões no plural. Confira a ordem dos argumentos.</p>"},
+   {t:"plain",l:"Exercícios graduais",h:"<p><b>1.</b> Some os valores da região Sul.</p><p><b>2.</b> Conte quantos pedidos estão Aprovados.</p><p><b>3.</b> Some os valores da região Sul que passam de 100.</p>"},
+   {t:"code",l:"Soluções",h:"=SOMASE(A2:A100;\"Sul\";B2:B100)\n=CONT.SE(C2:C100;\"Aprovado\")\n=SOMASES(B2:B100;A2:A100;\"Sul\";B2:B100;\">100\")"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>SOMASE, CONT.SE e MÉDIASE resumem com uma condição. As versões no plural aceitam várias. Critério vai entre aspas. Cuidado com a ordem dos argumentos entre simples e plural.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p>Diferença entre SOMASE e SOMASES? Uma condição contra várias, e a ordem dos argumentos muda. Como escrever um critério de comparação? Entre aspas, como \">100\".</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Resumo condicional<ul><li>SOMASE → soma com 1 condição</li><li>CONT.SE → conta com 1 condição</li><li>MÉDIASE → média com 1 condição</li><li>Plural (SES) → várias condições</li><li>Critério entre aspas</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><b>Mini-projeto:</b> monte um resumo de vendas por região com SOMASE e CONT.SE.</p><p><b>Conexão:</b> é a mesma ideia de WHERE com GROUP BY no SQL (temas 14 e 15): filtrar e resumir.</p>"}
+  ],
+  cards:[
+    ["O que SOMASE faz?","Soma apenas as células que atendem a uma condição."],
+    ["Quando usar as versões no plural (SES)?","Quando há mais de uma condição."],
+    ["Como se escreve o critério \">100\"?","Entre aspas."],
+    ["Qual cuidado entre SOMASE e SOMASES?","A ordem dos argumentos muda; no plural a soma vem primeiro."]] }
+];
+const PL_QUIZ = [
+ {q:"Toda fórmula em Excel e Sheets começa com:",o:["Dois pontos","O sinal de igual (=)","Aspas","Um espaço"],c:1,e:"O sinal de igual indica que a célula é uma fórmula."},
+ {q:"Em português, qual o separador de argumentos nos dois programas?",o:["Vírgula","Ponto e vírgula (;)","Dois pontos","Barra"],c:1,e:"Em português usa-se ponto e vírgula; em inglês, vírgula."},
+ {q:"O que $A$1 trava?",o:["Nada","Só a linha","Só a coluna","Coluna e linha"],c:3,e:"O cifrão antes da letra e do número trava coluna e linha."},
+ {q:"Qual função conta apenas células com número?",o:["CONT.VALORES","CONT.NÚM","SOMA","SE"],c:1,e:"CONT.NÚM conta números; CONT.VALORES conta qualquer célula preenchida."},
+ {q:"Para decidir entre dois resultados por uma condição, usa-se:",o:["SOMA","SE","PROCV","ARRUMAR"],c:1,e:"A função SE escolhe entre dois valores conforme a condição."},
+ {q:"Qual operador junta dois textos?",o:["+","&","/","*"],c:1,e:"O operador & concatena (junta) textos."},
+ {q:"No PROCV, o que garante correspondência exata?",o:["VERDADEIRO no final","FALSO no final","Travar com $","Usar aspas"],c:1,e:"FALSO no último argumento pede correspondência exata."},
+ {q:"Qual função exige Excel 365 ou 2021 e não existe em versões antigas?",o:["PROCV","ÍNDICE","PROCX","SOMASE"],c:2,e:"PROCX (XLOOKUP) só existe no Excel 365/2021 e no Sheets; use ÍNDICE/CORRESP para compatibilidade."},
+ {q:"Para somar só os valores de uma região, usa-se:",o:["SOMA","SOMASE","CONT.SE","MÉDIA"],c:1,e:"SOMASE soma apenas as células que atendem à condição."}
+];
 const SUBJECTS = {
-  sql:        { name:"SQL", code:"SQL", themes:SQL_THEMES, quiz:SQL_QUIZ, themeEx:SQL_THEMEEX, practice:true, ready:true },
-  viz:        { name:"Visualização de Dados", code:"VIZ", themes:VIZ_THEMES, quiz:VIZ_QUIZ, themeEx:{}, practice:false, ready:true },
-  estatistica:{ name:"Estatística", code:"EST", themes:EST_THEMES, quiz:EST_QUIZ, themeEx:{}, practice:false, ready:true },
-  powerbi:    { name:"Power BI", code:"BI", themes:BI_THEMES, quiz:BI_QUIZ, themeEx:{}, practice:false, ready:true },
-  ia:         { name:"Inteligência Artificial", code:"IA", themes:IA_THEMES, quiz:IA_QUIZ, themeEx:{}, practice:false, ready:true },
-  python:     { name:"Python", code:"PY", themes:PY_THEMES, quiz:PY_QUIZ, themeEx:{}, practice:false, ready:true },
-  referencia:  { name:"Guia de Referência", code:"REF", themes:REF_THEMES, quiz:REF_QUIZ, themeEx:{}, practice:false, ready:true }
+  intro:      { name:"01 · Introdução", code:"INTRO", themes:INTRO_THEMES, quiz:INTRO_QUIZ, themeEx:{}, practice:false, ready:true },
+  planilhas:  { name:"02 · Planilhas", code:"PL", themes:PL_THEMES, quiz:PL_QUIZ, themeEx:{}, practice:false, ready:true },
+  sql:        { name:"03 · SQL", code:"SQL", themes:SQL_THEMES, quiz:SQL_QUIZ, themeEx:SQL_THEMEEX, practice:true, ready:true },
+  python:     { name:"04 · Python", code:"PY", themes:PY_THEMES, quiz:PY_QUIZ, themeEx:{}, practice:false, ready:true },
+  viz:        { name:"05 · Visualização de Dados", code:"VIZ", themes:VIZ_THEMES, quiz:VIZ_QUIZ, themeEx:{}, practice:false, ready:true },
+  estatistica:{ name:"06 · Estatística", code:"EST", themes:EST_THEMES, quiz:EST_QUIZ, themeEx:{}, practice:false, ready:true },
+  powerbi:    { name:"07 · Power BI", code:"BI", themes:BI_THEMES, quiz:BI_QUIZ, themeEx:{}, practice:false, ready:true },
+  ia:         { name:"08 · Inteligência Artificial", code:"IA", themes:IA_THEMES, quiz:IA_QUIZ, themeEx:{}, practice:false, ready:true },
+  referencia: { name:"09 · Guia de Referência", code:"REF", themes:REF_THEMES, quiz:REF_QUIZ, themeEx:{}, practice:false, ready:true }
 };
-let curSubject='sql';
-let THEMES=SUBJECTS.sql.themes, QUIZ=SUBJECTS.sql.quiz, THEME_EX=SUBJECTS.sql.themeEx;
+let curSubject='intro';
+let THEMES=SUBJECTS.intro.themes, QUIZ=SUBJECTS.intro.quiz, THEME_EX=SUBJECTS.intro.themeEx;
 
 const store = {
   get studied(){ try{return JSON.parse(localStorage.getItem('studied_'+curSubject)||'[]')}catch(e){return[]} },
