@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadernos de Estudo</title>
-<meta name="app-version" content="20260627-5">
+<meta name="app-version" content="20260627-6">
 <meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1930,78 +1930,73 @@ const PY_QUIZ = [
 ];
 
 const REF_THEMES = [
-{ id:"ref-py", num:"01", cat:"Guia de Referência", title:"Python essencial", date:DATE1,
+{ id:"ref-py", num:"01", cat:"Guia de Referência", title:"Python", date:DATE1,
   blocks:[
-   {t:"concept",l:"Para que serve",h:"<p>São as ferramentas que vêm com o Python ou que se instalam para o dia a dia. A maior parte já está na biblioteca padrão (em inglês standard library), sem precisar instalar nada.</p>"},
-   {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>os e pathlib</td><td>Lidar com pastas e caminhos de arquivos.</td></tr><tr><td>datetime</td><td>Trabalhar com datas e horas.</td></tr><tr><td>json</td><td>Ler e gravar dados no formato JSON.</td></tr><tr><td>csv</td><td>Ler e gravar planilhas em texto (CSV).</td></tr><tr><td>collections</td><td>Estruturas prontas como Counter e defaultdict.</td></tr><tr><td>venv e pip</td><td>Criar ambiente isolado (venv) e instalar pacotes (pip).</td></tr></table>"},
-   {t:"concept",l:"Quando usar qual",h:"<p>Para abrir arquivos simples de texto ou CSV, a biblioteca padrão basta. Quando os dados viram tabela de verdade e você precisa filtrar e agrupar, troque para o pandas (próximo tema).</p><p>pip e venv são a base: venv isola as bibliotecas de cada projeto, evitando conflito de versões.</p>"},
-   {t:"tip",l:"Boas práticas",h:"<p>Crie um venv por projeto. Use pathlib em vez de juntar caminhos com texto. Prefira a biblioteca padrão antes de instalar algo novo: menos dependências, menos manutenção.</p>"},
-   {t:"plain",l:"Documentação oficial",h:"<ul><li>Python: <a href='https://docs.python.org/pt-br/3/' target='_blank'>docs.python.org/pt-br/3</a></li><li>pip: <a href='https://pip.pypa.io/' target='_blank'>pip.pypa.io</a></li></ul>"},
-   {t:"recap",l:"O que preciso lembrar",h:"<p>A biblioteca padrão resolve muito sem instalar. venv isola projetos, pip instala pacotes. Para tabelas de verdade, use pandas.</p>"}
+   {t:"concept",l:"Para que serve",h:"<p>Reúne tudo de Python em um só lugar: a linguagem base (o que já vem instalado e o pip) e as bibliotecas centrais para trabalhar com dados.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Linguagem base</th><th>Para que serve</th></tr><tr><td>os e pathlib</td><td>Lidar com pastas e caminhos de arquivos.</td></tr><tr><td>datetime</td><td>Trabalhar com datas e horas.</td></tr><tr><td>json e csv</td><td>Ler e gravar dados em JSON e em CSV.</td></tr><tr><td>collections</td><td>Estruturas prontas como Counter e defaultdict.</td></tr><tr><td>venv e pip</td><td>Criar ambiente isolado (venv) e instalar pacotes (pip).</td></tr></table>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Bibliotecas de dados</th><th>Para que serve</th></tr><tr><td>pandas</td><td>Tabelas (DataFrame): filtrar, agrupar, resumir.</td></tr><tr><td>NumPy</td><td>Cálculo numérico rápido com vetores. Base do pandas.</td></tr><tr><td>openpyxl</td><td>Ler e escrever arquivos Excel (.xlsx).</td></tr><tr><td>SQLAlchemy</td><td>Conectar o Python a bancos SQL.</td></tr></table>"},
+   {t:"concept",l:"Quando usar qual",h:"<p>Para arquivos simples de texto ou CSV, a biblioteca padrão basta. Quando os dados viram tabela de verdade e você precisa filtrar e agrupar, use o pandas. NumPy entra em contas pesadas com muitos números; openpyxl quando a entrega é uma planilha Excel; SQLAlchemy quando os dados vêm de um banco.</p><p>pip e venv são a base: o venv isola as bibliotecas de cada projeto, evitando conflito de versões.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Crie um venv por projeto. Prefira a biblioteca padrão antes de instalar algo novo. Aprenda pandas com profundidade, pensando em paralelo com SQL (filtrar, agrupar e ordenar são a mesma lógica). Use NumPy só quando o ganho de desempenho justificar.</p>"},
+   {t:"plain",l:"Documentação oficial",h:"<ul><li>Python: <a href='https://docs.python.org/pt-br/3/' target='_blank'>docs.python.org/pt-br/3</a></li><li>pip: <a href='https://pip.pypa.io/' target='_blank'>pip.pypa.io</a></li><li>pandas: <a href='https://pandas.pydata.org/docs/' target='_blank'>pandas.pydata.org/docs</a></li><li>NumPy: <a href='https://numpy.org/doc/' target='_blank'>numpy.org/doc</a></li><li>SQLAlchemy: <a href='https://docs.sqlalchemy.org/' target='_blank'>docs.sqlalchemy.org</a></li></ul>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Python<ul><li>Linguagem base<ul><li>stdlib (os, datetime, json, csv)</li><li>venv: isola o projeto</li><li>pip: instala pacotes</li></ul></li><li>Dados<ul><li>pandas: tabelas (centro)</li><li>NumPy: base numérica</li><li>openpyxl: Excel</li><li>SQLAlchemy: liga ao banco</li></ul></li></ul></li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Linguagem base: stdlib, venv e pip. Dados: pandas é o centro, NumPy a base numérica, openpyxl para Excel e SQLAlchemy para o banco. A lógica de dados espelha o SQL.</p>"}
   ],
   cards:[
     ["Para que serve o venv?","Criar um ambiente isolado de bibliotecas por projeto."],
     ["O que o pip faz?","Instala pacotes externos do Python."],
-    ["Qual módulo lida com datas?","datetime."]] },
-{ id:"ref-dados", num:"02", cat:"Guia de Referência", title:"Dados em Python", date:DATE1,
-  blocks:[
-   {t:"concept",l:"Para que serve",h:"<p>São as bibliotecas centrais para analisar dados em Python: carregar, limpar, transformar e resumir tabelas.</p>"},
-   {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>pandas</td><td>Tabelas (DataFrame): filtrar, agrupar, resumir.</td></tr><tr><td>NumPy</td><td>Cálculo numérico rápido com vetores. Base do pandas.</td></tr><tr><td>openpyxl</td><td>Ler e escrever arquivos Excel (.xlsx).</td></tr><tr><td>SQLAlchemy</td><td>Conectar o Python a bancos SQL.</td></tr></table>"},
-   {t:"concept",l:"Quando usar qual",h:"<p>O ponto de partida é o pandas: quase tudo passa por ele. NumPy entra quando você precisa de contas pesadas em grandes vetores de números. openpyxl quando a entrega final é uma planilha Excel.</p><p>SQLAlchemy quando os dados vivem em um banco e você quer trazê-los para o pandas.</p>"},
-   {t:"tip",l:"Boas práticas",h:"<p>Aprenda pandas com profundidade: é o centro do trabalho em Dados. Pense em paralelo com SQL, pois a lógica de filtrar, agrupar e ordenar é a mesma. Use NumPy só quando o ganho de desempenho justificar.</p>"},
-   {t:"plain",l:"Documentação oficial",h:"<ul><li>pandas: <a href='https://pandas.pydata.org/docs/' target='_blank'>pandas.pydata.org/docs</a></li><li>NumPy: <a href='https://numpy.org/doc/' target='_blank'>numpy.org/doc</a></li><li>SQLAlchemy: <a href='https://docs.sqlalchemy.org/' target='_blank'>docs.sqlalchemy.org</a></li></ul>"},
-   {t:"recap",l:"O que preciso lembrar",h:"<p>pandas é o centro. NumPy é a base numérica. openpyxl para Excel. SQLAlchemy liga Python ao banco. A lógica espelha o SQL.</p>"}
-  ],
-  cards:[
-    ["Qual a biblioteca central de Dados em Python?","pandas."],
+    ["Qual a biblioteca central de dados?","pandas (tabelas/DataFrame)."],
     ["O que é NumPy?","Cálculo numérico rápido com vetores; base do pandas."],
     ["O que conecta Python a bancos SQL?","SQLAlchemy."]] },
-{ id:"ref-viz", num:"03", cat:"Guia de Referência", title:"Visualização de dados", date:DATE1,
+{ id:"ref-viz", num:"02", cat:"Guia de Referência", title:"Visualização de dados", date:DATE1,
   blocks:[
    {t:"concept",l:"Para que serve",h:"<p>São as bibliotecas que transformam tabelas em gráficos, para comunicar resultados de forma visual.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>Matplotlib</td><td>Base de gráficos em Python. Controle total, mais manual.</td></tr><tr><td>Seaborn</td><td>Gráficos estatísticos bonitos com pouco código. Usa o Matplotlib por baixo.</td></tr><tr><td>Plotly</td><td>Gráficos interativos, com zoom e dicas ao passar o mouse.</td></tr></table>"},
    {t:"concept",l:"Quando usar qual",h:"<p>Para um gráfico rápido durante a análise, Seaborn entrega bom resultado com pouco esforço. Quando precisa de controle fino de cada detalhe, vá para o Matplotlib. Quando o gráfico será explorado pelo usuário (web, dashboard), use o Plotly.</p>"},
    {t:"tip",l:"Boas práticas",h:"<p>Comece pelo Seaborn para velocidade. Escolha o tipo de gráfico pela pergunta, não pela estética. Mantenha rótulos claros e evite excesso de cores, em linha com o caderno de Visualização.</p>"},
    {t:"plain",l:"Documentação oficial",h:"<ul><li>Matplotlib: <a href='https://matplotlib.org/stable/' target='_blank'>matplotlib.org/stable</a></li><li>Seaborn: <a href='https://seaborn.pydata.org/' target='_blank'>seaborn.pydata.org</a></li><li>Plotly: <a href='https://plotly.com/python/' target='_blank'>plotly.com/python</a></li></ul>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Visualização em Python<ul><li>Matplotlib: base, controle total</li><li>Seaborn: estatístico, rápido</li><li>Plotly: interativo</li><li>Escolha pelo objetivo</li></ul></li></ul>"},
    {t:"recap",l:"O que preciso lembrar",h:"<p>Matplotlib é a base (controle). Seaborn é rápido (estatístico). Plotly é interativo. Escolha o gráfico pela pergunta.</p>"}
   ],
   cards:[
     ["Qual biblioteca é a base dos gráficos em Python?","Matplotlib."],
     ["Quando usar Seaborn?","Para gráficos estatísticos rápidos, com pouco código."],
     ["Quando usar Plotly?","Quando o gráfico precisa ser interativo."]] },
-{ id:"ref-sql", num:"04", cat:"Guia de Referência", title:"SQL e MySQL", date:DATE1,
+{ id:"ref-sql", num:"03", cat:"Guia de Referência", title:"SQL e MySQL", date:DATE1,
   blocks:[
    {t:"concept",l:"Para que serve",h:"<p>São o banco de dados e as ferramentas para consultar, administrar e conectar o SQL ao restante do trabalho.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Ferramenta</th><th>Para que serve</th></tr><tr><td>MySQL</td><td>O banco de dados (SGBD) onde os dados ficam.</td></tr><tr><td>MySQL Workbench</td><td>Cliente visual oficial para escrever e rodar consultas.</td></tr><tr><td>DBeaver</td><td>Cliente que conecta a vários bancos diferentes.</td></tr><tr><td>SQLAlchemy</td><td>Liga o Python ao banco para trazer dados ao pandas.</td></tr></table>"},
    {t:"concept",l:"Quando usar qual",h:"<p>SGBD significa Sistema de Gerenciamento de Banco de Dados: o programa que guarda e organiza os dados. O MySQL é o SGBD. Para escrever consultas no dia a dia, use um cliente como o Workbench ou o DBeaver.</p><p>Quando quiser analisar no Python, o SQLAlchemy traz o resultado do banco para um DataFrame.</p>"},
    {t:"tip",l:"Boas práticas",h:"<p>Use a documentação oficial do MySQL como referência principal. Teste consultas no cliente antes de levar para o código. Lembre dos índices e do EXPLAIN (temas 25 e 28) ao buscar desempenho.</p>"},
    {t:"plain",l:"Documentação oficial",h:"<ul><li>MySQL: <a href='https://dev.mysql.com/doc/' target='_blank'>dev.mysql.com/doc</a></li><li>DBeaver: <a href='https://dbeaver.com/docs/' target='_blank'>dbeaver.com/docs</a></li><li>SQLAlchemy: <a href='https://docs.sqlalchemy.org/' target='_blank'>docs.sqlalchemy.org</a></li></ul>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>SQL e MySQL<ul><li>MySQL: o banco (SGBD)</li><li>Workbench / DBeaver: clientes</li><li>SQLAlchemy: liga ao Python</li><li>Fonte: dev.mysql.com</li></ul></li></ul>"},
    {t:"recap",l:"O que preciso lembrar",h:"<p>MySQL é o banco (SGBD). Workbench e DBeaver são clientes para consultar. SQLAlchemy conecta ao Python. Doc oficial é a referência.</p>"}
   ],
   cards:[
     ["O que é um SGBD?","Sistema de Gerenciamento de Banco de Dados; o MySQL é um deles."],
     ["Para que serve o MySQL Workbench?","É o cliente visual para escrever e rodar consultas."],
     ["O que liga o Python ao banco SQL?","SQLAlchemy."]] },
-{ id:"ref-bi", num:"05", cat:"Guia de Referência", title:"Power BI", date:DATE1,
+{ id:"ref-bi", num:"04", cat:"Guia de Referência", title:"Power BI", date:DATE1,
   blocks:[
    {t:"concept",l:"Para que serve",h:"<p>São as partes do Power BI que você combina para transformar dados em painéis (dashboards) interativos.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Recurso</th><th>Para que serve</th></tr><tr><td>Power BI Desktop</td><td>Programa onde você cria os relatórios.</td></tr><tr><td>Power Query</td><td>Limpa e transforma os dados antes da análise (etapa de ETL).</td></tr><tr><td>DAX</td><td>Linguagem de cálculo para medidas e colunas.</td></tr><tr><td>Power BI Service</td><td>Nuvem para publicar e compartilhar os painéis.</td></tr></table>"},
    {t:"concept",l:"Quando usar qual",h:"<p>ETL significa Extrair, Transformar e Carregar (em inglês Extract, Transform, Load): preparar o dado bruto. Isso é feito no Power Query. Os cálculos (total, média, percentual) vêm com o DAX, sigla de Data Analysis Expressions (Expressões de Análise de Dados).</p><p>Cria-se no Desktop e publica-se no Service.</p>"},
    {t:"tip",l:"Boas práticas",h:"<p>Trate os dados no Power Query, não na mão. Escreva medidas DAX claras e nomeadas. Use a documentação oficial da Microsoft em português como referência. Conecte com o caderno de Visualização para escolher bem os gráficos.</p>"},
    {t:"plain",l:"Documentação oficial",h:"<ul><li>Power BI: <a href='https://learn.microsoft.com/pt-br/power-bi/' target='_blank'>learn.microsoft.com/pt-br/power-bi</a></li><li>DAX: <a href='https://learn.microsoft.com/pt-br/dax/' target='_blank'>learn.microsoft.com/pt-br/dax</a></li></ul>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Power BI<ul><li>Desktop: cria</li><li>Power Query: limpa (ETL)</li><li>DAX: calcula</li><li>Service: publica</li></ul></li></ul>"},
    {t:"recap",l:"O que preciso lembrar",h:"<p>Desktop cria, Power Query limpa (ETL), DAX calcula, Service publica. Doc oficial da Microsoft em português é a referência.</p>"}
   ],
   cards:[
     ["O que significa ETL?","Extrair, Transformar e Carregar: preparar o dado bruto."],
     ["O que é DAX?","Data Analysis Expressions: a linguagem de cálculo do Power BI."],
     ["Onde se limpa o dado no Power BI?","No Power Query."]] },
-{ id:"ref-ia", num:"06", cat:"Guia de Referência", title:"IA e Machine Learning", date:DATE1,
+{ id:"ref-ia", num:"05", cat:"Guia de Referência", title:"IA e Machine Learning", date:DATE1,
   blocks:[
    {t:"concept",l:"Para que serve",h:"<p>São as bibliotecas para criar modelos que aprendem com dados, do aprendizado de máquina clássico aos modelos de linguagem atuais.</p>"},
    {t:"table",h:"<table class='cmd'><tr><th>Biblioteca</th><th>Para que serve</th></tr><tr><td>scikit-learn</td><td>Machine Learning clássico: classificação, regressão, agrupamento.</td></tr><tr><td>PyTorch</td><td>Deep Learning (redes neurais), pesquisa e produção.</td></tr><tr><td>TensorFlow</td><td>Deep Learning, alternativa ao PyTorch.</td></tr><tr><td>Hugging Face</td><td>Modelos prontos de linguagem e visão para reaproveitar.</td></tr></table>"},
    {t:"concept",l:"Quando usar qual",h:"<p>Machine Learning (aprendizado de máquina) é ensinar o computador a achar padrões em dados. Para a maioria dos problemas tabulares, comece pelo scikit-learn. Deep Learning (aprendizado profundo) usa redes neurais e entra em imagem, texto e voz, com PyTorch ou TensorFlow.</p><p>Para usar modelos de linguagem já treinados, o Hugging Face poupa muito trabalho.</p>"},
    {t:"tip",l:"Boas práticas",h:"<p>Domine o scikit-learn antes do Deep Learning: a base estatística vem primeiro. Separe sempre dados de treino e de teste. Só vá para redes neurais quando o problema realmente pedir.</p>"},
    {t:"plain",l:"Documentação oficial",h:"<ul><li>scikit-learn: <a href='https://scikit-learn.org/stable/' target='_blank'>scikit-learn.org/stable</a></li><li>PyTorch: <a href='https://pytorch.org/docs/' target='_blank'>pytorch.org/docs</a></li><li>Hugging Face: <a href='https://huggingface.co/docs' target='_blank'>huggingface.co/docs</a></li></ul>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>IA e Machine Learning<ul><li>scikit-learn: ML clássico</li><li>PyTorch / TensorFlow: deep learning</li><li>Hugging Face: modelos prontos</li><li>Base estatística primeiro</li></ul></li></ul>"},
    {t:"recap",l:"O que preciso lembrar",h:"<p>scikit-learn para ML clássico (começo). PyTorch e TensorFlow para Deep Learning. Hugging Face para modelos prontos. Base estatística primeiro.</p>"}
   ],
   cards:[
@@ -2009,7 +2004,7 @@ const REF_THEMES = [
     ["O que é Deep Learning?","Aprendizado com redes neurais, usado em imagem, texto e voz."],
     ["Para que serve o Hugging Face?","Reaproveitar modelos prontos de linguagem e visão."]] }
 ,
-{ id:"ref-creditos", num:"07", cat:"Créditos", title:"Referências e créditos", date:DATE1,
+{ id:"ref-creditos", num:"06", cat:"Créditos", title:"Referências e créditos", date:DATE1,
   blocks:[
    {t:"concept",l:"O que é",h:"<p>Esta página reúne as referências do material: quem é responsável por cada tecnologia, a documentação oficial usada como fonte e o que foi usado para construir o aplicativo.</p><p>Citar a fonte é boa prática profissional: dá crédito a quem produziu e permite que você confira a informação direto na origem.</p>"},
    {t:"plain",l:"Responsável por cada tecnologia",h:"<table class='cmd'><tr><th>Tecnologia</th><th>Responsável</th></tr><tr><td>Python</td><td>Python Software Foundation (PSF)</td></tr><tr><td>MySQL</td><td>Oracle Corporation</td></tr><tr><td>SQLite</td><td>D. Richard Hipp (domínio público)</td></tr><tr><td>Microsoft Excel</td><td>Microsoft</td></tr><tr><td>Power BI</td><td>Microsoft</td></tr><tr><td>Google Sheets</td><td>Google</td></tr><tr><td>pandas e NumPy</td><td>Comunidade open source (NumFOCUS)</td></tr><tr><td>Matplotlib e scikit-learn</td><td>Comunidade open source (NumFOCUS)</td></tr></table>"},
@@ -2017,6 +2012,7 @@ const REF_THEMES = [
    {t:"tip",l:"O que foi usado neste projeto",h:"<p>O aplicativo é um arquivo único feito com as tecnologias base da web: HTML (estrutura), CSS (visual) e JavaScript (interação), sem depender de frameworks externos.</p><p>No modo Praticar, o app roda um banco SQLite dentro do navegador por meio do sql.js, que traduz o SQLite para rodar em JavaScript. Assim a validação das consultas funciona sem internet.</p><p>Para abrir no celular como aplicativo, usa-se um manifesto PWA (Progressive Web App, aplicativo web instalável). O código fica no GitHub (da Microsoft) e a publicação é feita pela Vercel.</p>"},
    {t:"plain",l:"Resumo das ferramentas do projeto",h:"<table class='cmd'><tr><th>Recurso</th><th>Para que serviu</th></tr><tr><td>HTML, CSS, JavaScript</td><td>Construir todo o aplicativo em um arquivo.</td></tr><tr><td>sql.js (SQLite)</td><td>Rodar e validar consultas no modo Praticar.</td></tr><tr><td>PWA (manifesto)</td><td>Instalar no celular e usar offline.</td></tr><tr><td>GitHub</td><td>Guardar e versionar o código.</td></tr><tr><td>Vercel</td><td>Publicar o app na internet.</td></tr></table>"},
    {t:"tip",l:"Como citar uma fonte",h:"<p>Ao usar uma informação de terceiros, registre de onde veio: o nome do responsável e o endereço da documentação. Em conteúdo técnico, prefira sempre a documentação oficial, que é a fonte mais confiável e atualizada.</p>"},
+   {t:"plain",l:"Mapa mental",h:"<ul><li>Referências e créditos<ul><li>Cada tecnologia tem um responsável</li><li>Python: PSF; MySQL: Oracle</li><li>Power BI e Excel: Microsoft</li><li>Fonte principal: documentação oficial</li><li>Projeto: HTML, JS, sql.js, GitHub, Vercel</li></ul></li></ul>"},
    {t:"recap",l:"O que preciso lembrar",h:"<p>Cada tecnologia tem um responsável (Python pela PSF, MySQL pela Oracle, Power BI e Excel pela Microsoft, Sheets pelo Google). A fonte principal do material é a documentação oficial. O app foi feito com HTML, CSS, JavaScript, sql.js, PWA, GitHub e Vercel.</p>"}
   ],
   cards:[
