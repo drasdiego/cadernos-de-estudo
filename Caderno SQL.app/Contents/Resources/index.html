@@ -1254,13 +1254,120 @@ const IA_QUIZ = [
  {q:"A IA generativa, diferente da tradicional:",o:["Só classifica dados","Cria novos dados (texto, imagem)","Apaga dados","Só faz backup"],c:1,e:"A generativa produz conteúdo novo semelhante aos dados de treino."}
 ];
 
+const PY_THEMES = [
+{ id:"py-intro", num:"01", cat:"Fundamentos", title:"Python e a biblioteca padrão", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Nenhum. Este é o ponto de partida.</p>"},
+   {t:"concept",l:"O que é",h:"<p><strong>Python</strong> é uma linguagem de programação de alto nível. \"Alto nível\" quer dizer que ela é próxima da linguagem humana e esconde detalhes da máquina. Ela é <strong>interpretada</strong> (executa o código direto, sem um passo separado de compilação) e tem <strong>tipagem dinâmica e forte</strong>.</p><p>Tipagem dinâmica: você não declara o tipo da variável. Tipagem forte: a linguagem não mistura tipos incompatíveis sozinha.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Python é uma das linguagens mais usadas em Dados, automação e Inteligência Artificial (IA). É a porta de entrada para pandas, análise de dados e aprendizado de máquina. Aprender bem a base evita confusão depois.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p>Automatizar tarefas repetitivas, analisar dados, criar scripts, APIs e modelos. Não é a primeira escolha para apps de celular nativos ou jogos de alta performance.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>Você escreve o código num arquivo <code>.py</code> ou no terminal interativo (REPL, sigla de Read-Eval-Print Loop, ou seja, um modo que lê, executa e mostra o resultado linha a linha). O interpretador lê e executa.</p><p>Python já vem com a <strong>biblioteca padrão</strong>: um conjunto grande de módulos prontos. Em inglês isso é chamado de \"batteries included\" (pilhas inclusas), porque você resolve muita coisa sem instalar nada.</p>"},
+   {t:"code",h:"<span class='cm'># Exemplo concreto: imprimir um texto e usar um módulo pronto</span>\nprint(<span class='st'>\"Olá, mundo\"</span>)\n\n<span class='kw'>import</span> math\nprint(math.sqrt(16))   <span class='cm'># 4.0</span>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Categoria</th><th>Exemplos de módulos</th></tr><tr><td>Texto</td><td>string, re</td></tr><tr><td>Datas</td><td>datetime</td></tr><tr><td>Matemática</td><td>math, random, statistics</td></tr><tr><td>Arquivos</td><td>pathlib, os</td></tr><tr><td>Dados</td><td>json, csv</td></tr></table>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Confundir Python 2 com Python 3 (use sempre o 3). Instalar pacotes no Python do sistema em vez de um ambiente isolado. Achar que interpretada significa sempre lenta.</p>"},
+   {t:"tip",l:"Boas práticas (recomendação)",h:"<p>Siga a PEP 8 (Python Enhancement Proposal número 8, o guia de estilo oficial): nomes em snake_case, 4 espaços de recuo. Isole as dependências de cada projeto em um ambiente virtual: <code>python -m venv .venv</code>.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> imprima seu nome com <code>print</code>.</li><li><strong>Intermediário:</strong> importe <code>math</code> e imprima a raiz quadrada de 81.</li><li><strong>Avançado:</strong> pesquise na documentação um módulo da biblioteca padrão que você usaria para ler um arquivo CSV (resposta: csv).</li></ul>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>Python: alto nível, interpretada, tipagem dinâmica e forte. Biblioteca padrão grande (\"pilhas inclusas\"). Roda no REPL ou em arquivos .py. Dependências externas ficam num ambiente virtual.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> definição de tipagem dinâmica e forte; o que é a biblioteca padrão. <strong>Pergunta de recrutador:</strong> \"Por que Python é tão usado em Dados?\" Resposta: legibilidade, biblioteca padrão e o ecossistema (pandas, numpy).</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Python<ul><li>Alto nível, interpretada</li><li>Tipagem dinâmica e forte</li><li>Biblioteca padrão (pilhas inclusas)</li><li>Pacotes externos: PyPI + pip + venv</li></ul></li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> escreva um script que imprime seu nome e a raiz quadrada da sua idade. <strong>Conecta com o próximo:</strong> para guardar nome e idade, você precisa de variáveis e tipos, que é o tema 02.</p>"}
+  ],
+  cards:[["O que quer dizer \"linguagem de alto nível\"?","Que é próxima da linguagem humana e esconde detalhes da máquina."],
+         ["O que é a biblioteca padrão do Python?","Um conjunto grande de módulos que já vêm instalados, cobrindo tarefas comuns (pilhas inclusas)."],
+         ["Tipagem dinâmica e forte: explique cada parte.","Dinâmica: não se declara o tipo. Forte: a linguagem não mistura tipos incompatíveis sozinha."],
+         ["O que é um ambiente virtual e por que usar?","Uma pasta isolada com as dependências de um projeto, para evitar conflitos entre versões de pacotes."]] },
+
+{ id:"py-tipos", num:"02", cat:"Fundamentos", title:"Tipos embutidos e variáveis", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Tema 01 (saber rodar um print e importar um módulo).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Uma <strong>variável</strong> é um nome que aponta para um valor guardado na memória. Um <strong>tipo</strong> diz que espécie de valor é: número, texto, verdadeiro/falso.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Quase todo programa guarda e transforma dados. Errar o tipo (texto onde devia ser número) é uma das causas mais comuns de bug.</p>"},
+   {t:"concept",l:"Quando usar cada tipo",h:"<p>int para contagens, float para medidas com decimais, str para texto, bool para sim/não, None para \"ainda não tem valor\".</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O tipo pertence ao valor, não ao nome. Por isso o mesmo nome pode receber um número e depois um texto. Você descobre o tipo com <code>type(x)</code>.</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Tipo</th><th>Para que serve</th></tr><tr><td>int</td><td>Inteiros, sem limite fixo de tamanho.</td></tr><tr><td>float</td><td>Números com casas decimais.</td></tr><tr><td>str</td><td>Texto (imutável).</td></tr><tr><td>bool</td><td>True ou False (é um subtipo de int).</td></tr><tr><td>None</td><td>Ausência de valor.</td></tr></table>"},
+   {t:"code",h:"<span class='cm'># Exemplo concreto</span>\nnome = <span class='st'>\"Ana\"</span>     <span class='cm'># str</span>\nidade = 28        <span class='cm'># int</span>\naltura = 1.65     <span class='cm'># float</span>\nprint(type(idade))           <span class='cm'># &lt;class 'int'&gt;</span>\nprint(<span class='st'>f\"{nome}, {idade} anos\"</span>)  <span class='cm'># f-string</span>"},
+   {t:"attr",l:"Erros comuns",h:"<p><strong>float não é exato:</strong> <code>0.1 + 0.2</code> dá 0.30000000000000004. Para dinheiro, arredonde ou use <code>decimal</code>. Comparar com None com <code>==</code>: o certo é <code>is None</code>.</p>"},
+   {t:"tip",l:"Boas práticas",h:"<p>Use f-strings (texto começando com <code>f</code> e variáveis entre chaves) para montar mensagens. Dê nomes que dizem o que a variável guarda.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> crie nome (str), idade (int), altura (float) e imprima os três numa f-string.</li><li><strong>Intermediário:</strong> some duas strings de número convertendo com <code>int()</code>.</li><li><strong>Avançado:</strong> mostre que <code>0.1 + 0.2 == 0.3</code> é False e conserte com <code>round(x, 2)</code>.</li></ul>"},
+   {t:"code",h:"<span class='cm'># Soluções</span>\nnome, idade, altura = <span class='st'>\"Ana\"</span>, 28, 1.65\nprint(<span class='st'>f\"{nome}, {idade} anos, {altura}m\"</span>)\nprint(int(<span class='st'>\"3\"</span>) + int(<span class='st'>\"4\"</span>))           <span class='cm'># 7</span>\nprint(round(0.1 + 0.2, 2) == 0.3)  <span class='cm'># True</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>int (inteiro), float (decimal, inexato), str (texto), bool (True/False), None. O tipo é do valor. Formate com f-strings. Compare None com <code>is</code>.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> por que 0.1 + 0.2 não é 0.3; diferença entre <code>==</code> (valor) e <code>is</code> (mesmo objeto). <strong>Pergunta de recrutador:</strong> \"Como você guardaria um valor em dinheiro com segurança?\" Resposta: usar <code>decimal.Decimal</code>, não float.</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Tipos<ul><li>Números: int, float</li><li>Texto: str (imutável)</li><li>Lógico: bool</li><li>Vazio: None</li></ul></li><li>Ferramentas: type(), f-strings, is None</li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> peça nome e ano de nascimento com <code>input()</code> e imprima a idade. <strong>Conecta com o próximo:</strong> para guardar muitos valores juntos, você usa estruturas de dados, que é o tema 03.</p>"}
+  ],
+  cards:[["O que é uma variável em Python?","Um nome que aponta para um valor na memória; o tipo pertence ao valor."],
+         ["Por que 0.1 + 0.2 não é igual a 0.3?","Porque float usa representação binária, que não guarda esses decimais com exatidão."],
+         ["== versus is?","== compara o valor; is compara se é o mesmo objeto. Use is None."],
+         ["Como guardar dinheiro com segurança?","Com decimal.Decimal (ou arredondando), nunca com float puro."]] },
+
+{ id:"py-estruturas", num:"03", cat:"Estruturas de dados", title:"list, tuple, dict e set", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 01 e 02 (variáveis e tipos).</p>"},
+   {t:"concept",l:"O que é",h:"<p>São coleções: formas de guardar vários valores numa só variável. O Python tem quatro principais: <strong>list, tuple, dict e set</strong>.</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Escolher a coleção certa deixa o código mais claro e mais rápido. É um dos temas que mais aparece em entrevista.</p>"},
+   {t:"concept",l:"Quando usar (analogia)",h:"<p><strong>list:</strong> uma fila de tarefas que muda. <strong>tuple:</strong> uma coordenada (x, y) que não muda. <strong>dict:</strong> uma agenda (nome do contato leva ao telefone). <strong>set:</strong> um saco de etiquetas, sem repetidas.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>list e tuple guardam por <strong>ordem</strong> (posição). dict guarda por <strong>chave</strong>. set guarda valores <strong>únicos</strong>. list e dict e set podem mudar; tuple não muda (é imutável).</p>"},
+   {t:"table",h:"<table class='cmd'><tr><th>Coleção</th><th>Característica</th></tr><tr><td>list</td><td>Ordenada, muda. [1, 2, 3]</td></tr><tr><td>tuple</td><td>Ordenada, não muda. (1, 2)</td></tr><tr><td>dict</td><td>Chave para valor. {'a': 1}</td></tr><tr><td>set</td><td>Sem repetidos, sem ordem. {1, 2}</td></tr></table>"},
+   {t:"code",h:"<span class='cm'># Exemplo concreto de cada uma</span>\nnums = [3, 1, 2]; nums.sort()   <span class='cm'># list -&gt; [1, 2, 3]</span>\nponto = (10, 20)                 <span class='cm'># tuple</span>\npessoa = {<span class='st'>\"nome\"</span>: <span class='st'>\"Ana\"</span>}     <span class='cm'># dict</span>\nprint(pessoa.get(<span class='st'>\"email\"</span>, <span class='st'>\"sem\"</span>))  <span class='cm'># default seguro</span>\nprint(set([1, 1, 2]))            <span class='cm'># {1, 2}</span>"},
+   {t:"attr",l:"Erros comuns",h:"<p><strong>Apelido (aliasing):</strong> <code>b = a</code> não copia a lista; mexer em b mexe em a. Copie com <code>a.copy()</code>. Chave de dict precisa ser imutável: tupla pode, lista não. Não apague itens de uma lista enquanto a percorre.</p>"},
+   {t:"tip",l:"Boas práticas e performance (fato)",h:"<p>Procurar um item é <strong>O(1)</strong> em set e dict (quase instantâneo) e <strong>O(n)</strong> em list (percorre tudo). O(1) e O(n) descrevem como o tempo cresce com o tamanho. Para muitas buscas, use set ou dict.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> ordene [5, 3, 9, 1] e pegue o maior e o menor.</li><li><strong>Intermediário:</strong> conte quantas vezes cada palavra aparece numa frase, com um dict.</li><li><strong>Avançado:</strong> ache os itens em comum entre duas listas, sem repetir, com set.</li></ul>"},
+   {t:"code",h:"<span class='cm'># Soluções</span>\nl = sorted([5, 3, 9, 1]); print(l[0], l[-1])   <span class='cm'># 1 9</span>\n\ncont = {}\n<span class='kw'>for</span> p <span class='kw'>in</span> <span class='st'>\"a casa a flor\"</span>.split():\n    cont[p] = cont.get(p, 0) + 1\nprint(cont)\n\nprint(set([1,2,3]) &amp; set([2,3,4]))   <span class='cm'># {2, 3}</span>"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>list (ordenada, muda), tuple (ordenada, não muda), dict (chave para valor), set (únicos). Busca rápida (O(1)) em dict e set. Cuidado com apelido; use .copy e .get.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> complexidade de busca em list vs dict/set; por que tupla pode ser chave e lista não. <strong>Pergunta de recrutador:</strong> \"Como você removeria duplicatas de uma lista?\" Resposta: <code>set(lista)</code>.</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Coleções<ul><li>Por ordem: list (muda), tuple (não muda)</li><li>Por chave: dict</li><li>Únicos: set</li></ul></li><li>Busca rápida: dict, set (O(1))</li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> guarde 3 contatos num dict (nome para telefone) e imprima cada um. <strong>Conecta com o próximo:</strong> para percorrer essas coleções e decidir o que fazer, você usa controle de fluxo, o tema 04.</p>"}
+  ],
+  cards:[["Quando usar dict em vez de list?","Quando você busca por uma chave (ex.: nome para telefone) e quer busca rápida (O(1))."],
+         ["Por que uma lista não pode ser chave de dict?","Porque chaves precisam ser imutáveis e hashable; a lista muda, a tupla não."],
+         ["Como remover duplicatas de uma lista?","Convertendo para set: set(lista)."],
+         ["O que é aliasing (apelido) de lista?","Quando b = a faz os dois nomes apontarem para a mesma lista; mudar um muda o outro. Copie com a.copy()."]] },
+
+{ id:"py-fluxo", num:"04", cat:"Lógica", title:"Controle de fluxo e compreensões", date:DATE1,
+  blocks:[
+   {t:"tip",l:"Pré-requisitos",h:"<p>Temas 02 e 03 (tipos e coleções).</p>"},
+   {t:"concept",l:"O que é",h:"<p>Controle de fluxo é decidir <strong>o que o programa faz</strong> em cada situação e <strong>repetir</strong> ações. As peças são <code>if</code> (decisão), <code>for</code> e <code>while</code> (repetição).</p>"},
+   {t:"concept",l:"Por que importa",h:"<p>Sem decisão e repetição, um programa só faz uma coisa fixa. É o que dá inteligência ao código.</p>"},
+   {t:"concept",l:"Quando usar",h:"<p><code>if</code> quando há caminhos diferentes. <code>for</code> quando você sabe o que percorrer (uma lista). <code>while</code> quando repete até uma condição mudar.</p>"},
+   {t:"concept",l:"Como funciona",h:"<p>O Python usa <strong>indentação</strong> (recuo, 4 espaços) para marcar o que está dentro de cada bloco, em vez de chaves. O bloco recuado pertence ao if ou ao for acima.</p>"},
+   {t:"code",h:"<span class='cm'># Decisão</span>\nidade = 20\n<span class='kw'>if</span> idade &gt;= 18:\n    print(<span class='st'>\"maior\"</span>)\n<span class='kw'>else</span>:\n    print(<span class='st'>\"menor\"</span>)\n\n<span class='cm'># Repetição com índice e valor</span>\n<span class='kw'>for</span> pos, nome <span class='kw'>in</span> enumerate([<span class='st'>\"Ana\"</span>, <span class='st'>\"Bia\"</span>]):\n    print(pos, nome)   <span class='cm'># 0 Ana / 1 Bia</span>"},
+   {t:"concept",l:"Compreensão (comprehension)",h:"<p>Uma <strong>compreensão de lista</strong> (list comprehension) cria uma lista nova a partir de outra, em uma linha. É mais curto e legível que um loop com <code>append</code>.</p>"},
+   {t:"code",h:"<span class='cm'># Lógica: para cada n de 0 a 9, se for par, guarde o quadrado</span>\nquad = [n*n <span class='kw'>for</span> n <span class='kw'>in</span> range(10) <span class='kw'>if</span> n % 2 == 0]\nprint(quad)   <span class='cm'># [0, 4, 16, 36, 64]</span>"},
+   {t:"attr",l:"Erros comuns",h:"<p>Misturar tabulação e espaços (erro de indentação). Esquecer que <code>range(n)</code> vai de 0 a n-1. Fazer compreensões aninhadas demais, que ficam ilegíveis.</p>"},
+   {t:"tip",l:"Boas práticas (comparação de abordagens)",h:"<p>Prefira <code>for item in lista</code> a <code>for i in range(len(lista))</code>. Use <code>enumerate</code> se precisar do índice. Use compreensão quando ela cabe em uma linha clara; senão, um loop normal é melhor.</p>"},
+   {t:"plain",h:"<p><strong>Exercícios graduais</strong></p><ul><li><strong>Básico:</strong> imprima os pares de 1 a 10.</li><li><strong>Intermediário:</strong> com uma compreensão, gere o tamanho de cada palavra de uma frase.</li><li><strong>Avançado:</strong> com enumerate, crie um dict que liga cada nome à sua posição.</li></ul>"},
+   {t:"code",h:"<span class='cm'># Soluções</span>\nprint([n <span class='kw'>for</span> n <span class='kw'>in</span> range(1, 11) <span class='kw'>if</span> n % 2 == 0])\nprint([len(p) <span class='kw'>for</span> p <span class='kw'>in</span> <span class='st'>\"o gato preto\"</span>.split()])\nnomes = [<span class='st'>\"Ana\"</span>, <span class='st'>\"Bia\"</span>]\nprint({n: i <span class='kw'>for</span> i, n <span class='kw'>in</span> enumerate(nomes)})"},
+   {t:"recap",l:"O que preciso lembrar",h:"<p>if decide; for e while repetem; indentação marca os blocos. enumerate dá índice e valor. Compreensão cria listas em uma linha.</p>"},
+   {t:"tip",l:"Em entrevistas",h:"<p><strong>O que cai:</strong> diferença entre compreensão de lista (cria tudo na memória) e generator (gera sob demanda); o que é for/else. <strong>Pergunta de recrutador:</strong> \"Como percorrer índice e valor ao mesmo tempo?\" Resposta: <code>enumerate</code>.</p>"},
+   {t:"plain",h:"<p><strong>Mapa mental</strong></p><ul><li>Fluxo<ul><li>Decisão: if / elif / else</li><li>Repetição: for, while</li><li>Ajudantes: range, enumerate, zip</li></ul></li><li>Atalho: compreensão (list/dict/set)</li></ul>"},
+   {t:"tip",l:"Mini-projeto e conexão",h:"<p><strong>Mini-projeto:</strong> percorra uma lista de notas e imprima \"aprovado\" para nota maior ou igual a 7. <strong>Conecta com o próximo:</strong> para reaproveitar lógica, você agrupa tudo em funções, o próximo passo do caderno.</p>"}
+  ],
+  cards:[["Como o Python marca blocos de código?","Por indentação (recuo de 4 espaços), em vez de chaves."],
+         ["Para que serve enumerate?","Percorrer obtendo índice e valor ao mesmo tempo, sem usar range(len(...))."],
+         ["List comprehension versus generator?","A compreensão cria a lista toda na memória; o generator gera item a item sob demanda, poupando memória."],
+         ["O que range(5) gera?","Os números de 0 a 4 (de 0 até n-1)."]] }
+];
+
+const PY_QUIZ = [
+ {q:"Python tem tipagem:",o:["Estática e fraca","Dinâmica e forte","Estática e forte","Dinâmica e fraca"],c:1,e:"Dinâmica (tipo definido em execução) e forte (não converte tipos incompatíveis sozinho)."},
+ {q:"O que significa \"batteries included\"?",o:["Python precisa de muitas instalações","Já vem com uma biblioteca padrão extensa","Só funciona com pilhas","É uma biblioteca paga"],c:1,e:"A biblioteca padrão cobre muitas tarefas comuns sem instalar nada."},
+ {q:"Quais destes valores são falsy?",o:["1, 'a', [1]","0, '', [], None","True, 'x'","Apenas None"],c:1,e:"Zero, string e coleções vazias e None são falsy; o resto é truthy."},
+ {q:"Para comparar uma variável com None, o correto é:",o:["x == None","x is None","x = None","x != 0"],c:1,e:"Use is None, que compara identidade, conforme recomendado."},
+ {q:"Buscar se um item existe é O(1) em:",o:["list","set e dict","tuple","str"],c:1,e:"set e dict usam tabela hash (O(1)); list e tuple são O(n)."},
+ {q:"Por que uma lista não pode ser chave de dict?",o:["É muito grande","Não é hashable (é mutável)","É lenta","Só aceita números"],c:1,e:"Chaves precisam ser hashable; listas são mutáveis e não hashable. Tuplas servem."},
+ {q:"O Python define blocos de código por:",o:["Chaves { }","Ponto e vírgula","Indentação","Parênteses"],c:2,e:"A indentação (recuo) define os blocos; o padrão são 4 espaços."},
+ {q:"range(5) gera:",o:["1 a 5","0 a 5","0 a 4","5 a 0"],c:2,e:"Vai de 0 a n-1, ou seja, 0, 1, 2, 3, 4."},
+ {q:"A forma recomendada de formatar texto é:",o:["concatenar com +","f-strings","usar vírgulas no print","% antigo sempre"],c:1,e:"f-strings (f\"{x}\") são claras e suportam formatação como {v:.2f}."},
+ {q:"0.1 + 0.2 == 0.3 em Python resulta em:",o:["True","False","Erro","0.3"],c:1,e:"False, por causa da representação binária de float. Arredonde para comparar."}
+];
+
 const SUBJECTS = {
   sql:        { name:"SQL", code:"SQL", themes:SQL_THEMES, quiz:SQL_QUIZ, themeEx:SQL_THEMEEX, practice:true, ready:true },
   viz:        { name:"Visualização de Dados", code:"VIZ", themes:VIZ_THEMES, quiz:VIZ_QUIZ, themeEx:{}, practice:false, ready:true },
   estatistica:{ name:"Estatística", code:"EST", themes:EST_THEMES, quiz:EST_QUIZ, themeEx:{}, practice:false, ready:true },
   powerbi:    { name:"Power BI", code:"BI", themes:BI_THEMES, quiz:BI_QUIZ, themeEx:{}, practice:false, ready:true },
   ia:         { name:"Inteligência Artificial", code:"IA", themes:IA_THEMES, quiz:IA_QUIZ, themeEx:{}, practice:false, ready:true },
-  python:     { name:"Python", code:"PY", themes:[], quiz:[], themeEx:{}, practice:false, ready:false }
+  python:     { name:"Python", code:"PY", themes:PY_THEMES, quiz:PY_QUIZ, themeEx:{}, practice:false, ready:true }
 };
 let curSubject='sql';
 let THEMES=SUBJECTS.sql.themes, QUIZ=SUBJECTS.sql.quiz, THEME_EX=SUBJECTS.sql.themeEx;

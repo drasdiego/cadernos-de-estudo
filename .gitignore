@@ -7,3 +7,4 @@ node_modules/
 __pycache__/
 _engine.txt
 *.tmp
+_py.txt
